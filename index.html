@@ -358,7 +358,7 @@ function enemyTurn(){
   logmsg(lines.join(' '));
   if(p.hp<=0){lines.push(`${p.name} ist kampfunfähig!`);let ok=pickNext();if(!ok){busy=false;render();return}lines.push(`${active().name} kommt in den Kampf!`)}
   S.battleTurn='player';playMessages([...lines,'Was möchtest du tun?'],()=>{if(!active()||active().hp<=0)return;menuMode='root';render()});
- },450);
+ },900);
 }
 
 function animateLunge(side){
