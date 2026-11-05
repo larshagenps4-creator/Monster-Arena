@@ -347,7 +347,7 @@ function teamWipe(){S.enemy=null;S.losses++;S.stage=1;S.enemyLevel=1;S.team= S.t
 function pickNext(){let n=teamMons().find(m=>m.hp>0);if(n){S.active=n.id;logmsg(`${n.name} springt automatisch ein!`);return true}teamWipe();return false}
 function enemyTurn(){
  let e=S.enemy,p=active();if(!e||!p||busy)return;
- S.battleTurn='enemy';busy=true;menuMode='none';render();
+ S.battleTurn='enemy';busy=true;menuMode='none';render();animateLunge('enemy');
  
  turnTimer=setTimeout(()=>{
   e=S.enemy;p=active();if(!e||!p){busy=false;render();return}
@@ -361,18 +361,25 @@ function enemyTurn(){
  },450);
 }
 
+function animateLunge(side){
+ const id=side==='player'?'playerSprite':'enemySprite';
+ const node=document.getElementById(id);if(!node)return;
+ const cls=side==='player'?'lunge-player':'lunge-enemy';
+ node.classList.remove(cls);void node.offsetWidth;node.classList.add(cls);
+ setTimeout(()=>node.classList.remove(cls),950);
+}
 function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!sc)return;let el=document.createElement('div');el.className='impact '+kind;el.textContent=txt;sc.appendChild(el);setTimeout(()=>el.remove(),750)}
 function playerAct(k,id){
  if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
  if(k==='switch'){let n=S.owned.find(m=>m.id===id);if(!S.team.includes(id)||!n||n.hp<=0||id===p.id)return;if(p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1);S.active=id;logmsg(`Du wechselst zu ${n.name}.`);playMessages([`Du wechselst zu ${n.name}.`,`${e.name} ist am Zug!`],()=>enemyTurn());return}
  if(k==='special'&&p.cooldown>0)return alert(`Spezialfähigkeit noch ${p.cooldown} eigene Runde(n) Abklingzeit.`);
- busy=true;menuMode='none';S.battleTurn='animating';render();
+ busy=true;menuMode='none';S.battleTurn='animating';render();animateLunge('player');
  turnTimer=setTimeout(()=>{p=active();e=S.enemy;if(!p||!e){busy=false;render();return}let d=0,msg='',lines=[];
  if(k==='defend'){p.guard=true;p.cooldown=Math.max(0,p.cooldown-3);lines.push(`${p.name} geht in Abwehrhaltung.`)}
  else{let base=p.atk*(p.slow>0?.65:1);if(p.slow>0)p.slow--;if(k==='special'){base=p.atk*1.45*(p.slow>0?.65:1);p.cooldown=4;if(p.element==='Eis'){e.slow=2;lines.push(`${p.name} setzt ${p.special} ein!`)}else if(p.element==='Schatten')lines.push(`${p.name} setzt ${p.special} ein!`);else lines.push(`${p.name} setzt ${p.special} ein!`)}else lines.push(`${p.name} greift an!`);[d,msg]=hit(p,e,base);if(e.guard){d=Math.max(1,Math.round(d*.3));e.guard=false}e.hp=Math.max(0,e.hp-d);lines.push(`${e.name} verliert ${d} HP.`);if(k==='special'&&p.element==='Schatten'){let heal=Math.min(p.max-p.hp,Math.round(d*.55));p.hp+=heal;if(heal)lines.push(`${p.name} heilt sich um ${heal} LP.`)}if(k==='special'&&p.element==='Blitz')e.guard=false;if(k!=='special'&&p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1)}
  logmsg(lines.join(' '));render();
  playMessages(lines,()=>{if(e.hp<=0){busy=false;winBattle();render();return}enemyTurn()});
- },420);
+ },900);
 }
 
 function winBattle(){let e=S.enemy,p=active();S.wins++;let reward=180+S.stage*35+(e.boss?1200:0);S.coins+=reward;if(p){p.xp+=60+S.stage*10+(e.boss?150:0);level(p)}if(e.boss){S.bossDefeated++;logmsg(`👑 BOSS BESIEGT! Einmalige Boss-Belohnung: +1200 Bonusmünzen und ein Beschwörungsticket (Testbonus).`);S.tickets=(S.tickets||0)+1}logmsg(`🏆 Sieg! +${reward} Münzen. Stufe ${S.stage} abgeschlossen.`);S.enemy=null;S.stage++;S.enemyLevel=S.stage;S.owned.forEach(m=>{m.guard=false;m.slow=0});S.battleTurn='player'}
@@ -497,10 +504,28 @@ load();render();
 @media(max-width:520px){.battle-scene #enemySprite,.battle-scene #playerSprite{width:clamp(108px,29vw,128px)!important;height:clamp(108px,29vw,128px)!important}}
 @media(prefers-reduced-motion:reduce){#playerSprite.lunge-player .battle-art,#enemySprite.lunge-enemy .battle-art{animation:none!important}}
 </style>
-<style id="v185-static-arena">
-/* Keine Bewegung, kein Blinken und kein Treffer-Flackern an den Kampfmonstern. */
-#enemySprite,#playerSprite,#enemySprite * ,#playerSprite *{animation:none!important;transition:none!important}
-#enemySprite .creature,#playerSprite .creature{filter:none!important;opacity:1!important}
+<style id="v191-slow-attack-lunge">
+/* Ruhiger Vorstoß beim Angriff: kurz nach vorne, dann weich zurück. */
+#enemySprite,#playerSprite,#enemySprite * ,#playerSprite *{transition:none!important}
+#playerSprite.lunge-player .battle-art{
+ animation:v191-player-lunge 900ms cubic-bezier(.22,.7,.25,1) both!important;
+}
+#enemySprite.lunge-enemy .battle-art{
+ animation:v191-enemy-lunge 900ms cubic-bezier(.22,.7,.25,1) both!important;
+}
+@keyframes v191-player-lunge{
+ 0%,100%{translate:0 0;scale:1}
+ 42%{translate:30px -7px;scale:1.06}
+ 68%{translate:12px -2px;scale:1.02}
+}
+@keyframes v191-enemy-lunge{
+ 0%,100%{translate:0 0;scale:1}
+ 42%{translate:-30px 7px;scale:1.06}
+ 68%{translate:-12px 2px;scale:1.02}
+}
+@media(prefers-reduced-motion:reduce){
+ #playerSprite.lunge-player .battle-art,#enemySprite.lunge-enemy .battle-art{animation:none!important}
+}
 </style>
 </body></html>
 
