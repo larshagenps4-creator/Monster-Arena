@@ -354,7 +354,7 @@ function enemyTurn(){
   let action='attack',roll=Math.random();if(e.cooldown===0&&(e.boss?roll<.42:roll<.22))action='special';else if(roll>.76)action='defend';
   let d=0,msg='',lines=[];
   if(action==='defend'){e.guard=true;if(e.cooldown>0)e.cooldown=Math.max(0,e.cooldown-1);lines.push(`${e.name} nimmt eine defensive Haltung ein.`)}
-  else{let base=e.atk*(e.slow>0?.65:1);if(e.slow>0)e.slow--;if(p.guard)base*=.3;[d,msg]=hit(e,p,base);if(action==='special'){e.cooldown=4;if(e.element==='Eis'){p.slow=2;lines.push(`${e.name} setzt ${e.special} ein!`)}else if(e.element==='Schatten'){let heal=Math.min(e.max-e.hp,Math.round(d*.4));e.hp+=heal;lines.push(`${e.name} setzt ${e.special} ein und heilt sich um ${heal} LP.`)}else{d=Math.round(d*1.25);lines.push(`${e.name} setzt ${e.special} ein!`)}}else lines.push(`${e.name} greift an!`);p.hp=Math.max(0,p.hp-d);p.guard=false;lines.push(`${p.name} verliert ${d} HP.`);if(action!=='special'&&e.cooldown>0)e.cooldown=Math.max(0,e.cooldown-1)}
+  else{let base=e.atk*(e.slow>0?.65:1);if(e.slow>0)e.slow--;if(p.guard)base*=.3;[d,msg]=hit(e,p,base);if(action==='special'){e.cooldown=4;if(e.element==='Eis'){p.slow=2;lines.push(`${e.name} setzt ${e.special} ein!`)}else if(e.element==='Schatten'){let heal=Math.min(e.max-e.hp,Math.round(d*.4));e.hp+=heal;lines.push(`${e.name} setzt ${e.special} ein und heilt sich um ${heal} LP.`)}else{d=Math.round(d*1.25);lines.push(`${e.name} setzt ${e.special} ein!`)}}else lines.push(`${e.name} greift an!`);p.hp=Math.max(0,p.hp-d);animateHitAfterImpact('player');p.guard=false;lines.push(`${p.name} verliert ${d} HP.`);if(action!=='special'&&e.cooldown>0)e.cooldown=Math.max(0,e.cooldown-1)}
   logmsg(lines.join(' '));
   if(p.hp<=0){lines.push(`${p.name} ist kampfunfähig!`);let ok=pickNext();if(!ok){busy=false;render();return}lines.push(`${active().name} kommt in den Kampf!`)}
   S.battleTurn='player';playMessages([...lines,'Was möchtest du tun?'],()=>{if(!active()||active().hp<=0)return;menuMode='root';render()});
@@ -368,6 +368,13 @@ function animateLunge(side){
  node.classList.remove(cls);void node.offsetWidth;node.classList.add(cls);
  setTimeout(()=>node.classList.remove(cls),950);
 }
+function animateHitAfterImpact(side){
+ const node=document.getElementById(side==='player'?'playerSprite':'enemySprite');
+ if(!node)return;
+ node.classList.remove('hit-after-impact');void node.offsetWidth;
+ node.classList.add('hit-after-impact');
+ setTimeout(()=>node.classList.remove('hit-after-impact'),500);
+}
 function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!sc)return;let el=document.createElement('div');el.className='impact '+kind;el.textContent=txt;sc.appendChild(el);setTimeout(()=>el.remove(),750)}
 function playerAct(k,id){
  if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
@@ -376,7 +383,7 @@ function playerAct(k,id){
  busy=true;menuMode='none';S.battleTurn='animating';render();animateLunge('player');
  turnTimer=setTimeout(()=>{p=active();e=S.enemy;if(!p||!e){busy=false;render();return}let d=0,msg='',lines=[];
  if(k==='defend'){p.guard=true;p.cooldown=Math.max(0,p.cooldown-3);lines.push(`${p.name} geht in Abwehrhaltung.`)}
- else{let base=p.atk*(p.slow>0?.65:1);if(p.slow>0)p.slow--;if(k==='special'){base=p.atk*1.45*(p.slow>0?.65:1);p.cooldown=4;if(p.element==='Eis'){e.slow=2;lines.push(`${p.name} setzt ${p.special} ein!`)}else if(p.element==='Schatten')lines.push(`${p.name} setzt ${p.special} ein!`);else lines.push(`${p.name} setzt ${p.special} ein!`)}else lines.push(`${p.name} greift an!`);[d,msg]=hit(p,e,base);if(e.guard){d=Math.max(1,Math.round(d*.3));e.guard=false}e.hp=Math.max(0,e.hp-d);lines.push(`${e.name} verliert ${d} HP.`);if(k==='special'&&p.element==='Schatten'){let heal=Math.min(p.max-p.hp,Math.round(d*.55));p.hp+=heal;if(heal)lines.push(`${p.name} heilt sich um ${heal} LP.`)}if(k==='special'&&p.element==='Blitz')e.guard=false;if(k!=='special'&&p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1)}
+ else{let base=p.atk*(p.slow>0?.65:1);if(p.slow>0)p.slow--;if(k==='special'){base=p.atk*1.45*(p.slow>0?.65:1);p.cooldown=4;if(p.element==='Eis'){e.slow=2;lines.push(`${p.name} setzt ${p.special} ein!`)}else if(p.element==='Schatten')lines.push(`${p.name} setzt ${p.special} ein!`);else lines.push(`${p.name} setzt ${p.special} ein!`)}else lines.push(`${p.name} greift an!`);[d,msg]=hit(p,e,base);if(e.guard){d=Math.max(1,Math.round(d*.3));e.guard=false}e.hp=Math.max(0,e.hp-d);animateHitAfterImpact('enemy');lines.push(`${e.name} verliert ${d} HP.`);if(k==='special'&&p.element==='Schatten'){let heal=Math.min(p.max-p.hp,Math.round(d*.55));p.hp+=heal;if(heal)lines.push(`${p.name} heilt sich um ${heal} LP.`)}if(k==='special'&&p.element==='Blitz')e.guard=false;if(k!=='special'&&p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1)}
  logmsg(lines.join(' '));render();
  playMessages(lines,()=>{if(e.hp<=0){busy=false;winBattle();render();return}enemyTurn()});
  },900);
@@ -503,6 +510,18 @@ load();render();
 @keyframes v174-enemy-lunge{0%,100%{transform:translate(0,0) scale(.78)}42%{transform:translate(-22px,9px) scale(.835)}68%{transform:translate(-8px,2px) scale(.796)}}
 @media(max-width:520px){.battle-scene #enemySprite,.battle-scene #playerSprite{width:clamp(108px,29vw,128px)!important;height:clamp(108px,29vw,128px)!important}}
 @media(prefers-reduced-motion:reduce){#playerSprite.lunge-player .battle-art,#enemySprite.lunge-enemy .battle-art{animation:none!important}}
+</style>
+<style id="v192-hit-flash-after-impact">
+/* Trefferblinken startet erst beim tatsächlichen Treffer nach dem Vorstoß. */
+#enemySprite.hit-after-impact .battle-art,
+#playerSprite.hit-after-impact .battle-art{
+ animation:v192-hit-flash 420ms ease-in-out both!important;
+}
+@keyframes v192-hit-flash{
+ 0%,100%{filter:brightness(1)}
+ 25%{filter:brightness(2.1)}
+ 55%{filter:brightness(.72)}
+}
 </style>
 <style id="v191-slow-attack-lunge">
 /* Ruhiger Vorstoß beim Angriff: kurz nach vorne, dann weich zurück. */
