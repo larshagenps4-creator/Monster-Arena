@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#10182c"><title>Monster Arena – Testversion</title>
+<style>
+:root{--bg:#080d19;--panel:#121c30;--panel2:#1c2942;--line:#2b3b59;--text:#f5f7ff;--muted:#a9b7d0;--red:#fb5266;--green:#2bd49a;--gold:#ffc65c;--blue:#42c8ff;--purple:#b18cff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#182747 0,#080d19 58%);color:var(--text);font:15px system-ui,-apple-system,sans-serif;padding:0 12px}header,main{max-width:980px;margin:auto}header{display:flex;justify-content:space-between;align-items:center;padding:16px 0 10px;gap:8px}h1{font-size:clamp(22px,5vw,31px);margin:0}h2{font-size:20px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}.muted{color:var(--muted)}.small{font-size:12px}.wallet,.pill{background:#263754;padding:7px 10px;border-radius:11px;font-weight:750;white-space:nowrap}.nav{display:flex;gap:7px;overflow:auto;padding:8px 0 14px}button{border:1px solid #405373;border-radius:11px;padding:10px 12px;background:#293a58;color:white;font-weight:750;cursor:pointer;touch-action:manipulation}button:disabled{opacity:.38;cursor:not-allowed}.nav button{white-space:nowrap}.nav .active,.primary{background:#7652e8;border-color:#9c84ff}.green{background:#087f5b}.cyan{background:#087da8}.gold{background:#d9a02b;color:#17120a}.red{background:#a9213b}.panel{background:linear-gradient(145deg,#17233a,#10192b);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:13px;box-shadow:0 8px 24px #0002}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,225px),1fr));gap:10px}.monster{background:#1c2a43;border:1px solid #344866;border-radius:13px;padding:12px;min-width:0}.emoji{font-size:clamp(38px,8vw,58px);line-height:1.15}.rarity{font-weight:900;text-transform:uppercase;font-size:11px}.Common{color:#d1d9e8}.Uncommon{color:#4ade80}.Rare{color:#60a5fa}.Epic{color:#d8b4fe}.Legendary{color:#fbbf24}.row{display:flex;align-items:center;justify-content:space-between;gap:8px}.stats{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.bar{height:9px;background:#080d19;border-radius:10px;overflow:hidden;margin:5px 0 8px;border:1px solid #2b3851}.bar span{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#7cf5a5);transition:width .35s}.hp span{background:linear-gradient(90deg,#e73554,#ff7d84)}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.actions button{flex:1;min-width:95px}.battle-scene{position:relative;min-height:270px;border:1px solid #3a4663;border-radius:15px;overflow:hidden;padding:12px;background:radial-gradient(ellipse at center bottom,#3b3154 0,#18233b 44%,#0a1121 100%);margin:10px 0}.scene-top{display:flex;justify-content:flex-end}.scene-bottom{display:flex;justify-content:flex-start;align-items:end;margin-top:20px}.combatant{position:relative;width:58%;max-width:360px;background:#0b1323eF;border:1px solid #344866;border-radius:12px;padding:10px;z-index:2}.combatant.enemy{margin-left:auto}.combatant.player{margin-right:auto}.damage-pop{position:absolute;top:42%;right:-5px;z-index:8;font-size:22px;font-weight:1000;color:#ff6878;text-shadow:0 2px 8px #000;animation:damageFloat .9s ease-out forwards;pointer-events:none}.damage-pop.heal{color:#6dffb0;right:auto;left:-5px}@keyframes damageFloat{0%{opacity:0;transform:translateY(12px) scale(.65)}20%{opacity:1;transform:translateY(0) scale(1.15)}100%{opacity:0;transform:translateY(-28px) scale(1)}}.creature{font-size:clamp(55px,13vw,92px);filter:drop-shadow(0 8px 7px #0008);transition:transform .28s,filter .28s}.enemy .creature{text-align:right}.player .creature{text-align:left}.attacking.player .player .creature{transform:translate(28px,-8px) scale(1.12);filter:drop-shadow(0 0 14px #ffb34d)}.attacking.enemy .enemy .creature{transform:translate(-28px,8px) scale(1.12);filter:drop-shadow(0 0 14px #ff6262)}.impact{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);font-size:32px;font-weight:1000;color:#fff;text-shadow:0 2px 5px #000,0 0 18px #ffb43b;animation:pop .7s ease-out forwards;z-index:5;pointer-events:none}.impact.heal{color:#75ffba;text-shadow:0 0 18px #2bd49a}.impact.guard{color:#8ce4ff}@keyframes pop{0%{opacity:0;transform:translate(-50%,-20%) scale(.5)}25%{opacity:1;transform:translate(-50%,-60%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-100%) scale(1)}}.turnbox{padding:11px;border:1px solid #2e8eb7;background:#0d2b40;border-radius:12px;text-align:center;font-weight:850;margin:10px 0}.boss-banner{padding:10px;text-align:center;background:linear-gradient(90deg,#511b24,#a32331,#511b24);border:1px solid #ff7474;border-radius:10px;color:#ffe2a4;font-weight:950;letter-spacing:.06em;margin:8px 0}.log{background:#080e1a;padding:10px;border-radius:10px;max-height:190px;overflow:auto;font-size:13px;line-height:1.5}.notice{background:#1b3048;border-left:3px solid #38bdf8;padding:10px;border-radius:7px;margin:10px 0}.task{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #34425b;padding:10px 0}.footer{text-align:center;color:#71809c;font-size:12px;padding:20px}.locked{opacity:.6}.cooldown{font-size:11px;display:block;margin-top:3px;color:#ffdb8a}.tag{display:inline-block;border-radius:7px;padding:3px 7px;background:#273955;font-size:11px;font-weight:800}.selection{outline:2px solid #8b7bff}.empty{padding:18px;text-align:center;color:var(--muted)}@media(max-width:520px){body{padding:0 9px}.panel{padding:11px}.battle-scene{min-height:245px;padding:8px}.combatant{width:58%;padding:7px}.fight-row{display:flex;align-items:center;gap:6px}.fight-row .combatant{width:58%;flex:1;min-width:0}.fight-controls{width:40%;display:flex;flex-direction:column;gap:5px}.fight-controls button{width:100%;min-width:0;padding:8px 4px;font-size:11px;line-height:1.15}.fight-controls b{font-size:11px}.fight-controls .muted{font-size:9px}.fight-controls .small{font-size:9px}.scene-bottom{margin-top:12px}.scene-bottom{margin-top:14px}.stats .pill{font-size:11px;padding:5px 7px}.nav{margin:0 -2px}.actions button{padding:10px 7px;font-size:13px}}
+
+/* Compact arena: battle actions remain beside the player's monster. */
+.battle-panel{padding:9px;margin-bottom:8px}
+.battle-scene{min-height:0;height:clamp(330px,53vh,470px);padding:8px;display:flex;flex-direction:column;justify-content:space-between}
+.scene-top{position:relative;min-height:42%;align-items:flex-start}
+.scene-top .combatant{width:54%;max-width:300px}
+.fight-row{display:flex;align-items:center;gap:7px;min-height:45%}
+.fight-row .combatant{width:auto;flex:1;min-width:0}
+.fight-controls{width:39%;display:flex;flex-direction:column;gap:6px}
+.fight-controls button{width:100%;min-width:0;padding:9px 5px;font-size:12px;line-height:1.15}
+.fight-controls b{font-size:12px}
+.fight-controls .muted,.fight-controls .small{font-size:10px}
+.element-open{position:absolute;left:4px;top:8px;z-index:5;padding:7px 9px;font-size:11px;background:#253b61;border-color:#7da9e8}
+.element-modal{position:fixed;inset:0;z-index:1000;background:#050914dd;display:flex;align-items:center;justify-content:center;padding:16px}
+.element-modal-card{width:min(540px,100%);max-height:82vh;overflow:auto;background:#15223a;border:1px solid #53698c;border-radius:16px;padding:16px;box-shadow:0 18px 50px #000b}
+.element-modal-card .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.element-modal-card .monster{padding:10px}
+.element-modal-card .close-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.turnbox{margin:5px 0;padding:7px;font-size:13px}
+.battle-log-panel{display:none}
+.battle-team-switch{margin-top:5px}
+@media(max-width:520px){
+ body{padding:0 7px}
+ header{padding:8px 0 5px}
+ h1{font-size:21px}
+ .nav{padding:4px 0 7px;gap:5px}
+ .nav button{padding:7px 9px;font-size:12px}
+ .panel.battle-panel{padding:8px}
+ .battle-scene{height:clamp(330px,54vh,430px);margin:6px 0}
+ .combatant{padding:6px}
+ .combatant .row b{font-size:12px}
+ .combatant .small,.combatant .muted{font-size:10px}
+ .combatant .pill{font-size:10px;padding:4px 5px}
+ .creature{font-size:clamp(45px,12vw,68px)}
+ .fight-row{gap:5px}
+ .fight-controls{width:40%;gap:5px}
+ .fight-controls button{padding:8px 3px;font-size:11px}
+ .fight-controls b{font-size:11px}
+ .fight-controls .muted,.fight-controls .small{font-size:9px}
+ .element-open{top:5px;left:4px;padding:6px 7px;font-size:10px}
+ .battle-team-switch h3{font-size:13px}
+ .battle-team-switch .actions button{font-size:10px;padding:6px}
+ .battle-log-panel{display:none!important}
+}
+
+
+/* Version 6 – freie Pokémon-inspirierte Arena */
+.battle-panel{background:transparent;border:0;box-shadow:none;padding:4px 0}
+.battle-scene{height:clamp(390px,58vh,520px);min-height:390px;border:0;border-radius:18px;overflow:hidden;position:relative;padding:14px 12px;background:linear-gradient(180deg,#9bd9f2 0%,#d8f0ee 42%,#8ecb70 43%,#4d9c48 100%);box-shadow:inset 0 -30px 50px #27652b55}
+.battle-scene:before{content:' ';position:absolute;inset:35% 0 25%;background:linear-gradient(160deg,transparent 0 22%,#7eae91 23% 36%,transparent 37%),linear-gradient(200deg,transparent 0 25%,#83b69a 26% 42%,transparent 43%);opacity:.8;pointer-events:none}
+.battle-scene:after{content:' ';position:absolute;left:-10%;right:-10%;bottom:16%;height:24%;border-radius:50%;background:#b5d68b;box-shadow:0 8px 0 #6da65c;opacity:.85;pointer-events:none}
+.scene-top,.fight-row{position:relative;z-index:2;min-height:0}
+.scene-top{height:43%;display:flex;align-items:flex-start;justify-content:flex-end}
+.scene-top .combatant{width:57%;max-width:340px}
+.combatant{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none;z-index:3;color:#182b24;text-shadow:0 1px 0 #ffffff99}
+.combatant .row b{font-size:14px;color:#172c24}
+.combatant .tag{background:#f4f4d9;color:#263326;border:1px solid #718a60}
+.combatant .muted{color:#294b3b}
+.combatant .pill{background:#e8efd4;color:#243c2b}
+.combatant .bar{background:#d8e1c5;border-color:#718b65}
+.combatant .creature{font-size:clamp(64px,17vw,112px);line-height:1.1;filter:drop-shadow(0 9px 4px #1c402a66);margin-top:5px}
+.enemy .creature{text-align:right}.player .creature{text-align:left}
+.fight-row{height:52%;display:flex;align-items:flex-end;gap:10px}
+.fight-row .combatant{width:auto;flex:1;min-width:0}
+.fight-controls{width:37%;display:flex;flex-direction:column;gap:7px;align-self:flex-end;z-index:5}
+.fight-controls button{width:100%;min-width:0;padding:10px 5px;font-size:12px;box-shadow:0 3px 0 #0003}
+.fight-controls button:disabled{opacity:.45}
+.element-open{position:absolute;left:4px;top:5px;z-index:6;background:#f4f5df;color:#243a2c;border-color:#829a69}
+.turnbox{position:relative;z-index:2;background:#183d31;border-color:#a7d17c;color:#f5ffe9}
+.battle-menu{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0;position:relative;z-index:8}
+.battle-menu button{padding:14px 8px;font-size:15px}
+.menu-sub{background:#132b25;border:1px solid #527b4a;border-radius:12px;padding:10px;margin:8px 0}
+.menu-sub .actions{margin-top:8px}
+.damage-pop{position:absolute;top:35%;right:8%;z-index:9;font-size:22px;font-weight:1000;color:#c21e35;text-shadow:0 2px 2px white;animation:damageFloat .9s ease-out forwards}
+.damage-pop.heal{color:#087d43}
+.battle-team-switch{position:relative;z-index:2}
+@media(max-width:520px){.battle-scene{height:clamp(390px,57vh,470px);padding:12px 9px}.scene-top{height:43%}.fight-row{height:52%;gap:7px}.fight-controls{width:35%;gap:6px}.fight-controls button{padding:9px 3px;font-size:11px}.combatant .row b{font-size:12px}.combatant .small,.combatant .muted{font-size:10px}.combatant .tag{font-size:10px}.combatant .creature{font-size:clamp(58px,16vw,88px)}.element-open{font-size:10px;padding:6px 7px}}
+
+/* Version 7: klassische Statusfenster, Kampftext und klare Trefferanimationen */
+.battle-scene{display:flex;flex-direction:column;justify-content:space-between;gap:8px;height:clamp(420px,62vh,540px);min-height:420px;padding:12px;background:linear-gradient(180deg,#b9e8f5 0%,#e8f4d7 42%,#83c56b 43%,#438e45 100%)}
+.scene-top{height:36%;min-height:0;align-items:flex-start}
+.scene-top .combatant{width:min(62%,340px);margin-left:auto}
+.fight-row{height:52%;min-height:0;align-items:flex-end}
+.fight-row .combatant{width:min(62%,340px);flex:1}
+.combatant{background:#f5f1cf!important;border:3px solid #536c45!important;border-radius:9px!important;padding:7px 9px!important;color:#243323!important;text-shadow:none!important;box-shadow:3px 4px 0 #294b3677}
+.combatant .row b{font-size:13px;color:#1c2b20}
+.combatant .tag{background:#e6e2b9;color:#243323;border:1px solid #7e875e}
+.combatant .small{color:#344a35}
+.combatant .bar{height:8px;background:#59604a;border:1px solid #35472f;margin:3px 0 5px}
+.combatant .creature{font-size:clamp(58px,15vw,96px);line-height:1.05;filter:drop-shadow(0 5px 3px #0004)}
+.enemy .creature{text-align:right}.player .creature{text-align:left}
+.combatant .exp-line{display:flex;align-items:center;gap:5px;font-size:9px;color:#344a35;margin-top:2px}
+.exp-track{height:5px;flex:1;background:#9da68a;border:1px solid #6d795d;border-radius:5px;overflow:hidden}.exp-track span{display:block;height:100%;background:#48a9e8}
+.battle-message{background:#16445a;color:#fff;border:4px solid #e5d69a;outline:2px solid #4c593b;border-radius:8px;padding:10px 12px;min-height:58px;font-weight:750;line-height:1.35;font-size:13px;box-shadow:0 3px 0 #263b2c;}
+.battle-message small{display:block;color:#d5e9e7;font-weight:500;margin-top:3px}
+.battle-menu,.menu-sub{background:#f5f1cf;border:3px solid #536c45;border-radius:9px;padding:8px;color:#243323}
+.battle-menu button,.menu-sub button{min-height:42px}
+.combatant.attacker-player .creature{animation:playerLunge .42s ease-in-out}
+.combatant.attacker-enemy .creature{animation:enemyLunge .42s ease-in-out}
+.combatant.taking-hit .creature{animation:hitFlash .42s ease-in-out}
+@keyframes playerLunge{0%,100%{transform:translate(0,0)}45%{transform:translate(28px,-9px) scale(1.1)}}
+@keyframes enemyLunge{0%,100%{transform:translate(0,0)}45%{transform:translate(-28px,9px) scale(1.1)}}
+@keyframes hitFlash{0%,100%{filter:brightness(1);transform:translateX(0)}25%{filter:brightness(2.2);transform:translateX(-7px)}55%{filter:brightness(.65);transform:translateX(6px)}}
+@media(max-width:520px){.battle-scene{height:clamp(420px,62vh,500px);padding:9px}.scene-top{height:35%}.fight-row{height:53%}.combatant{padding:6px 7px!important}.battle-message{font-size:12px;min-height:54px;padding:8px}.combatant .creature{font-size:clamp(55px,15vw,78px)}}
+
+/* Version 8: Pokémon-ähnlicher Ablauf mit Text zuerst, dann Aktionsmenü */
+.scene-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.scene-top .combatant{width:48%;max-width:300px;margin:0}
+.fight-row{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.fight-row .combatant{width:48%;max-width:300px;flex:0 1 48%;margin:0}
+.battle-sprite{position:relative;z-index:4;font-size:clamp(66px,17vw,105px);line-height:1;filter:drop-shadow(0 8px 5px #24472c88);transition:transform .35s}
+.enemy-sprite{margin-left:auto;margin-right:5%;align-self:center}
+.player-sprite{margin-left:5%;margin-right:auto;align-self:flex-end}
+
+@media(max-width:520px){.scene-top .combatant,.fight-row .combatant{width:52%;max-width:52%;flex-basis:52%}.battle-sprite{font-size:clamp(62px,17vw,88px)}}
+.battle-message{min-height:76px;font-size:14px;display:flex;flex-direction:column;justify-content:center;cursor:pointer}
+.battle-message .message-hint{font-size:10px;color:#d5e9e7;font-weight:500;margin-top:5px}
+.battle-message.waiting{border-color:#e5d69a}
+.battle-menu,.menu-sub{margin-top:7px}
+.battle-menu[hidden],.menu-sub[hidden]{display:none!important}
+.scene-top .combatant{margin-left:0;margin-right:auto;max-width:46%;}
+.fight-row .combatant{margin-left:auto;margin-right:0;max-width:46%;}
+.scene-top{justify-content:flex-end}
+.fight-row{justify-content:flex-start}
+.scene-top .combatant .creature{text-align:right}
+.fight-row .combatant .creature{text-align:left}
+.combatant.attacker-player .creature{animation:playerLunge .42s ease-in-out}
+.combatant.attacker-enemy .creature{animation:enemyLunge .42s ease-in-out}
+@media(max-width:520px){.scene-top .combatant,.fight-row .combatant{max-width:58%;width:58%}.battle-message{min-height:70px;font-size:12px}}
+
+/* Version 9: 3D-Cartoon-Monsterfamilien und gemeinsames Text-/Aktionsfenster */
+.art-wrap{display:flex;align-items:center;justify-content:center;min-height:116px;margin:7px 0;border-radius:12px;overflow:hidden;background:radial-gradient(ellipse at center,#31486a,#142139 72%);border:1px solid #425b7c}
+.monster-art{display:block;width:100%;max-width:190px;height:116px;object-fit:contain;filter:drop-shadow(0 6px 8px #0008)}
+.art-wrap.Uncommon{box-shadow:inset 0 0 18px #22c55e55}.art-wrap.Rare{box-shadow:inset 0 0 18px #3b82f655}.art-wrap.Epic{box-shadow:inset 0 0 20px #a855f755}.art-wrap.Legendary{box-shadow:inset 0 0 24px #f59e0b88;border-color:#c18b32}
+.battle-art{width:clamp(90px,25vw,150px);height:clamp(90px,25vw,150px);object-fit:contain;border-radius:10px;filter:drop-shadow(0 8px 8px #17351f88)}
+.battle-sprite{font-size:0!important;display:flex;align-items:center;justify-content:center;min-width:0}
+.mini-art{width:30px;height:30px;object-fit:contain;vertical-align:middle;border-radius:6px}
+.battle-console{border:3px solid #536c45;border-radius:10px;background:#f5f1cf;padding:5px;margin-top:7px}
+.battle-console .battle-message{margin:0;border:0;outline:0;box-shadow:none;border-radius:5px;min-height:54px}
+.battle-console .battle-menu{margin:5px 0 0;padding:0;border:0;background:transparent;display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.battle-console .battle-menu button{min-width:0;min-height:46px;padding:8px 5px;font-size:14px}
+.battle-console .menu-sub{margin:5px 0 0}
+@media(max-width:520px){.battle-scene{height:clamp(270px,42vh,340px);min-height:270px;padding:8px}.scene-top{height:40%}.fight-row{height:52%}.battle-art{width:clamp(82px,24vw,118px);height:clamp(82px,24vw,118px)}.scene-top .combatant,.fight-row .combatant{max-width:52%;width:52%}.battle-console .battle-menu button{font-size:13px;padding:7px 3px}.art-wrap{min-height:94px}.monster-art{height:94px}}
+
+/* Version 11: freie Monster-Sprites und atmosphärische 3D-Arena */
+.battle-scene{
+ height:clamp(390px,58vh,520px)!important;min-height:390px!important;
+ background:#23354b url('assets/arena-background.svg') center center/cover no-repeat!important;
+ border:2px solid #6e9db8!important;border-radius:20px!important;
+ box-shadow:inset 0 0 35px #06152b88,0 8px 24px #0007!important;
+ padding:12px!important;position:relative;isolation:isolate;
+}
+.battle-scene:before,.battle-scene:after{display:none!important}
+.scene-top{height:43%;display:flex;align-items:flex-start;justify-content:space-between!important;position:relative;z-index:2}
+.fight-row{height:52%;display:flex;align-items:flex-end;justify-content:space-between!important;position:relative;z-index:2}
+.scene-top .combatant{order:0;margin:4px auto 0 4px!important;width:48%!important;max-width:48%!important;flex:0 1 48%!important}
+.enemy-sprite{order:1;margin:0 3% 0 auto!important;align-self:center}
+.player-sprite{order:0;margin:0 auto 0 2%!important;align-self:flex-end}
+.fight-row .combatant{order:1;margin:0 3px 0 auto!important;width:48%!important;max-width:48%!important;flex:0 1 48%!important}
+.battle-sprite{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;overflow:visible!important;z-index:4}
+.battle-art{display:block;width:clamp(125px,35vw,190px)!important;height:clamp(125px,35vw,190px)!important;max-width:none!important;object-fit:contain!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 12px 8px #061322aa)!important}
+.enemy-sprite .battle-art{width:clamp(115px,32vw,175px)!important;height:clamp(115px,32vw,175px)!important}
+.combatant{z-index:5!important;background:linear-gradient(145deg,#fff7d7,#e8dfb3)!important;border:3px solid #647c54!important;border-radius:13px!important;color:#1d2a21!important;box-shadow:3px 5px 0 #182b3c88!important;text-shadow:none!important;padding:8px 10px!important}
+.combatant .row b{color:#1d2a21!important;font-size:14px!important}
+.combatant .tag{background:#e4e7c5!important;color:#263b2c!important;border-color:#87986b!important}
+.combatant .bar{height:9px!important}
+@media(max-width:520px){
+ .battle-scene{height:clamp(390px,56vh,470px)!important;min-height:390px!important;padding:9px!important}
+ .scene-top{height:43%!important}.fight-row{height:52%!important}
+ .scene-top .combatant,.fight-row .combatant{width:49%!important;max-width:49%!important;flex-basis:49%!important}
+ .battle-art{width:clamp(112px,34vw,150px)!important;height:clamp(112px,34vw,150px)!important}
+ .enemy-sprite .battle-art{width:clamp(105px,31vw,140px)!important;height:clamp(105px,31vw,140px)!important}
+ .combatant{padding:6px 7px!important}.combatant .row b{font-size:12px!important}
+}
+
+.battle-art,.monster-art{object-fit:contain!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:drop-shadow(0 10px 7px #07142688)!important}
+.art-wrap{background:radial-gradient(ellipse at center bottom,#2d4963aa,transparent 70%)!important;border:0!important;overflow:visible!important}
+.monster-art{width:100%;height:160px;display:block}
+@media(max-width:520px){.monster-art{height:112px}}
+.battle-art,.monster-art{object-fit:contain!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:drop-shadow(0 10px 7px #07142688)!important}
+.art-wrap{background:radial-gradient(ellipse at center bottom,#2d4963aa,transparent 70%)!important;border:0!important;overflow:visible!important}
+.monster-art{width:100%;height:160px;display:block}
+@media(max-width:520px){.monster-art{height:112px}}
+
+/* VERSION 14 – Arena-Neuaufbau nach der Referenzvorlage */
+.battle-panel{padding:8px!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.battle-scene{
+ position:relative!important;display:block!important;isolation:isolate!important;overflow:hidden!important;
+ width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:1.30/1!important;
+ margin:8px 0 10px!important;padding:0!important;border:2px solid #66b4d7!important;border-radius:24px!important;
+ background:#183047 url('assets/arena-background-v14.png') center center/100% 100% no-repeat!important;
+ box-shadow:0 7px 22px #0008,inset 0 0 18px #06152b66!important;
+}
+.battle-scene:before,.battle-scene:after{display:none!important}
+.battle-scene .scene-top,.battle-scene .fight-row{display:contents!important}
+.battle-scene #enemyCard,.battle-scene #playerCard{
+ position:absolute!important;z-index:7!important;width:44%!important;max-width:44%!important;margin:0!important;
+ padding:5px 7px!important;border:2px solid #687e56!important;border-radius:12px!important;
+ background:linear-gradient(145deg,#fff8d9,#e8dfb7)!important;color:#20291e!important;
+ box-shadow:2px 4px 0 #172b3c88!important;text-shadow:none!important;
+}
+.battle-scene #enemyCard{left:3%!important;top:3%!important;padding-top:24px!important}
+.battle-scene #playerCard{right:3%!important;bottom:3%!important;width:46%!important;max-width:46%!important}
+.battle-scene .combatant .row{gap:4px!important;align-items:center!important}
+.battle-scene .combatant .row b{font-size:clamp(10px,3.2vw,14px)!important;color:#20291e!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.battle-scene .combatant .tag{font-size:clamp(9px,2.8vw,12px)!important;padding:3px 5px!important;background:#e4e8c6!important;color:#263b2c!important}
+.battle-scene .combatant .bar{height:8px!important;margin:4px 0 3px!important}
+.battle-scene .combatant .small{font-size:9px!important}
+.battle-scene .battle-sprite{position:absolute!important;display:flex!important;align-items:center!important;justify-content:center!important;z-index:5!important;margin:0!important;padding:0!important;width:auto!important;height:auto!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
+.battle-scene #enemySprite{left:65%!important;top:24%!important;transform:translate(-50%,-50%)!important}
+.battle-scene #playerSprite{left:25%!important;top:76%!important;transform:translate(-50%,-50%)!important}
+.battle-scene .battle-art{display:block!important;width:clamp(105px,31vw,170px)!important;height:clamp(105px,31vw,170px)!important;max-width:none!important;max-height:none!important;object-fit:contain!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:drop-shadow(0 9px 7px #07142699)!important}
+.battle-scene #playerSprite .battle-art{width:clamp(125px,37vw,195px)!important;height:clamp(125px,37vw,195px)!important}
+.battle-scene .element-open{position:absolute!important;z-index:9!important;left:4%!important;top:4%!important;font-size:10px!important;padding:5px 7px!important;border-radius:18px!important;background:#f5f1cf!important;color:#263323!important;border:2px solid #6a8157!important;box-shadow:0 2px 0 #293d2b!important}
+.battle-console{border:3px solid #536c45!important;border-radius:14px!important;background:#f5f1cf!important;padding:6px!important;margin:8px 0!important;box-shadow:0 3px 0 #182d3b!important}
+.battle-console .battle-message{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:5px!important;background:#16445a!important;color:#fff!important;border:0!important;outline:0!important;box-shadow:none!important;border-radius:8px!important;padding:11px!important;min-height:72px!important;text-align:left!important}
+.battle-console .battle-message-text{display:block!important;font-weight:800!important;line-height:1.35!important}
+.battle-console .message-hint{display:block!important;color:#d5e9e7!important;font-size:10px!important}
+.battle-console .battle-menu,.battle-console .menu-sub{background:transparent!important;border:0!important;padding:0!important;margin:5px 0 0!important;color:white!important}
+.battle-console .battle-menu{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important}
+.battle-console .battle-menu button{min-width:0!important;min-height:46px!important;font-size:14px!important;padding:7px 4px!important}
+.battle-console .menu-sub .actions{display:flex!important;gap:6px!important;margin-top:6px!important}
+.battle-console .menu-sub .actions button{flex:1!important;min-width:0!important;padding:7px 3px!important;font-size:12px!important}
+.battle-console .menu-sub .row{color:#fff!important}
+.battle-team-switch{margin-top:6px!important}
+@media(max-width:520px){
+ .battle-scene{aspect-ratio:1.30/1!important;border-radius:20px!important}
+ .battle-scene #enemyCard{width:46%!important;max-width:46%!important;top:4%!important;left:3%!important}
+ .battle-scene #playerCard{width:47%!important;max-width:47%!important;right:2.5%!important;bottom:3%!important}
+ .battle-scene #enemySprite{left:72%!important;top:39%!important}
+ .battle-scene #playerSprite{left:25%!important;top:77%!important}
+ .battle-scene .battle-art{width:clamp(105px,31vw,135px)!important;height:clamp(105px,31vw,135px)!important}
+ .battle-scene #playerSprite .battle-art{width:clamp(125px,37vw,158px)!important;height:clamp(125px,37vw,158px)!important}
+ .battle-scene .combatant{padding:5px 6px!important}
+ .battle-scene .combatant .row b{font-size:11px!important}
+ .battle-console .battle-menu button{font-size:13px!important;min-height:45px!important}
+ .battle-console .menu-sub .actions button{font-size:11px!important;line-height:1.15!important}
+}
+
+
+/* VERSION 15: fixed creature foot anchors on the arena circles */
+.battle-scene #enemySprite{left:69%!important;top:49%!important;transform:translate(-50%,-88%)!important;}
+.battle-scene #playerSprite{left:28%!important;top:79%!important;transform:translate(-50%,-88%)!important;}
+.battle-scene .battle-sprite{width:clamp(118px,34vw,190px)!important;height:clamp(118px,34vw,190px)!important;}
+.battle-scene .battle-art{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;}
+.battle-scene #playerSprite .battle-art{width:100%!important;height:100%!important;}
+@media(max-width:520px){
+ .battle-scene #enemySprite{left:69%!important;top:49%!important;}
+ .battle-scene #playerSprite{left:28%!important;top:79%!important;}
+ .battle-scene .battle-sprite{width:clamp(122px,36vw,166px)!important;height:clamp(122px,36vw,166px)!important;}
+}
+
+
+/* VERSION 17.1 – three isolated test sprites with foot anchors aligned to the arena rings */
+.battle-scene #enemySprite,
+.battle-scene #playerSprite{
+  position:absolute!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;
+  width:clamp(145px,34vw,190px)!important;height:clamp(145px,34vw,190px)!important;
+  margin:0!important;padding:0!important;overflow:visible!important;z-index:6!important;
+  background:transparent!important;border:0!important;box-shadow:none!important;
+}
+/* The image bottom is the foot contact point: align it with the centre of each glowing ring. */
+.battle-scene #enemySprite{left:69%!important;top:46%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-100%)!important;}
+.battle-scene #playerSprite{left:28%!important;top:79%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-100%)!important;}
+.battle-scene .battle-art{
+  display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;
+  object-fit:contain!important;object-position:center bottom!important;background:transparent!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+  filter:drop-shadow(0 10px 8px #061322aa)!important;
+}
+@media(max-width:520px){
+ .battle-scene #enemySprite,.battle-scene #playerSprite{width:clamp(132px,36vw,166px)!important;height:clamp(132px,36vw,166px)!important;}
+ .battle-scene #enemySprite{left:69%!important;top:46%!important;}
+ .battle-scene #playerSprite{left:28%!important;top:79%!important;}
+}
+
+</style></head><body>
+<header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 18.2 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<script>
+const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
+const book=[
+['Blattling','🍃','Pflanze','Common',82,19,8,'Rankenhieb'],
+['Glutfünkchen','🔥','Feuer','Common',82,19,8,'Glutstoß'],
+['Tropfli','💧','Wasser','Common',82,18,10,'Blubber'],
+['Blitzling','⚡','Blitz','Rare',96,25,9,'Funkenstoß'],
+['Eisling','❄️','Eis','Rare',98,22,12,'Frosthieb'],
+['Schattilly','🌑','Schatten','Rare',100,26,9,'Schattenklaue'],
+['Drakli','🐉','Drache','Rare',105,28,12,'Drachenhauch'],
+['Naturion','🌿','Pflanze','Legendary',260,72,38,'Urwurzel'],
+['Pyronox','🔥','Feuer','Legendary',250,82,30,'Sonneninferno'],
+['Aqualor','💧','Wasser','Legendary',270,70,42,'Flutkoloss'],
+['Voltaran','⚡','Blitz','Legendary',245,88,28,'Himmelssturm'],
+['Frostor','❄️','Eis','Legendary',265,76,40,'Ewiger Winter'],
+['Umbrax','🌑','Schatten','Legendary',255,84,34,'Nachtzehrer'],
+['Dracurion','🐉','Drache','Legendary',285,92,40,'Weltenbrand']
+]
+const odds={normal:[['Common',90],['Rare',10]]},prices={normal:500,legendary:5000};
+let nextId=1, busy=false,turnTimer=null, messageTimer=null, messageQueue=[], messageDone=null, messageFull='', dexElement='Alle', dexRarity='Alle', dexSelected=0;
+const fresh={coins:0,owned:[],team:[],active:null,enemy:null,stage:1,wins:0,losses:0,log:['Willkommen in der Monster Arena! Wähle dein Team auf Stufe 1.'],claims:[],daily:'',battleTurn:'player',playerCooldown:{},enemyCooldown:0,enemyLevel:1,bossDefeated:0};
+let S;
+function artFor(m){const art={'Blattling':'assets/test-monsters/blattling.png','Glutfünkchen':'assets/test-monsters/glutfuenkchen.png','Tropfli':'assets/test-monsters/tropfli.png','Blitzling':'assets/monsters/blitzling.png','Eisling':'assets/monsters/eisling.png','Schattilly':'assets/monsters/schattilly.png','Drakli':'assets/monsters/drakli.png','Naturion':'assets/monsters/naturion.png','Pyronox':'assets/monsters/pyronox.png','Aqualor':'assets/monsters/aqualor.png','Voltaran':'assets/monsters/voltaran.png','Frostor':'assets/monsters/frostor.png','Umbrax':'assets/monsters/umbrax.png','Dracurion':'assets/monsters/dracurion.png'};return art[m.name]||'assets/test-monsters/blattling.png'}
+function monsterArt(m,cls='monster-art'){return `<img class="${cls}" src="${artFor(m)}" alt="${m.name}" loading="lazy">`}
+function battleMonsterArt(m){const src=artFor(m);return `<img class="battle-art" src="${src}" alt="${m.name}" loading="eager">`}
+function make(t,l=1){let mx=Math.round(t[4]*(1+(l-1)*.12));let m={id:nextId++,name:t[0],emoji:t[1],element:t[2],rarity:t[3],level:l,xp:0,max:mx,hp:mx,atk:Math.round(t[5]*(1+(l-1)*.1)),def:Math.round(t[6]*(1+(l-1)*.08)),special:t[7],slow:0,guard:false,cooldown:0};m.sprite=artFor(m);return m}
+function save(){try{localStorage.setItem('monsterArenaSaveV3',JSON.stringify(S))}catch(e){}}
+function load(){try{S={...fresh,...JSON.parse(localStorage.getItem('monsterArenaSaveV3')||'{}')}}catch{S={...fresh}}S.owned=Array.isArray(S.owned)?S.owned.filter(m=>book.some(t=>t[0]===m.name)):[];S.team=Array.isArray(S.team)?S.team:[];S.log=Array.isArray(S.log)?S.log:[];S.claims=Array.isArray(S.claims)?S.claims:[];S.stage=Math.max(1,Number(S.stage)||1);if(!S.owned.length){let m=make(book[0]);S.owned=[m];S.team=[m.id];S.active=m.id}S.owned.forEach(m=>{m.sprite=artFor(m)});S.team=S.team.filter((id,i,arr)=>S.owned.some(m=>m.id===id)&&arr.indexOf(id)===i).slice(0,5);if(!S.team.length)S.team=[S.owned[0].id];if(!S.team.includes(S.active)||!S.owned.some(m=>m.id===S.active&&m.hp>0))S.active=S.team.find(id=>S.owned.find(m=>m.id===id)?.hp>0)||S.team[0];nextId=Math.max(1,...S.owned.map(m=>m.id+1));save()}
+const active=()=>S.owned.find(m=>m.id===S.active),teamMons=()=>S.team.map(id=>S.owned.find(m=>m.id===id)).filter(Boolean),logmsg=t=>{S.log.unshift(t);S.log=S.log.slice(0,35);save()};
+function playMessages(lines,done){clearInterval(messageTimer);messageQueue=[...lines];messageDone=done||null;busy=true;menuMode='none';nextMessage()}
+function nextMessage(){if(!messageQueue.length){busy=false;let cb=messageDone;messageDone=null;render();if(cb)cb();return}messageFull=messageQueue.shift();let i=0;let node=$('.battle-message-text');if(!node){render();node=$('.battle-message-text')}if(!node){busy=false;return}node.textContent='';messageTimer=setInterval(()=>{node=$('.battle-message-text');if(!node){clearInterval(messageTimer);return}i++;node.textContent=messageFull.slice(0,i);if(i>=messageFull.length){clearInterval(messageTimer);let hint=$('.message-hint');if(hint)hint.textContent='Tippe zum Fortfahren';}},30)}
+function advanceMessage(){if(!busy||!messageFull)return;clearInterval(messageTimer);let node=$('.battle-message-text');if(node)node.textContent=messageFull;let hint=$('.message-hint');if(hint)hint.textContent='Tippe zum Fortfahren';messageFull='';setTimeout(()=>{if(messageQueue.length)nextMessage();else{busy=false;let cb=messageDone;messageDone=null;render();if(cb)cb()}},180)}
+
+function bar(m){return `<div class="row small"><span>❤️ LP</span><b>${Math.max(0,m.hp)}/${m.max}</b></div><div class="bar hp"><span style="width:${Math.max(0,Math.min(100,m.hp/m.max*100))}%"></span></div>`}
+function expBar(m){let need=m.level*100;return `<div class="exp-line"><b>EXP</b><div class="exp-track"><span style="width:${Math.max(0,Math.min(100,m.xp/need*100))}%"></span></div><span>${m.xp}/${need}</span></div>`}
+function card(m,extra=''){return `<div class="monster"><div class="row"><span class="rarity ${m.rarity}">${m.rarity}</span><span class="pill">${m.element}</span></div><div class="art-wrap ${m.rarity}">${monsterArt(m)}</div><b>${m.name}</b><div class="muted small">Level ${m.level} · Spezial: ${m.special}</div>${bar(m)}<div class="stats"><span class="pill">⚔️ ${m.atk}</span><span class="pill">🛡️ ${m.def}</span><span class="pill">XP ${m.xp}/${m.level*100}</span></div>${extra}</div>`}
+function weighted(type){let n=Math.random()*100;for(const [r,p] of odds[type]){n-=p;if(n<=0)return r}return odds[type].at(-1)[0]}
+function canManage(){return S.stage===1&&!S.enemy&&!busy}function canPrepare(){return !S.enemy&&!busy}
+function summon(type){if(!canManage())return alert('Beschwörungen sind nur auf Stufe 1 möglich.');if(S.coins<prices[type])return alert('Nicht genug Münzen.');S.coins-=prices[type];if(type==='legendary'&&Math.random()>=0.05){logmsg('🌟 Das Legendär-Ei hat keinen legendären Kern enthalten. Versuche es erneut!');render();return}let rar=type==='legendary'?'Legendary':weighted('normal'),pool=book.filter(t=>t[3]===rar),m=make(pool[Math.floor(Math.random()*pool.length)]);S.owned.push(m);logmsg(`🥚 ${m.name} (${m.rarity}) wurde beschworen und ist jetzt in deiner Sammlung.`);render()}
+function summonTicket(){if(!canManage())return alert('Beschwörungen sind nur auf Stufe 1 möglich.');if(!(S.tickets>0))return alert('Du hast kein Boss-Beschwörungsticket.');S.tickets--;let rar='Legendary',pool=book.filter(t=>t[3]===rar),m=make(pool[Math.floor(Math.random()*pool.length)]);S.owned.push(m);logmsg(`🎟️ Boss-Ticket eingelöst: ${m.name} (${m.rarity}) wurde beschworen!`);render()}
+function mult(x,y){if(({Feuer:'Pflanze',Pflanze:'Wasser',Wasser:'Feuer'})[x.element]===y.element)return[1.2,'Elementvorteil +20%!'];if(x.element==='Blitz'&&y.element==='Wasser')return[1.1,'Blitzvorteil +10%!'];return[1,'']}
+function hit(x,y,base=x.atk){let[k,msg]=mult(x,y);return[Math.max(3,Math.round(base*k-y.def*.42)),msg]}
+function isBoss(){return S.stage%10===0}
+function enemyMake(){
+ let boss=isBoss(), pool;
+ if(boss){
+   if(S.stage>=50) pool=book.filter(t=>t[3]==='Legendary');
+   else pool=book.filter(t=>t[3]==='Rare');
+ } else if(S.stage<10){pool=book.filter(t=>t[3]==='Common')}
+ else if(S.stage<30){pool=book.filter(t=>t[3]==='Common'||t[3]==='Rare')}
+ else if(S.stage<50){pool=book.filter(t=>t[3]==='Rare')}
+ else {pool=book.filter(t=>t[3]==='Rare')}
+ let t=pool[Math.floor(Math.random()*pool.length)];
+ let lv=Math.max(1,Math.floor(S.stage*.55));let e=make(t,lv);
+ if(!boss){const scale=S.stage<=3?0.62:S.stage<=6?0.76:S.stage<=9?0.9:1;e.max=Math.max(1,Math.round(e.max*scale));e.hp=e.max;e.atk=Math.max(1,Math.round(e.atk*scale));e.def=Math.max(0,Math.round(e.def*scale));}
+ e.boss=boss;
+ if(boss){e.name=t[0];e.max=Math.round(e.max*(S.stage>=50?2.0:1.65));e.hp=e.max;e.atk=Math.round(e.atk*(S.stage>=50?1.65:1.3));e.def=Math.round(e.def*1.25);e.special=t[7]}
+ return e
+}
+function start(){if(busy||S.enemy)return;menuMode='none';if(S.stage===1&&!S.team.length)return alert('Wähle zuerst dein Team.');let p=active();if(!p||p.hp<=0){let living=teamMons().find(m=>m.hp>0);if(!living)return teamWipe();S.active=living.id;p=living}S.enemy=enemyMake();S.battleTurn='player';S.enemyCooldown=0;let intro=S.enemy.boss?`Ein Boss erscheint: ${S.enemy.name}!`:`Ein wildes ${S.enemy.name} erscheint!`;logmsg(intro);playMessages([intro,'Was möchtest du tun?'],()=>{menuMode='root';render()})}
+function level(m){while(m.xp>=m.level*100){m.xp-=m.level*100;m.level++;m.max=Math.round(m.max*1.12);m.atk=Math.round(m.atk*1.1);m.def=Math.round(m.def*1.08);m.hp=Math.min(m.max,m.hp+20);logmsg(`${m.name} erreicht Level ${m.level}!`)}}
+function teamWipe(){S.enemy=null;S.losses++;S.stage=1;S.enemyLevel=1;S.team= S.team.filter(id=>S.owned.some(m=>m.id===id));S.active=S.team.find(id=>S.owned.find(m=>m.id===id)?.hp>0)||S.team[0]||S.owned[0]?.id;S.owned.forEach(m=>{m.hp=m.max;m.guard=false;m.slow=0;m.cooldown=0});logmsg('💀 Dein gesamtes Team wurde besiegt! Du kehrst auf Stufe 1 zurück. Alle Monster werden vollständig geheilt. Monster, Level, XP, Verbesserungen und Münzen bleiben erhalten. Beschwöre neue Monster und baue dein Team auf Stufe 1 neu auf!');save()}
+function pickNext(){let n=teamMons().find(m=>m.hp>0);if(n){S.active=n.id;logmsg(`${n.name} springt automatisch ein!`);return true}teamWipe();return false}
+function enemyTurn(){
+ let e=S.enemy,p=active();if(!e||!p||busy)return;
+ S.battleTurn='enemy';busy=true;menuMode='none';render();
+ 
+ turnTimer=setTimeout(()=>{
+  e=S.enemy;p=active();if(!e||!p){busy=false;render();return}
+  let action='attack',roll=Math.random();if(e.cooldown===0&&(e.boss?roll<.42:roll<.22))action='special';else if(roll>.76)action='defend';
+  let d=0,msg='',lines=[];
+  if(action==='defend'){e.guard=true;if(e.cooldown>0)e.cooldown=Math.max(0,e.cooldown-1);lines.push(`${e.name} nimmt eine defensive Haltung ein.`)}
+  else{let base=e.atk*(e.slow>0?.65:1);if(e.slow>0)e.slow--;if(p.guard)base*=.3;[d,msg]=hit(e,p,base);if(action==='special'){e.cooldown=4;if(e.element==='Eis'){p.slow=2;lines.push(`${e.name} setzt ${e.special} ein!`)}else if(e.element==='Schatten'){let heal=Math.min(e.max-e.hp,Math.round(d*.4));e.hp+=heal;lines.push(`${e.name} setzt ${e.special} ein und heilt sich um ${heal} LP.`)}else{d=Math.round(d*1.25);lines.push(`${e.name} setzt ${e.special} ein!`)}}else lines.push(`${e.name} greift an!`);p.hp=Math.max(0,p.hp-d);p.guard=false;lines.push(`${p.name} verliert ${d} HP.`);if(action!=='special'&&e.cooldown>0)e.cooldown=Math.max(0,e.cooldown-1)}
+  logmsg(lines.join(' '));
+  if(p.hp<=0){lines.push(`${p.name} ist kampfunfähig!`);let ok=pickNext();if(!ok){busy=false;render();return}lines.push(`${active().name} kommt in den Kampf!`)}
+  S.battleTurn='player';playMessages([...lines,'Was möchtest du tun?'],()=>{if(!active()||active().hp<=0)return;menuMode='root';render()});
+ },450);
+}
+
+function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!sc)return;let el=document.createElement('div');el.className='impact '+kind;el.textContent=txt;sc.appendChild(el);setTimeout(()=>el.remove(),750)}
+function playerAct(k,id){
+ if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
+ if(k==='switch'){let n=S.owned.find(m=>m.id===id);if(!S.team.includes(id)||!n||n.hp<=0||id===p.id)return;if(p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1);S.active=id;logmsg(`Du wechselst zu ${n.name}.`);playMessages([`Du wechselst zu ${n.name}.`,`${e.name} ist am Zug!`],()=>enemyTurn());return}
+ if(k==='special'&&p.cooldown>0)return alert(`Spezialfähigkeit noch ${p.cooldown} eigene Runde(n) Abklingzeit.`);
+ busy=true;menuMode='none';S.battleTurn='animating';render();
+ turnTimer=setTimeout(()=>{p=active();e=S.enemy;if(!p||!e){busy=false;render();return}let d=0,msg='',lines=[];
+ if(k==='defend'){p.guard=true;p.cooldown=Math.max(0,p.cooldown-3);lines.push(`${p.name} geht in Abwehrhaltung.`)}
+ else{let base=p.atk*(p.slow>0?.65:1);if(p.slow>0)p.slow--;if(k==='special'){base=p.atk*1.45*(p.slow>0?.65:1);p.cooldown=4;if(p.element==='Eis'){e.slow=2;lines.push(`${p.name} setzt ${p.special} ein!`)}else if(p.element==='Schatten')lines.push(`${p.name} setzt ${p.special} ein!`);else lines.push(`${p.name} setzt ${p.special} ein!`)}else lines.push(`${p.name} greift an!`);[d,msg]=hit(p,e,base);if(e.guard){d=Math.max(1,Math.round(d*.3));e.guard=false}e.hp=Math.max(0,e.hp-d);lines.push(`${e.name} verliert ${d} HP.`);if(k==='special'&&p.element==='Schatten'){let heal=Math.min(p.max-p.hp,Math.round(d*.55));p.hp+=heal;if(heal)lines.push(`${p.name} heilt sich um ${heal} LP.`)}if(k==='special'&&p.element==='Blitz')e.guard=false;if(k!=='special'&&p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1)}
+ logmsg(lines.join(' '));render();
+ playMessages(lines,()=>{if(e.hp<=0){busy=false;winBattle();render();return}enemyTurn()});
+ },420);
+}
+
+function winBattle(){let e=S.enemy,p=active();S.wins++;let reward=180+S.stage*35+(e.boss?1200:0);S.coins+=reward;if(p){p.xp+=60+S.stage*10+(e.boss?150:0);level(p)}if(e.boss){S.bossDefeated++;logmsg(`👑 BOSS BESIEGT! Einmalige Boss-Belohnung: +1200 Bonusmünzen und ein Beschwörungsticket (Testbonus).`);S.tickets=(S.tickets||0)+1}logmsg(`🏆 Sieg! +${reward} Münzen. Stufe ${S.stage} abgeschlossen.`);S.enemy=null;S.stage++;S.enemyLevel=S.stage;S.owned.forEach(m=>{m.guard=false;m.slow=0});S.battleTurn='player'}
+function healAll(){if(!canPrepare())return alert('Während eines Kampfes kannst du nicht heilen.');let ms=teamMons().filter(m=>m.hp<m.max);if(!ms.length)return alert('Dein Team hat bereits volle Lebenspunkte.');if(S.coins<75)return alert('Du brauchst 75 Münzen.');S.coins-=75;ms.forEach(m=>{m.hp=m.max;m.slow=0;m.guard=false});logmsg('Dein gesamtes Team wurde für 75 Münzen geheilt.');render()}
+function healTurn(kind){if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),targets=kind==='team'?teamMons():[p],cost=kind==='team'?75:20;if(!p||targets.every(m=>m.hp>=m.max))return alert('Diese Monster haben bereits volle Lebenspunkte.');if(S.coins<cost)return alert(`Du brauchst ${cost} Münzen.`);S.coins-=cost;targets.forEach(m=>{m.hp=m.max;m.slow=0;m.guard=false});let line=kind==='team'?`Dein gesamtes Team wurde für ${cost} Münzen geheilt.`:`${p.name} wurde für ${cost} Münzen vollständig geheilt.`;logmsg(line);S.battleTurn='animating';playMessages([line,'Dein Zug entfällt. Der Gegner ist am Zug!'],()=>enemyTurn())}
+function train(id,what){if(!canPrepare())return alert('Während eines Kampfes kannst du nicht trainieren.');let m=S.owned.find(x=>x.id===id),cost=what==='heal'?20:150+m.level*50;if(S.coins<cost)return alert('Nicht genug Münzen.');S.coins-=cost;if(what==='atk')m.atk+=4;if(what==='def')m.def+=3;if(what==='hp'){m.max+=12;m.hp+=12}if(what==='heal')m.hp=m.max;logmsg(`${m.name}: Training abgeschlossen.`);render()}
+function setTeam(id){if(!canManage())return alert('Dein Team kannst du nur auf Stufe 1 ändern.');let idx=S.team.indexOf(id);if(idx>=0){if(S.team.length===1)return alert('Du brauchst mindestens ein Teammonster.');S.team=S.team.filter(x=>x!==id);if(S.active===id)S.active=teamMons().find(m=>m.hp>0)?.id||S.team[0];logmsg(`${S.owned.find(m=>m.id===id).name} aus dem aktiven Team genommen.`)}else{if(S.team.length>=5)return alert('Dein Team darf maximal 5 Monster haben.');let m=S.owned.find(x=>x.id===id);if(!m)return;S.team.push(id);if(!active()||active().hp<=0)S.active=id;logmsg(`${m.name} ins Team aufgenommen.`)}render()}
+function setActive(id){if(!canManage())return alert('Monster kannst du nur auf Stufe 1 auswählen.');if(!S.team.includes(id))return alert('Nimm das Monster zuerst in dein Team auf.');let m=S.owned.find(x=>x.id===id);if(m&&m.hp>0){S.active=id;logmsg(`${m.name} ist dein Startmonster.`);render()}else alert('Dieses Monster muss erst geheilt werden.')}
+function claim(id){let done={first:S.wins>=1,wins3:S.wins>=3,summon3:S.owned.length>=4,level5:S.owned.some(m=>m.level>=5),daily:S.daily!==new Date().toDateString()}[id];if(!done||S.claims.includes(id))return;let reward={first:250,wins3:400,summon3:250,level5:500,daily:150}[id];S.claims.push(id);if(id==='daily')S.daily=new Date().toDateString();S.coins+=reward;logmsg(`Aufgabe erledigt: +${reward} Münzen!`);render()}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function elementIcon(el){return ({Feuer:'🔥',Wasser:'💧',Pflanze:'🍃',Blitz:'⚡',Eis:'❄️',Schatten:'🌑',Drache:'🐉'})[el]||'✨'}
+function battle(){
+ let e=S.enemy,p=active(),busyNow=busy;
+ if(!e){return `<div class="panel"><div class="row"><h2>🏟️ Arena · Stufe ${S.stage}</h2><span class="pill">🪙 ${S.coins}</span></div>${S.stage===1?'<div class="notice">Auf Stufe 1 kannst du dein Team ändern, Monster beschwören, trainieren und heilen. Ab Stufe 2 ist dein Team für den Durchlauf fest.</div>':''}${S.stage>1&&S.stage%10===0?`<div class="boss-banner">👑 BOSS HERAUSFORDERUNG – STUFE ${S.stage}</div>`:''}<div class="grid">${teamMons().map(m=>`<div class="monster ${m.id===S.active?'selection':''}"><div class="row"><b>${monsterArt(m,'mini-art')} ${m.name}</b><span class="tag">${m.id===S.active?'Aktiv':'Team'}</span></div><div class="muted small">Lv. ${m.level} · ${elementIcon(m.element)} ${m.element}</div>${bar(m)}</div>`).join('')}</div><div class="actions"><button class="primary" onclick="G.start()" ${!teamMons().some(m=>m.hp>0)?'disabled':''}>⚔️ Kampf auf Stufe ${S.stage} starten</button><button class="green" onclick="G.healAll()">💚 Team heilen · 75 🪙</button></div>${!teamMons().some(m=>m.hp>0)?'<div class="notice">Dein Team ist erschöpft.</div>':''}</div><div class="panel"><h2>📜 Kampfverlauf</h2><div class="log">${S.log.map(x=>'<div>› '+esc(x)+'</div>').join('')}</div></div>`}
+ if(!p)return '<div class="panel">Kein kampffähiges Monster im Team.</div>';
+ let controls='';
+ if(menuMode==='root') controls=`<div class="battle-menu root-actions"><button class="red" onclick="G.menu('fight')" ${busyNow?'disabled':''}>⚔️ KAMPF</button><button class="green" onclick="G.menu('heal')" ${busyNow?'disabled':''}>💚 HEILUNG</button></div>`;
+ if(menuMode==='fight') controls=`<div class="menu-sub"><div class="row"><b>⚔️ Attacken</b><button onclick="G.menu('root')">↩ Zurück</button></div><div class="actions"><button class="red" onclick="G.act('attack')" ${busyNow?'disabled':''}>Angriff<br><small>${hit(p,e)[0]} Schaden</small></button><button class="primary" onclick="G.act('special')" ${busyNow||p.cooldown>0?'disabled':''}>Spezial<br><small>${p.cooldown?`Noch ${p.cooldown}`:esc(p.special)}</small></button><button class="cyan" onclick="G.act('defend')" ${busyNow?'disabled':''}>Abwehr<br><small>70% Schutz</small></button></div></div>`;
+ if(menuMode==='heal') controls=`<div class="menu-sub"><div class="row"><b>💚 Heilung</b><button onclick="G.menu('root')">↩ Zurück</button></div><div class="actions"><button class="green" onclick="G.healTurn('single')" ${busyNow||S.coins<20||p.hp>=p.max?'disabled':''}>Dieses Monster heilen<br><small>20 🪙 · Zug verbraucht</small></button><button class="green" onclick="G.healTurn('team')" ${busyNow||S.coins<75||teamMons().every(m=>m.hp>=m.max)?'disabled':''}>Ganzes Team heilen<br><small>75 🪙 · Zug verbraucht</small></button></div><div class="muted small">Nach der Heilung greift der Gegner einmal an.</div></div>`;
+ let last=messageFull||S.log[0]||'Der Kampf beginnt!';
+ return `<div class="panel battle-panel"><div class="row"><h2>🏟️ Arena · Stufe ${S.stage}</h2><span class="pill">${e.boss?'👑 BOSS':'Kampf'}</span></div>${e.boss?`<div class="boss-banner">👑 BOSS HERAUSFORDERUNG – STUFE ${S.stage}</div>`:''}
+ <div class="battle-scene"><button class="element-open" onclick="G.toggleGuide()">📘 Elemente</button>
+ <div class="scene-top"><div class="combatant enemy" id="enemyCard"><div class="row"><b>${esc(e.name)}</b><span class="tag">${elementIcon(e.element)} Lv. ${e.level}</span></div>${bar(e)}</div><div class="battle-sprite enemy-sprite" id="enemySprite">${battleMonsterArt(e)}</div></div>
+ <div class="fight-row"><div class="battle-sprite player-sprite" id="playerSprite">${battleMonsterArt(p)}</div><div class="combatant player" id="playerCard"><div class="row"><b>${esc(p.name)}</b><span class="tag">${elementIcon(p.element)} Lv. ${p.level}</span></div>${bar(p)}${expBar(p)}</div></div></div>
+ <div class="battle-console"><div class="battle-message ${busyNow?'waiting':''}" aria-live="polite"><span class="battle-message-text" onclick="G.advance()">${esc(last)}</span><small class="message-hint" onclick="G.advance()">${busyNow?'Text wird angezeigt …':''}</small>${controls}</div></div>
+ <div class="battle-team-switch"><h3>Teamwechsel (verbraucht deinen Zug)</h3><div class="actions">${teamMons().filter(m=>m.id!==p.id&&m.hp>0).map(m=>`<button onclick="G.act('switch',${m.id})" ${busyNow?'disabled':''}>${m.emoji} ${m.name} · ${m.hp} LP</button>`).join('')||'<span class="muted">Keine anderen kampffähigen Teammonster.</span>'}</div></div></div>`;
+}
+function teamPage(){let allowed=canManage();return `<div class="panel"><div class="row"><h2>🛡️ Aktives Team (${S.team.length}/5)</h2><span class="tag">${allowed?'Team bearbeiten erlaubt':'Nur auf Stufe 1 änderbar'}</span></div><div class="notice">Wähle bis zu fünf Monster. Alle anderen bleiben in deiner Sammlung. Teamzusammenstellung ist ausschließlich auf Stufe 1 möglich – auch nach Bosskämpfen nicht.</div><div class="grid">${S.owned.map(m=>{let inTeam=S.team.includes(m.id);return card(m,`<div class="actions"><button onclick="G.setTeam(${m.id})" ${!allowed||(!inTeam&&S.team.length>=5)?'disabled':''}>${inTeam?'Aus Team nehmen':'Ins Team nehmen'}</button><button onclick="G.setActive(${m.id})" ${!allowed||!inTeam||m.id===S.active||m.hp<=0?'disabled':''}>${m.id===S.active?'Startmonster':'Als Startmonster'}</button></div>`)}).join('')}</div><p class="muted small">Aktiv = dein Startmonster. Fällt es im Kampf aus, springt automatisch das nächste kampffähige Teammonster ein.</p></div>`}
+function summonPage(){let allowed=canManage();return `<div class="panel"><h2>🥚 Beschwörungen</h2>${!allowed?'<div class="notice">Beschwören ist nur auf Stufe 1 möglich.</div>':''}<p class="muted">Neue Monster landen in deiner Sammlung. Das normale Ei enthält die drei gewöhnlichen und vier seltenen Anfangsmonster.</p><div class="grid"><div class="monster"><h3>🥚 Normales Ei</h3><p class="muted small">90 % gewöhnlich (je 30 % pro Monster) · 10 % selten (je 2,5 % pro Monster)</p><div class="row"><b>🪙 500</b><button class="primary" onclick="G.summon('normal')" ${!allowed||S.coins<500?'disabled':''}>Beschwören</button></div></div><div class="monster"><h3>🌟 Legendär-Ei</h3><p class="muted small">Nur die sieben eigenständigen legendären Monster. 5 % Chance auf ein legendäres Monster pro Ei.</p><div class="row"><b>🪙 5.000</b><button class="gold" onclick="G.summon('legendary')" ${!allowed||S.coins<5000?'disabled':''}>Legendär-Ei öffnen</button></div></div></div></div>`}
+function collection(){return `<div class="panel"><h2>🐾 Monstersammlung (${S.owned.length})</h2><p class="muted">Hier bleiben alle deine Monster erhalten, auch wenn sie nicht im aktiven Team sind.</p><div class="grid">${S.owned.map(m=>card(m,`<div class="actions"><button onclick="G.details(${m.id})">Details</button><span class="tag">${S.team.includes(m.id)?'Im Team':'Sammlung'}</span></div>`)).join('')}</div></div>`}
+function guide(){return `<div class="panel"><h2>📘 Element-Leitfaden</h2><div class="notice">14 Monster: drei gewöhnliche und vier seltene Anfangsmonster sowie sieben eigenständige legendäre Monster.</div><div class="grid"><div class="monster"><h3>🔥 Feuer</h3>Stark gegen 🌿 Pflanze (+20%)</div><div class="monster"><h3>💧 Wasser</h3>Stark gegen 🔥 Feuer (+20%)</div><div class="monster"><h3>🌿 Pflanze</h3>Stark gegen 💧 Wasser (+20%)</div><div class="monster"><h3>⚡ Blitz</h3>+10% Schaden gegen Wasser</div><div class="monster"><h3>❄️ Eis</h3>Spezial verlangsamt Gegner für 2 Gegnerzüge</div><div class="monster"><h3>🌑 Schatten</h3>Spezial verursacht Schaden und heilt dich um 55% des Schadens</div><div class="monster"><h3>🐉 Drache</h3>Seltenes Element mit starken Angriffen</div></div><div class="notice">Spezialfähigkeiten haben nach Benutzung 4 eigene Runden Abklingzeit. Verteidigen reduziert den nächsten Treffer um 70% und verkürzt die Spezial-Abklingzeit um 3 Runden.</div></div>`}
+function training(){let allowed=canPrepare();return `<div class="panel"><div class="row"><h2>💪 Training & Heilung</h2><button class="green" onclick="G.healAll()" ${!allowed?'disabled':''}>Team heilen · 75 🪙</button></div>${!allowed?'<div class="notice">Training und Heilung sind nur außerhalb eines Kampfes möglich. HP bleiben zwischen Kämpfen erhalten.</div>':''}<div class="grid">${S.owned.map(m=>`<div class="monster"><h3>${monsterArt(m,'mini-art')} ${m.name}</h3>${bar(m)}<div class="stats"><span class="pill">⚔️ ${m.atk}</span><span class="pill">🛡️ ${m.def}</span><span class="pill">❤️ ${m.max}</span></div><div class="actions"><button onclick="G.train(${m.id},'atk')" ${!allowed?'disabled':''}>Angriff +4 · ${150+m.level*50}🪙</button><button onclick="G.train(${m.id},'def')" ${!allowed?'disabled':''}>Abwehr +3</button><button onclick="G.train(${m.id},'hp')" ${!allowed?'disabled':''}>Max LP +12</button><button onclick="G.train(${m.id},'heal')" ${!allowed?'disabled':''}>Heilen · 20🪙</button></div></div>`).join('')}</div></div>`}
+function quests(){let ts=[['first','Erster Sieg','Gewinne deinen ersten Kampf.',S.wins>=1,250],['wins3','Champion','Gewinne 3 Kämpfe.',S.wins>=3,400],['summon3','Sammler','Besitze 4 Monster.',S.owned.length>=4,250],['level5','Wachstum','Erreiche Level 5 mit einem Monster.',S.owned.some(m=>m.level>=5),500],['daily','Täglicher Bonus','Einmal täglich abholen.',S.daily!==new Date().toDateString(),150]];return `<div class="panel"><h2>🎯 Aufgaben & Belohnungen</h2>${ts.map(t=>`<div class="task"><div><b>${t[1]}</b><div class="muted small">${t[2]}</div>🪙 ${t[4]}</div><button onclick="G.claim('${t[0]}')" ${!t[3]||S.claims.includes(t[0])?'disabled':''}>${S.claims.includes(t[0])?'Abgeholt':t[3]?'Abholen':'Offen'}</button></div>`).join('')}<div class="actions"><button onclick="G.reset()">Spielstand zurücksetzen</button></div></div>`}
+let tab='battle',menuMode='root';function toggleGuide(){
+ let old=document.getElementById('elementGuideModal');
+ if(old){old.remove();return}
+ let wrap=document.createElement('div');wrap.id='elementGuideModal';wrap.className='element-modal';
+ wrap.innerHTML=`<div class="element-modal-card"><div class="close-row"><h2>📘 Element-Leitfaden</h2><button onclick="G.toggleGuide()">✕ Schließen</button></div><div class="grid">
+ <div class="monster"><h3>🔥 Feuer</h3>Stark gegen 🌿 Pflanze (+20%)</div>
+ <div class="monster"><h3>💧 Wasser</h3>Stark gegen 🔥 Feuer (+20%)</div>
+ <div class="monster"><h3>🌿 Pflanze</h3>Stark gegen 💧 Wasser (+20%)</div>
+ <div class="monster"><h3>⚡ Blitz</h3>Zusatzschaden gegen Wasser (+10%)</div>
+ <div class="monster"><h3>❄️ Eis</h3>Spezial verlangsamt Gegner für 2 Gegnerzüge</div>
+ <div class="monster"><h3>🌑 Schatten</h3>Spezial verursacht Schaden und heilt dich</div>
+ <div class="monster"><h3>🐉 Drache</h3>Seltenes Element mit starken Angriffen</div>
+ </div><div class="notice">Spezialfähigkeiten: 4 Runden Abklingzeit. Normaler Angriff −1, Abwehr −3.</div></div>`;
+ wrap.addEventListener('click',ev=>{if(ev.target===wrap)wrap.remove()});
+ document.body.appendChild(wrap);
+}
+
+function monsterDex(){
+ const elements=['Alle','Pflanze','Feuer','Wasser','Blitz','Eis','Schatten','Drache'];
+ const rarities=['Alle','Common','Rare','Legendary'];
+ const filtered=book.map((t,i)=>({t,i})).filter(({t})=>(dexElement==='Alle'||t[2]===dexElement)&&(dexRarity==='Alle'||t[3]===dexRarity));
+ const selected=book[dexSelected]||book[0];
+ const elButtons=elements.map(e=>`<button class="${dexElement===e?'active':''}" onclick="G.dexElement('${e}')">${e==='Alle'?'Alle':({'Pflanze':'🍃','Feuer':'🔥','Wasser':'💧','Blitz':'⚡','Eis':'❄️','Schatten':'🌑','Drache':'🐉'}[e]+' '+e)}</button>`).join('');
+ const rarButtons=rarities.map(r=>`<button class="${dexRarity===r?'active':''}" onclick="G.dexRarity('${r}')">${r}</button>`).join('');
+ const tiles=filtered.map(({t,i})=>`<button class="dex-tile ${dexSelected===i?'selection':''}" onclick="G.dexSelect(${i})"><img src="${artFor({name:t[0],element:t[2],rarity:t[3]})}" alt="${t[0]}" loading="lazy"><b>${t[0]}</b><span class="rarity ${t[3]}">${t[3]}</span><small>${t[2]}</small></button>`).join('');
+ return `<section class="panel"><div class="row"><h2>📖 Monsterdex</h2><span class="pill">${book.length}/14 Monster · 7 Elemente</span></div><p class="muted small">Entdecke alle Monster der Arena – unabhängig davon, ob du sie bereits besitzt.</p><div class="dex-filters">${elButtons}</div><div class="dex-filters rarity-filters">${rarButtons}</div><div class="dex-layout"><div class="dex-grid">${tiles}</div><aside class="dex-detail"><img src="${artFor({name:selected[0],element:selected[2],rarity:selected[3]})}" alt="${selected[0]}"><h3>${selected[0]}</h3><div class="rarity ${selected[3]}">${selected[3]}</div><div class="pill">${selected[1]} ${selected[2]}</div><div class="stats"><span class="pill">❤️ ${selected[4]} LP</span><span class="pill">⚔️ ${selected[5]}</span><span class="pill">🛡️ ${selected[6]}</span></div><div class="notice"><b>Spezialfähigkeit</b><br>${selected[7]}</div><p class="muted small">Das Monster ist im Monsterdex sichtbar. Beschwöre es, um es deiner Sammlung hinzuzufügen.</p></aside></div></section>`;
+}
+
+let arenaColorCache=null, arenaColorBusy=false;
+const ARENA_ELEMENT_HUES={Feuer:4,Wasser:220,Pflanze:112,Blitz:48,Eis:190,Schatten:275,Drache:174};
+function rgbToHslHue(r,g,b){let mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;if(!d)return 0;let h=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4;return (h*60+360)%360}
+function hueRgb(h,s,v){
+ // Einheitliche, kräftige HSL-Farbgebung: Die Helligkeitsstruktur des Originalrings
+ // bleibt erhalten, die Sättigung wird aber für alle Elemente auf ein vergleichbares
+ // Niveau angehoben. So wirkt insbesondere Wasser nicht mehr blass gegenüber Pflanze.
+ const H=((h%360)+360)%360/360;
+ const L=Math.max(.28,Math.min(.68,.25+.38*Math.sqrt(Math.max(0,Math.min(1,v)))));
+ const S=.99;
+ const C=(1-Math.abs(2*L-1))*S;
+ const X=C*(1-Math.abs((H*6)%2-1));
+ const m=L-C/2;
+ let r=0,g=0,b=0;
+ if(H<1/6){r=C;g=X}else if(H<2/6){r=X;g=C}else if(H<3/6){g=C;b=X}else if(H<4/6){g=X;b=C}else if(H<5/6){r=X;b=C}else{r=C;b=X}
+ return [r+m,g+m,b+m];
+}
+function updateArenaRingColors(){
+ const scene=document.querySelector('.battle-scene');if(!scene||!S.enemy)return;
+ const player=active(),enemy=S.enemy;if(!player||!enemy)return;
+ const ph=ARENA_ELEMENT_HUES[player.element]??112,eh=ARENA_ELEMENT_HUES[enemy.element]??112;
+ const key=ph+'_'+eh;
+ if(arenaColorCache&&arenaColorCache.key===key){scene.style.setProperty('background-image',`url("${arenaColorCache.url}")`,'important');return}
+ if(arenaColorBusy)return;arenaColorBusy=true;
+ Promise.all(['assets/arena-background-v14.png','assets/ring-mask-player.png','assets/ring-mask-enemy.png'].map(src=>new Promise((resolve,reject)=>{let im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=src}))).then(([bg,pm,em])=>{
+  const c=document.createElement('canvas');c.width=bg.naturalWidth;c.height=bg.naturalHeight;const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(bg,0,0);let data=ctx.getImageData(0,0,c.width,c.height),p=data.data;
+  function apply(maskImg,targetHue){const mc=document.createElement('canvas');mc.width=c.width;mc.height=c.height;const mctx=mc.getContext('2d',{willReadFrequently:true});mctx.drawImage(maskImg,0,0,c.width,c.height);const a=mctx.getImageData(0,0,c.width,c.height).data;
+   for(let i=0;i<p.length;i+=4){let alpha=a[i]/255;if(alpha<.025)continue;let r=p[i]/255,g=p[i+1]/255,b=p[i+2]/255;let mx=Math.max(r,g,b),mn=Math.min(r,g,b),sat=mx===0?0:(mx-mn)/mx;if(sat<.04)continue;let rgb=hueRgb(targetHue,sat,mx);p[i]=Math.round((r*(1-alpha)+rgb[0]*alpha)*255);p[i+1]=Math.round((g*(1-alpha)+rgb[1]*alpha)*255);p[i+2]=Math.round((b*(1-alpha)+rgb[2]*alpha)*255)}
+  }
+  apply(pm,ph);apply(em,eh);ctx.putImageData(data,0,0);const url=c.toDataURL('image/webp',.94);arenaColorCache={key,url};scene.style.setProperty('background-image',`url("${url}")`,'important');
+ }).catch(err=>console.warn('Arena-Ringfarben konnten nicht geladen werden',err)).finally(()=>{arenaColorBusy=false;updateArenaRingColors()});
+}
+function render(){$('#coins').textContent=S.coins.toLocaleString('de-DE');let pages={battle,team:teamPage,summon:summonPage,collection,dex:monsterDex,guide,training,quests};$('#view').innerHTML=pages[tab]();updateArenaRingColors();document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));save()}
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(busy)return;tab=b.dataset.tab;render()});
+window.G={toggleGuide,dexElement(v){dexElement=v;render()},dexRarity(v){dexRarity=v;render()},dexSelect(i){dexSelected=i;render()},advance:advanceMessage,menu(m){if(busy)return;menuMode=m;render()},healTurn,start,summon,summonTicket,act:playerAct,healAll,train,claim,setTeam,setActive,details(id){let m=S.owned.find(x=>x.id===id);alert(`${m.name}\nSeltenheit: ${m.rarity}\nElement: ${m.element}\nLevel: ${m.level}\nLP: ${m.hp}/${m.max}\nAngriff: ${m.atk}\nVerteidigung: ${m.def}\nSpezial: ${m.special}`)},reset(){if(confirm('Spielstand dieser Testversion löschen?')){localStorage.removeItem('monsterArenaSaveV3');location.reload()}}};
+load();render();
+</script>
+
+
+<style id="v17-4-clean-arena">
+/* V17.4: zentrale Arena-Regeln. Fußpunkte bleiben fest; animiert wird nur das Bild. */
+.battle-scene #enemySprite,.battle-scene #playerSprite{
+ position:absolute!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;
+ width:clamp(112px,30vw,142px)!important;height:clamp(112px,30vw,142px)!important;
+ margin:0!important;overflow:visible!important;z-index:5!important;transform:translate(-50%,-88%)!important;
+}
+.battle-scene #enemySprite{left:69%!important;right:auto!important;top:49%!important;bottom:auto!important}
+.battle-scene #playerSprite{left:28%!important;right:auto!important;top:79%!important;bottom:auto!important}
+.battle-scene #enemySprite .battle-art,.battle-scene #playerSprite .battle-art{
+ display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;
+ object-fit:contain!important;object-position:center bottom!important;background:transparent!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ transform-origin:center bottom!important;backface-visibility:hidden;will-change:transform;
+}
+/* Nur das gegnerische Monster kleiner; das Spielermonster behält seine bisherige Größe. */
+.battle-scene #enemySprite .battle-art{--base-monster-scale:.78;transform:scale(var(--base-monster-scale))!important}
+.battle-scene #playerSprite .battle-art{--base-monster-scale:1;transform:scale(1)!important}
+
+@keyframes v174-player-lunge{0%,100%{transform:translate(0,0) scale(1)}42%{transform:translate(22px,-9px) scale(1.07)}68%{transform:translate(8px,-2px) scale(1.02)}}
+@keyframes v174-enemy-lunge{0%,100%{transform:translate(0,0) scale(.78)}42%{transform:translate(-22px,9px) scale(.835)}68%{transform:translate(-8px,2px) scale(.796)}}
+@media(max-width:520px){.battle-scene #enemySprite,.battle-scene #playerSprite{width:clamp(108px,29vw,128px)!important;height:clamp(108px,29vw,128px)!important}}
+@media(prefers-reduced-motion:reduce){#playerSprite.lunge-player .battle-art,#enemySprite.lunge-enemy .battle-art{animation:none!important}}
+</style>
+<style id="v185-static-arena">
+/* Keine Bewegung, kein Blinken und kein Treffer-Flackern an den Kampfmonstern. */
+#enemySprite,#playerSprite,#enemySprite * ,#playerSprite *{animation:none!important;transition:none!important}
+#enemySprite .creature,#playerSprite .creature{filter:none!important;opacity:1!important}
+</style>
+</body></html>
+
+
+<style id="monster-dex-v175">
+.dex-filters{display:flex;gap:6px;overflow-x:auto;padding:7px 0;scrollbar-width:thin}.dex-filters button{white-space:nowrap;font-size:12px;padding:8px 10px}.dex-filters button.active{background:#7652e8;border-color:#a28cff}.dex-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(180px,.8fr);gap:12px;margin-top:10px}.dex-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start}.dex-tile{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;padding:7px 4px;background:#1b2942;border-radius:12px}.dex-tile img{width:100%;height:78px;object-fit:contain;filter:drop-shadow(0 5px 5px #0008)}.dex-tile b{font-size:11px;text-align:center;overflow-wrap:anywhere}.dex-tile small{font-size:10px;color:#a9b8d1}.dex-tile .rarity{font-size:9px}.dex-detail{position:sticky;top:8px;align-self:start;text-align:center;background:#1b2942;border:1px solid #3b4c6c;border-radius:14px;padding:12px}.dex-detail img{width:100%;height:150px;object-fit:contain;filter:drop-shadow(0 7px 7px #0008)}.dex-detail .notice{text-align:left}.dex-detail h3{margin:5px 0}.dex-detail .stats{justify-content:center}.dex-detail .pill{font-size:11px}@media(max-width:600px){.dex-layout{grid-template-columns:1fr}.dex-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dex-detail{position:static;display:grid;grid-template-columns:100px 1fr;column-gap:10px;text-align:left;align-items:center}.dex-detail img{grid-row:span 5;height:120px}.dex-detail .stats{justify-content:flex-start}.dex-detail .notice{grid-column:1/-1}}
+</style>

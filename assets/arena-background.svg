@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+<defs>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#69c8f6"/><stop offset=".55" stop-color="#d9f3ff"/><stop offset="1" stop-color="#85a9a0"/></linearGradient>
+ <linearGradient id="stone" x2="0" y2="1"><stop stop-color="#7d8995"/><stop offset=".4" stop-color="#46566a"/><stop offset="1" stop-color="#1c2b40"/></linearGradient>
+ <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#66798a"/><stop offset="1" stop-color="#26364b"/></linearGradient>
+ <linearGradient id="water" x2="0" y2="1"><stop stop-color="#e4ffff"/><stop offset=".4" stop-color="#66d8ff"/><stop offset="1" stop-color="#1389c4"/></linearGradient>
+ <linearGradient id="banner" x2="0" y2="1"><stop stop-color="#ed3948"/><stop offset="1" stop-color="#79182d"/></linearGradient>
+ <radialGradient id="flame"><stop stop-color="#fff8a0"/><stop offset=".4" stop-color="#ffb22d"/><stop offset="1" stop-color="#ff681b" stop-opacity="0"/></radialGradient>
+ <pattern id="pavers" width="150" height="92" patternUnits="userSpaceOnUse"><path d="M0 0H150M0 0L-30 92M75 0L45 92M150 0L120 92M0 46H150" stroke="#d8e5ef" stroke-opacity=".19" stroke-width="3" fill="none"/></pattern>
+ <filter id="glow"><feGaussianBlur stdDeviation="10"/></filter>
+</defs>
+<rect width="1200" height="900" fill="url(#sky)"/>
+<!-- distant green hills, trees and mountain peaks -->
+<path d="M0 330L100 205 185 285 310 125 430 295 560 155 680 300 830 135 980 300 1090 185 1200 300V520H0Z" fill="#5d8793"/>
+<path d="M0 355L140 245 255 330 380 205 510 350 650 230 785 355 930 220 1065 340 1200 245V520H0Z" fill="#416f78"/>
+<path d="M0 390Q160 310 300 380T600 375T900 370T1200 380V520H0Z" fill="#43864f"/>
+<g fill="#2c6944"><circle cx="75" cy="300" r="72"/><circle cx="160" cy="325" r="58"/><circle cx="1000" cy="300" r="70"/><circle cx="1110" cy="325" r="62"/><circle cx="820" cy="280" r="50"/></g>
+<g fill="#56a95c"><circle cx="60" cy="260" r="50"/><circle cx="125" cy="280" r="42"/><circle cx="1040" cy="260" r="54"/><circle cx="1130" cy="285" r="43"/><circle cx="850" cy="250" r="38"/></g>
+<!-- waterfall -->
+<path d="M770 205H900L880 490H790Z" fill="url(#water)" opacity=".95"/><path d="M795 215L805 470M830 210L836 470M865 215L860 470" stroke="#fff" stroke-width="9" opacity=".5"/><path d="M755 475Q830 445 910 475" stroke="#c9f8ff" stroke-width="18" fill="none" opacity=".7"/>
+<!-- stone courtyard wall -->
+<path d="M0 400H1200V620H0Z" fill="#536577"/><path d="M0 430H1200M0 500H1200M0 570H1200" stroke="#b6c5d0" stroke-opacity=".2" stroke-width="7"/>
+<!-- columns -->
+<g fill="url(#stone)" stroke="#b4c0c8" stroke-width="7"><path d="M80 265H190V610H80Z"/><path d="M1010 265H1120V610H1010Z"/><path d="M65 250H205V285H65Z"/><path d="M995 250H1135V285H995Z"/><path d="M350 320H425V610H350Z"/><path d="M790 320H865V610H790Z"/></g>
+<g fill="#d3a34b" stroke="#6e4d28" stroke-width="7"><path d="M245 270H355V475L300 510 245 475Z"/><path d="M845 270H955V475L900 510 845 475Z"/></g>
+<g fill="url(#banner)" stroke="#f3c76d" stroke-width="7"><path d="M260 285H340V455L300 485 260 455Z"/><path d="M860 285H940V455L900 485 860 455Z"/></g>
+<g fill="#ffd34f"><path d="M300 330l-28 70h26l-12 54 44-80h-28l17-44zM900 330l-28 70h26l-12 54 44-80h-28l17-44z"/></g>
+<!-- braziers and flames -->
+<g><circle cx="45" cy="540" r="95" fill="url(#flame)"/><circle cx="1155" cy="540" r="95" fill="url(#flame)"/><path d="M10 520H80L70 590H20Z M1120 520H1190L1180 590H1130Z" fill="#26384b" stroke="#d7aa56" stroke-width="8"/><path d="M45 520Q0 455 45 410Q92 475 45 520M1155 520Q1110 455 1155 410Q1202 475 1155 520" fill="#ff9a25" stroke="#ffe18a" stroke-width="7"/></g>
+<!-- arena floor -->
+<path d="M0 600Q600 555 1200 600V900H0Z" fill="url(#floor)"/><path d="M0 600Q600 555 1200 600V900H0Z" fill="url(#pavers)"/><path d="M0 680Q600 640 1200 680M0 790Q600 755 1200 790" stroke="#d9e6ef" stroke-opacity=".15" stroke-width="6" fill="none"/>
+<!-- magic battle circles -->
+<ellipse cx="300" cy="765" rx="245" ry="75" fill="none" stroke="#71ff5d" stroke-width="24" opacity=".3" filter="url(#glow)"/><ellipse cx="300" cy="765" rx="245" ry="75" fill="none" stroke="#9aff62" stroke-width="8"/><ellipse cx="900" cy="650" rx="220" ry="65" fill="none" stroke="#37dfff" stroke-width="24" opacity=".3" filter="url(#glow)"/><ellipse cx="900" cy="650" rx="220" ry="65" fill="none" stroke="#58eaff" stroke-width="8"/>
+<rect width="1200" height="900" fill="#06172b" opacity=".06"/>
+</svg>

@@ -1,0 +1,5 @@
+Monster Arena V19.1 – kräftigere, angeglichene Elementringfarben
+
+Basis: V19.0. Geändert wurde ausschließlich die Farbumrechnung der bestehenden Ringmasken und der Wasser-Farbton.
+Keine Änderung an Arena-Aufstellung, Monsterpositionen/-größen, Sprites, Spielmechanik oder Animationen.
+Ringfarben bleiben dynamisch an das tatsächliche Element von Spieler und Gegner gekoppelt.

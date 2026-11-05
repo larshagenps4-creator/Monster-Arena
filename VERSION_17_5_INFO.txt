@@ -1,0 +1,7 @@
+Monster Arena V17.5
+
+Neu: Monsterdex-Reiter mit 35 Einträgen, Filter nach Element und Seltenheit sowie Detailansicht mit Basiswerten und Spezialfähigkeit.
+
+Wichtig: Die Monsterdex-Einträge verwenden die vorhandenen Einzelgrafiken aus V17.4 (die drei separaten Testmonster plus vorhandene Sprite-Dateien). Die komplette Neugestaltung aller 35 Monsterbilder ist in dieser Version noch nicht enthalten.
+
+Arena-Mechanik und Spielstandstruktur aus V17.4 wurden beibehalten. JavaScript-Syntax geprüft.

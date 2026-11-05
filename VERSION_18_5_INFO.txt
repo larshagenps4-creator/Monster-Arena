@@ -1,0 +1,5 @@
+V18.5 – Arena stabilisiert auf Basis von V18.2.
+
+Die Arena-Positionierung und Größen wurden unverändert aus V18.2 übernommen.
+Angriffsbewegung und Treffer-Blinkeffekte der Monster sind deaktiviert.
+Die Elementringe behalten in dieser stabilen Version die Originalfarben des Arena-Hintergrunds; eine dynamische Elementfärbung wurde bewusst nicht erneut über fehleranfällige Masken gelegt.

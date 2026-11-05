@@ -1,0 +1,12 @@
+MONSTER ARENA – TESTVERSION 17.1
+
+Änderungen gegenüber Version 16:
+- Blattling, Glutfünkchen und Tropfli werden über drei separate transparente PNG-Dateien geladen.
+- Die Arena-Hintergrundgrafik bleibt unverändert.
+- Die Monster werden über feste Fuß-Anker an den Mittelpunkten der grünen und blauen Arena-Ringe positioniert.
+- Die übrigen 32 Monster verwenden weiterhin die vorhandenen Grafiken.
+
+Wichtiger Hinweis:
+Die drei Testdateien wurden aus den bereits vorhandenen transparenten Einzelgrafiken der Version 16 übernommen und separat eingebunden. Sie sind NICHT neu im detailreichen 3D-Stil gezeichnet. Diese Version dient dazu, die getrennte Asset-Einbindung und feste Positionierung im echten Spiel zu testen.
+
+Start: index.html über Netlify veröffentlichen.

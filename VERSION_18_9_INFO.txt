@@ -1,0 +1,3 @@
+V18.9 – Elementabhängige Arenaringe
+Basis: V18.5 unverändert.
+Nur die vorhandenen farbigen Ringpixel im Arena-Hintergrund werden anhand separater, räumlich begrenzter Masken dynamisch eingefärbt. Keine zusätzlichen Ring-DOM-Elemente. Elementfarbe wird nach jedem Render anhand von aktivem Spieler und Gegner aktualisiert.
