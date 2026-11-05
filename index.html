@@ -369,11 +369,14 @@ function animateLunge(side){
  setTimeout(()=>node.classList.remove(cls),950);
 }
 function animateHitAfterImpact(side){
- const node=document.getElementById(side==='player'?'playerSprite':'enemySprite');
- if(!node)return;
- node.classList.remove('hit-after-impact');void node.offsetWidth;
- node.classList.add('hit-after-impact');
- setTimeout(()=>node.classList.remove('hit-after-impact'),500);
+ const id=side==='player'?'playerSprite':'enemySprite';
+ const apply=()=>{
+  const node=document.getElementById(id);if(!node)return;
+  node.classList.remove('hit-after-impact');void node.offsetWidth;
+  node.classList.add('hit-after-impact');
+  setTimeout(()=>node.classList.remove('hit-after-impact'),520);
+ };
+ setTimeout(apply,40);
 }
 function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!sc)return;let el=document.createElement('div');el.className='impact '+kind;el.textContent=txt;sc.appendChild(el);setTimeout(()=>el.remove(),750)}
 function playerAct(k,id){
@@ -383,8 +386,8 @@ function playerAct(k,id){
  busy=true;menuMode='none';S.battleTurn='animating';render();animateLunge('player');
  turnTimer=setTimeout(()=>{p=active();e=S.enemy;if(!p||!e){busy=false;render();return}let d=0,msg='',lines=[];
  if(k==='defend'){p.guard=true;p.cooldown=Math.max(0,p.cooldown-3);lines.push(`${p.name} geht in Abwehrhaltung.`)}
- else{let base=p.atk*(p.slow>0?.65:1);if(p.slow>0)p.slow--;if(k==='special'){base=p.atk*1.45*(p.slow>0?.65:1);p.cooldown=4;if(p.element==='Eis'){e.slow=2;lines.push(`${p.name} setzt ${p.special} ein!`)}else if(p.element==='Schatten')lines.push(`${p.name} setzt ${p.special} ein!`);else lines.push(`${p.name} setzt ${p.special} ein!`)}else lines.push(`${p.name} greift an!`);[d,msg]=hit(p,e,base);if(e.guard){d=Math.max(1,Math.round(d*.3));e.guard=false}e.hp=Math.max(0,e.hp-d);animateHitAfterImpact('enemy');lines.push(`${e.name} verliert ${d} HP.`);if(k==='special'&&p.element==='Schatten'){let heal=Math.min(p.max-p.hp,Math.round(d*.55));p.hp+=heal;if(heal)lines.push(`${p.name} heilt sich um ${heal} LP.`)}if(k==='special'&&p.element==='Blitz')e.guard=false;if(k!=='special'&&p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1)}
- logmsg(lines.join(' '));render();
+ else{let base=p.atk*(p.slow>0?.65:1);if(p.slow>0)p.slow--;if(k==='special'){base=p.atk*1.45*(p.slow>0?.65:1);p.cooldown=4;if(p.element==='Eis'){e.slow=2;lines.push(`${p.name} setzt ${p.special} ein!`)}else if(p.element==='Schatten')lines.push(`${p.name} setzt ${p.special} ein!`);else lines.push(`${p.name} setzt ${p.special} ein!`)}else lines.push(`${p.name} greift an!`);[d,msg]=hit(p,e,base);if(e.guard){d=Math.max(1,Math.round(d*.3));e.guard=false}e.hp=Math.max(0,e.hp-d);lines.push(`${e.name} verliert ${d} HP.`);if(k==='special'&&p.element==='Schatten'){let heal=Math.min(p.max-p.hp,Math.round(d*.55));p.hp+=heal;if(heal)lines.push(`${p.name} heilt sich um ${heal} LP.`)}if(k==='special'&&p.element==='Blitz')e.guard=false;if(k!=='special'&&p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1)}
+ logmsg(lines.join(' '));render();if(k!=='defend')animateHitAfterImpact('enemy');
  playMessages(lines,()=>{if(e.hp<=0){busy=false;winBattle();render();return}enemyTurn()});
  },900);
 }
@@ -511,16 +514,16 @@ load();render();
 @media(max-width:520px){.battle-scene #enemySprite,.battle-scene #playerSprite{width:clamp(108px,29vw,128px)!important;height:clamp(108px,29vw,128px)!important}}
 @media(prefers-reduced-motion:reduce){#playerSprite.lunge-player .battle-art,#enemySprite.lunge-enemy .battle-art{animation:none!important}}
 </style>
-<style id="v192-hit-flash-after-impact">
-/* Trefferblinken startet erst beim tatsächlichen Treffer nach dem Vorstoß. */
-#enemySprite.hit-after-impact .battle-art,
-#playerSprite.hit-after-impact .battle-art{
- animation:v192-hit-flash 420ms ease-in-out both!important;
+<style id="v193-visible-hit-feedback">
+/* Deutlich sichtbares Trefferfeedback auf dem gesamten Monster nach dem Treffer. */
+#enemySprite.hit-after-impact,#playerSprite.hit-after-impact{
+ animation:v193-hit-flash 520ms ease-in-out both!important;
 }
-@keyframes v192-hit-flash{
- 0%,100%{filter:brightness(1)}
- 25%{filter:brightness(2.1)}
- 55%{filter:brightness(.72)}
+@keyframes v193-hit-flash{
+ 0%,100%{filter:brightness(1) drop-shadow(0 0 0 transparent)}
+ 22%{filter:brightness(2.5) drop-shadow(0 0 13px #fff)}
+ 48%{filter:brightness(.58) drop-shadow(0 0 9px #ff4b4b)}
+ 72%{filter:brightness(1.65) drop-shadow(0 0 11px #fff)}
 }
 </style>
 <style id="v191-slow-attack-lunge">
