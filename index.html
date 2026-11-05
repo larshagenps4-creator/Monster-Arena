@@ -551,11 +551,14 @@ load();render();
 }
 </style>
 <style id="v194-combat-vitals-inline">
-.combat-vitals{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap;margin:5px 0 7px;font-size:clamp(10px,2.8vw,13px);font-weight:700;white-space:nowrap}
+.combat-vitals{display:flex;align-items:center;justify-content:space-between;gap:3px;flex-wrap:nowrap;margin:3px 0 5px;font-size:clamp(8px,2.3vw,10px);font-weight:750;white-space:nowrap;letter-spacing:-.25px}
+.combat-vitals>span{flex:0 0 auto}
 .combat-hp{color:#f16b72}
 .combat-stat.atk{color:#e9a34c}
 .combat-stat.def{color:#70aaf4}
-@media(max-width:390px){.combat-vitals{gap:5px;font-size:10px}}
+.combatant{padding:6px 7px!important}
+.combatant .bar{height:7px}
+@media(max-width:390px){.combat-vitals{gap:2px;font-size:9px;letter-spacing:-.35px}}
 </style>
 </body></html>
 
