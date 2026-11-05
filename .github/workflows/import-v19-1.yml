@@ -2,8 +2,7 @@ name: Import Monster Arena V19.1
 
 on:
   push:
-    paths:
-      - "Monster_Arena_V19_1_Elementringe_Leuchtkraft(1).zip"
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -23,7 +22,7 @@ jobs:
           from zipfile import ZipFile
           import shutil
 
-          archive = Path("Monster_Arena_V19_1_Elementringe_Leuchtkraft(1).zip")
+          archive = Path("Monster_Arena_V19_1_Elementringe_Leuchtkraft.zip")
           if not archive.exists():
               raise SystemExit("V19.1 ZIP not found in repository root")
 
