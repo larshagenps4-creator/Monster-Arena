@@ -316,6 +316,7 @@ function nextMessage(){if(!messageQueue.length){busy=false;let cb=messageDone;me
 function advanceMessage(){if(!busy||!messageFull)return;clearInterval(messageTimer);let node=$('.battle-message-text');if(node)node.textContent=messageFull;let hint=$('.message-hint');if(hint)hint.textContent='Tippe zum Fortfahren';messageFull='';setTimeout(()=>{if(messageQueue.length)nextMessage();else{busy=false;let cb=messageDone;messageDone=null;render();if(cb)cb()}},180)}
 
 function bar(m){return `<div class="row small"><span>❤️ LP</span><b>${Math.max(0,m.hp)}/${m.max}</b></div><div class="bar hp"><span style="width:${Math.max(0,Math.min(100,m.hp/m.max*100))}%"></span></div>`}
+function combatBar(m){return `<div class="combat-vitals"><span class="combat-hp">❤️ ${Math.max(0,m.hp)}/${m.max}</span><span class="combat-stat atk">⚔️ ATK ${m.atk}</span><span class="combat-stat def">🛡️ DEF ${m.def}</span></div><div class="bar hp"><span style="width:${Math.max(0,Math.min(100,m.hp/m.max*100))}%"></span></div>`}
 function expBar(m){let need=m.level*100;return `<div class="exp-line"><b>EXP</b><div class="exp-track"><span style="width:${Math.max(0,Math.min(100,m.xp/need*100))}%"></span></div><span>${m.xp}/${need}</span></div>`}
 function card(m,extra=''){return `<div class="monster"><div class="row"><span class="rarity ${m.rarity}">${m.rarity}</span><span class="pill">${m.element}</span></div><div class="art-wrap ${m.rarity}">${monsterArt(m)}</div><b>${m.name}</b><div class="muted small">Level ${m.level} · Spezial: ${m.special}</div>${bar(m)}<div class="stats"><span class="pill">⚔️ ${m.atk}</span><span class="pill">🛡️ ${m.def}</span><span class="pill">XP ${m.xp}/${m.level*100}</span></div>${extra}</div>`}
 function weighted(type){let n=Math.random()*100;for(const [r,p] of odds[type]){n-=p;if(n<=0)return r}return odds[type].at(-1)[0]}
@@ -412,8 +413,8 @@ function battle(){
  let last=messageFull||S.log[0]||'Der Kampf beginnt!';
  return `<div class="panel battle-panel"><div class="row"><h2>🏟️ Arena · Stufe ${S.stage}</h2><span class="pill">${e.boss?'👑 BOSS':'Kampf'}</span></div>${e.boss?`<div class="boss-banner">👑 BOSS HERAUSFORDERUNG – STUFE ${S.stage}</div>`:''}
  <div class="battle-scene"><button class="element-open" onclick="G.toggleGuide()">📘 Elemente</button>
- <div class="scene-top"><div class="combatant enemy" id="enemyCard"><div class="row"><b>${esc(e.name)}</b><span class="tag">${elementIcon(e.element)} Lv. ${e.level}</span></div>${bar(e)}</div><div class="battle-sprite enemy-sprite" id="enemySprite">${battleMonsterArt(e)}</div></div>
- <div class="fight-row"><div class="battle-sprite player-sprite" id="playerSprite">${battleMonsterArt(p)}</div><div class="combatant player" id="playerCard"><div class="row"><b>${esc(p.name)}</b><span class="tag">${elementIcon(p.element)} Lv. ${p.level}</span></div>${bar(p)}${expBar(p)}</div></div></div>
+ <div class="scene-top"><div class="combatant enemy" id="enemyCard"><div class="row"><b>${esc(e.name)}</b><span class="tag">${elementIcon(e.element)} Lv. ${e.level}</span></div>${combatBar(e)}</div><div class="battle-sprite enemy-sprite" id="enemySprite">${battleMonsterArt(e)}</div></div>
+ <div class="fight-row"><div class="battle-sprite player-sprite" id="playerSprite">${battleMonsterArt(p)}</div><div class="combatant player" id="playerCard"><div class="row"><b>${esc(p.name)}</b><span class="tag">${elementIcon(p.element)} Lv. ${p.level}</span></div>${combatBar(p)}${expBar(p)}</div></div></div>
  <div class="battle-console"><div class="battle-message ${busyNow?'waiting':''}" aria-live="polite"><span class="battle-message-text" onclick="G.advance()">${esc(last)}</span><small class="message-hint" onclick="G.advance()">${busyNow?'Text wird angezeigt …':''}</small>${controls}</div></div>
  <div class="battle-team-switch"><h3>Teamwechsel (verbraucht deinen Zug)</h3><div class="actions">${teamMons().filter(m=>m.id!==p.id&&m.hp>0).map(m=>`<button onclick="G.act('switch',${m.id})" ${busyNow?'disabled':''}>${m.emoji} ${m.name} · ${m.hp} LP</button>`).join('')||'<span class="muted">Keine anderen kampffähigen Teammonster.</span>'}</div></div></div>`;
 }
@@ -548,6 +549,13 @@ load();render();
 @media(prefers-reduced-motion:reduce){
  #playerSprite.lunge-player .battle-art,#enemySprite.lunge-enemy .battle-art{animation:none!important}
 }
+</style>
+<style id="v194-combat-vitals-inline">
+.combat-vitals{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap;margin:5px 0 7px;font-size:clamp(10px,2.8vw,13px);font-weight:700;white-space:nowrap}
+.combat-hp{color:#f16b72}
+.combat-stat.atk{color:#e9a34c}
+.combat-stat.def{color:#70aaf4}
+@media(max-width:390px){.combat-vitals{gap:5px;font-size:10px}}
 </style>
 </body></html>
 
