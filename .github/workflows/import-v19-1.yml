@@ -1,0 +1,56 @@
+name: Import Monster Arena V19.1
+
+on:
+  push:
+    paths:
+      - "Monster_Arena_V19_1_Elementringe_Leuchtkraft(1).zip"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Extract V19.1 archive
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import shutil
+
+          archive = Path("Monster_Arena_V19_1_Elementringe_Leuchtkraft(1).zip")
+          if not archive.exists():
+              raise SystemExit("V19.1 ZIP not found in repository root")
+
+          backup = Path("backups") / archive.name
+          backup.parent.mkdir(parents=True, exist_ok=True)
+          shutil.copy2(archive, backup)
+
+          root = Path(".").resolve()
+          with ZipFile(archive) as z:
+              for item in z.infolist():
+                  target = (root / item.filename).resolve()
+                  if root not in target.parents and target != root:
+                      raise SystemExit(f"Unsafe ZIP path: {item.filename}")
+                  if item.is_dir():
+                      target.mkdir(parents=True, exist_ok=True)
+                  else:
+                      target.parent.mkdir(parents=True, exist_ok=True)
+                      with z.open(item) as src, target.open("wb") as dst:
+                          shutil.copyfileobj(src, dst)
+
+          archive.unlink()
+          PY
+
+      - name: Commit extracted game files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Import Monster Arena V19.1 source and assets" || echo "No changes to commit"
+          git push
