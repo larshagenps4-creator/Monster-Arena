@@ -343,37 +343,39 @@
 @keyframes vine-wrap{0%{opacity:0;transform:translate(-50%,-50%) rotate(-28deg) scale(.15,.25)}35%{opacity:1;transform:translate(-50%,-50%) rotate(12deg) scale(1.05,.85)}68%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.15,1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(18deg) scale(1.35,1.1)}}
 @keyframes root-burst{0%{opacity:0;transform:scale(.2)}35%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.5)}}
 
-/* Wurzelbruch v2: compact roots erupt from cracks in the arena circle, curl inward, then strike. */
-.rootbreak-fx{position:fixed;z-index:2147483600;pointer-events:none;overflow:visible;animation:rootbreak-fade 2.2s ease-out both}
+/* Wurzelbruch: sculpted, branching fantasy roots erupt from the arena circle and slam into the target. */
+.rootbreak-fx{position:fixed;z-index:2147483600;pointer-events:none;overflow:visible;animation:rb-fade 2.3s ease-out both}
 .rootbreak-fx svg{width:100%;height:100%;overflow:visible}
-.rootbreak-fx .root-ground-glow{fill:url(#rootCircle);opacity:0;transform-box:fill-box;transform-origin:center;animation:root-ring-pop .55s ease-out forwards}
-.rootbreak-fx .root-ring{fill:none;stroke:#b9ed79;stroke-width:2;opacity:0;stroke-dasharray:5 6;animation:root-ring-pop .5s .04s ease-out forwards}
-.rootbreak-fx .root-cracks{fill:none;stroke:#c5ef86;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:48;stroke-dashoffset:48;animation:root-crack .28s .12s ease-out forwards}
-.rootbreak-fx .root-debris path{fill:#887653;stroke:#c0a879;stroke-width:1;opacity:0;animation:root-debris .65s .42s ease-out forwards}
-.rootbreak-fx .root-debris circle{fill:#b4d77a;opacity:0;animation:root-debris .6s .4s ease-out forwards}
-.rootbreak-fx .root-back,.rootbreak-fx .root-front{fill:url(#rootBark);stroke:#304f2c;stroke-width:2.8;stroke-linejoin:round;stroke-linecap:round;transform-box:fill-box;transform-origin:50% 100%;opacity:0;animation:root-burst .62s cubic-bezier(.12,.85,.25,1) forwards}
-.rootbreak-fx .root-r1{animation-delay:.22s}.rootbreak-fx .root-r2{animation-delay:.27s}
-.rootbreak-fx .root-front{fill:url(#rootFresh);stroke:#42683a;stroke-width:2.6}
-.rootbreak-fx .root-r3{animation-delay:.38s}.rootbreak-fx .root-r4{animation-delay:.43s}
-.rootbreak-fx .root-bark-lines{fill:none;stroke:#d0d99a;stroke-width:1.5;stroke-linecap:round;opacity:0;animation:root-detail .35s .85s ease-out forwards}
-.rootbreak-fx .root-impact{fill:none;stroke:#d9f69a;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0;transform-box:fill-box;transform-origin:center;animation:root-impact-flash .38s .78s ease-out forwards}
-.rootbreak-fx.rootbreak-hit .root-impact{animation:root-impact-flash .42s ease-out forwards}
-.rootbreak-boss .root-back,.rootbreak-boss .root-front{stroke-width:3.3}
-.plant-target-caught{animation:plant-caught .26s .72s ease-in-out 2}
-.root-impact-hit{animation:root-target-hit .38s ease-out 1}
-@keyframes root-ring-pop{0%{opacity:0;transform:scale(.55,.65)}45%{opacity:1;transform:scale(1.1,1.2)}100%{opacity:.75;transform:scale(1,1)}}
-@keyframes root-crack{to{stroke-dashoffset:0;opacity:.9}}
-@keyframes root-burst{0%{opacity:0;transform:scaleY(.04) translateY(12px)}48%{opacity:1;transform:scaleY(1.12) translateY(-3px)}72%{transform:scaleY(.94) translateY(1px)}100%{opacity:1;transform:scaleY(1) translateY(0)}}
-@keyframes root-debris{0%{opacity:0;transform:translateY(5px) scale(.35)}30%{opacity:1}100%{opacity:0;transform:translateY(-17px) scale(1.12)}}
-@keyframes root-detail{to{opacity:.75}}
-@keyframes root-impact-flash{0%{opacity:0;transform:scale(.55)}35%{opacity:1;transform:scale(1.1)}100%{opacity:0;transform:scale(1.35)}}
-@keyframes root-target-hit{0%{translate:0 0;filter:brightness(1)}25%{translate:0 -5px;filter:brightness(1.45)}55%{translate:0 2px;filter:brightness(1.15)}100%{translate:0 0;filter:brightness(1)}}
+.rootbreak-fx .rb-glow{fill:url(#rbGlow);opacity:0;transform-box:fill-box;transform-origin:center;animation:rb-glow .55s ease-out forwards}
+.rootbreak-fx .rb-ring{fill:none;stroke:#c4f18a;stroke-width:2;stroke-dasharray:4 6;opacity:0;animation:rb-glow .5s .04s ease-out forwards}
+.rootbreak-fx .rb-cracks{fill:none;stroke:#d2f59a;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:55;stroke-dashoffset:55;animation:rb-crack .28s .1s ease-out forwards}
+.rootbreak-fx .rb-soil path{fill:#806d4c;stroke:#c0a579;stroke-width:1.1;opacity:0;animation:rb-soil .62s .42s ease-out forwards}
+.rootbreak-fx .rb-soil circle{fill:#b3d77a;opacity:0;animation:rb-soil .6s .4s ease-out forwards}
+.rootbreak-fx .rb-root{fill:url(#rbBark);stroke:#314c2d;stroke-width:2.8;stroke-linejoin:round;stroke-linecap:round;transform-box:fill-box;transform-origin:50% 100%;opacity:0;animation:rb-erupt .68s cubic-bezier(.14,.82,.24,1) forwards}
+.rootbreak-fx .rb-one{animation-delay:.2s}.rootbreak-fx .rb-two{animation-delay:.25s}
+.rootbreak-fx .rb-front{fill:url(#rbBarkLight);stroke:#49643a;stroke-width:2.7}
+.rootbreak-fx .rb-three{animation-delay:.37s}.rootbreak-fx .rb-four{animation-delay:.42s}
+.rootbreak-fx .rb-branch{fill:url(#rbBark);stroke-width:2.2}
+.rootbreak-fx .rb-five{animation-delay:.48s}.rootbreak-fx .rb-six{animation-delay:.53s}
+.rootbreak-fx .rb-grain{fill:none;stroke:#e0d19a;stroke-width:1.45;stroke-linecap:round;opacity:0;animation:rb-grain .38s .82s ease-out forwards}
+.rootbreak-fx .rb-hit{fill:none;stroke:#e2f8a9;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0;transform-box:fill-box;transform-origin:center;animation:rb-impact .38s .82s ease-out forwards}
+.rootbreak-fx.rootbreak-hit .rb-hit{animation:rb-impact .42s ease-out forwards}
+.rootbreak-boss .rb-root{stroke-width:3.4}
+.plant-target-caught{animation:plant-caught .25s .72s ease-in-out 2}
+.root-impact-hit{animation:rb-target-hit .4s ease-out 1}
+@keyframes rb-glow{0%{opacity:0;transform:scale(.5,.55)}45%{opacity:1;transform:scale(1.08,1.18)}100%{opacity:.72;transform:scale(1,1)}}
+@keyframes rb-crack{to{stroke-dashoffset:0;opacity:.95}}
+@keyframes rb-erupt{0%{opacity:0;transform:scaleY(.05) translateY(13px) rotate(0)}48%{opacity:1;transform:scaleY(1.12) translateY(-3px) rotate(-2deg)}72%{transform:scaleY(.96) translateY(1px) rotate(1deg)}100%{opacity:1;transform:scaleY(1) translateY(0) rotate(0)}}
+@keyframes rb-soil{0%{opacity:0;transform:translateY(4px) scale(.35)}30%{opacity:1}100%{opacity:0;transform:translateY(-18px) scale(1.12)}}
+@keyframes rb-grain{to{opacity:.82}}
+@keyframes rb-impact{0%{opacity:0;transform:scale(.55)}32%{opacity:1;transform:scale(1.08)}100%{opacity:0;transform:scale(1.38)}}
+@keyframes rb-target-hit{0%{translate:0 0;filter:brightness(1)}25%{translate:0 -6px;filter:brightness(1.5)}55%{translate:0 2px;filter:brightness(1.18)}100%{translate:0 0;filter:brightness(1)}}
 @keyframes plant-caught{0%,100%{translate:0 0}35%{translate:-2px 0}70%{translate:2px 0}}
-@keyframes rootbreak-fade{0%,80%{opacity:1}100%{opacity:0}}
+@keyframes rb-fade{0%,82%{opacity:1}100%{opacity:0}}
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 19.4 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 19.5 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -495,44 +497,52 @@ function playPlantVines(isBoss,side){
  const target=document.getElementById(side==='player'?'enemySprite':'playerSprite');
  if(!target)return;
  const rect=target.getBoundingClientRect();
- const scale=isBoss?1.1:1;
- const w=Math.max(102,Math.round((rect.width+28)*scale)),h=Math.max(118,Math.round((rect.height+36)*scale));
+ const scale=isBoss?1.08:1;
+ const w=Math.max(108,Math.round((rect.width+30)*scale)),h=Math.max(122,Math.round((rect.height+38)*scale));
  const fx=document.createElement('div');
  fx.className='rootbreak-fx'+(isBoss?' rootbreak-boss':'');
  fx.setAttribute('aria-hidden','true');
  fx.style.left=(rect.left+(rect.width-w)/2)+'px';
- fx.style.top=(rect.top-12)+'px';
+ fx.style.top=(rect.top-13)+'px';
  fx.style.width=w+'px';fx.style.height=h+'px';
  fx.innerHTML=`
- <svg viewBox="0 0 240 230" preserveAspectRatio="none" role="presentation">
+ <svg viewBox="0 0 260 250" preserveAspectRatio="none" role="presentation">
  <defs>
-  <linearGradient id="rootBark" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b4a06b"/><stop offset=".3" stop-color="#718d49"/><stop offset=".7" stop-color="#496b36"/><stop offset="1" stop-color="#2b4c2c"/></linearGradient>
-  <linearGradient id="rootFresh" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d0e78b"/><stop offset=".45" stop-color="#85bd55"/><stop offset="1" stop-color="#47753b"/></linearGradient>
-  <radialGradient id="rootCircle"><stop stop-color="#a9ed62" stop-opacity=".48"/><stop offset=".65" stop-color="#79c94a" stop-opacity=".18"/><stop offset="1" stop-color="#79c94a" stop-opacity="0"/></radialGradient>
-  <filter id="rootDepth" x="-35%" y="-35%" width="170%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="2.2" result="blur"/><feOffset dy="2.5" result="offset"/><feComponentTransfer><feFuncA type="linear" slope=".5"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <linearGradient id="rbBark" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d0b77c"/><stop offset=".2" stop-color="#9b8658"/><stop offset=".48" stop-color="#687e43"/><stop offset=".78" stop-color="#405f35"/><stop offset="1" stop-color="#263f2a"/></linearGradient>
+  <linearGradient id="rbBarkLight" x1="0" y1="0" x2=".9" y2="1"><stop stop-color="#e1cc91"/><stop offset=".42" stop-color="#9caf62"/><stop offset="1" stop-color="#49683a"/></linearGradient>
+  <radialGradient id="rbGlow"><stop stop-color="#c0f477" stop-opacity=".55"/><stop offset=".62" stop-color="#8bd34d" stop-opacity=".22"/><stop offset="1" stop-color="#79c94a" stop-opacity="0"/></radialGradient>
+  <filter id="rbShadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/><feOffset dy="3" result="offset"/><feComponentTransfer><feFuncA type="linear" slope=".55"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
  </defs>
- <ellipse class="root-ground-glow" cx="120" cy="207" rx="105" ry="24"/>
- <ellipse class="root-ring" cx="120" cy="207" rx="77" ry="13"/>
- <g class="root-cracks"><path d="M120 207l-13 -7 4 -9 -13 -7"/><path d="M120 207l14 -8 -4 -9 12 -8"/><path d="M120 207l-4 9 -12 4"/><path d="M120 207l5 9 12 4"/></g>
- <g class="root-debris">
-  <path d="M42 202l-8 -10 12 -8 9 12Z"/><path d="M185 203l9 -13 12 5 -5 12Z"/><path d="M82 213l-5 -8 8 -6 7 9Z"/><path d="M151 214l6 -10 9 5 -4 8Z"/>
-  <circle cx="29" cy="174" r="2.8"/><circle cx="210" cy="176" r="3"/><circle cx="55" cy="153" r="2"/><circle cx="184" cy="151" r="2.2"/>
+ <ellipse class="rb-glow" cx="130" cy="224" rx="112" ry="23"/>
+ <ellipse class="rb-ring" cx="130" cy="224" rx="79" ry="14"/>
+ <g class="rb-cracks"><path d="M130 223l-15 -7 5 -10 -16 -8"/><path d="M130 223l16 -8 -5 -10 16 -9"/><path d="M130 223l-7 12 -13 5"/><path d="M130 223l7 12 13 5"/></g>
+ <g class="rb-soil">
+  <path d="M42 218l-9 -11 10 -12 12 7Z"/><path d="M205 217l10 -14 12 8 -7 11Z"/><path d="M74 232l-6 -8 8 -9 8 10Z"/><path d="M176 232l6 -10 10 7 -6 9Z"/>
+  <circle cx="34" cy="191" r="3"/><circle cx="224" cy="190" r="3.5"/><circle cx="55" cy="174" r="2.2"/><circle cx="204" cy="171" r="2.5"/>
  </g>
- <g filter="url(#rootDepth)">
-  <!-- rear roots rise first, then bend inward toward the monster -->
-  <path class="root-back root-r1" d="M53 211 C48 190 53 177 66 160 C77 145 83 132 80 116 C78 102 69 91 72 78 C87 88 98 103 96 120 C94 139 82 153 83 169 C84 184 92 197 101 211Z"/>
-  <path class="root-back root-r2" d="M187 211 C192 190 187 177 174 160 C163 145 157 132 160 116 C162 102 171 91 168 78 C153 88 142 103 144 120 C146 139 158 153 157 169 C156 184 148 197 139 211Z"/>
-  <!-- front roots curl across the lower body like thick natural roots -->
-  <path class="root-front root-r3" d="M78 213 C75 194 83 180 99 168 C113 157 116 143 108 130 C126 137 137 153 130 169 C123 184 109 190 107 204 C106 211 111 216 116 220 C98 220 86 218 78 213Z"/>
-  <path class="root-front root-r4" d="M162 213 C165 194 157 180 141 168 C127 157 124 143 132 130 C114 137 103 153 110 169 C117 184 131 190 133 204 C134 211 129 216 124 220 C142 220 154 218 162 213Z"/>
+ <g filter="url(#rbShadow)">
+  <!-- rear roots: broad at the base, tapered and forked at their tips -->
+  <path class="rb-root rb-back rb-one" d="M55 228 C48 211 55 194 70 177 C83 162 91 147 88 130 C86 115 75 103 79 86 C92 97 105 111 104 129 C103 148 91 163 91 179 C91 197 103 212 112 228 C91 232 69 234 55 228Z"/>
+  <path class="rb-root rb-back rb-two" d="M205 228 C212 211 205 194 190 177 C177 162 169 147 172 130 C174 115 185 103 181 86 C168 97 155 111 156 129 C157 148 169 163 169 179 C169 197 157 212 148 228 C169 232 191 234 205 228Z"/>
+  <!-- front roots fork inward and sweep across the lower torso -->
+  <path class="rb-root rb-front rb-three" d="M76 231 C72 213 83 198 101 184 C116 173 123 159 116 145 C134 152 143 168 135 184 C127 200 110 205 107 220 C106 226 111 231 119 235 C101 238 85 236 76 231Z"/>
+  <path class="rb-root rb-front rb-four" d="M184 231 C188 213 177 198 159 184 C144 173 137 159 144 145 C126 152 117 168 125 184 C133 200 150 205 153 220 C154 226 149 231 141 235 C159 238 175 236 184 231Z"/>
+  <!-- short branching tendrils make the roots organic, not straight bars -->
+  <path class="rb-root rb-branch rb-five" d="M91 185 C75 174 70 160 73 146 C84 154 91 165 91 177 C101 168 109 164 119 166 C111 179 102 185 91 185Z"/>
+  <path class="rb-root rb-branch rb-six" d="M169 185 C185 174 190 160 187 146 C176 154 169 165 169 177 C159 168 151 164 141 166 C149 179 158 185 169 185Z"/>
  </g>
- <g class="root-bark-lines"><path d="M64 192Q76 166 85 146Q94 125 82 101"/><path d="M176 192Q164 166 155 146Q146 125 158 101"/><path d="M91 204Q111 183 119 161"/><path d="M149 204Q129 183 121 161"/></g>
- <g class="root-impact"><path d="M91 126l-9 -13 2 18 -12 -5 12 14"/><path d="M149 126l9 -13 -2 18 12 -5 -12 14"/><path d="M108 119l12 -14 12 14"/></g>
+ <g class="rb-grain">
+  <path d="M64 215Q76 188 89 168Q101 148 91 119"/><path d="M196 215Q184 188 171 168Q159 148 169 119"/>
+  <path d="M88 224Q111 204 122 183Q130 168 124 155"/><path d="M172 224Q149 204 138 183Q130 168 136 155"/>
+  <path d="M82 173q-8 -12 -6 -21 M178 173q8 -12 6 -21"/>
+ </g>
+ <g class="rb-hit"><path d="M105 133l-12 -15 4 21 -14 -6 13 17"/><path d="M155 133l12 -15 -4 21 14 -6 -13 17"/><path d="M130 126l0 -19 M119 116l11 -12 11 12"/></g>
  </svg>`;
  document.body.appendChild(fx);
- target.classList.remove('plant-target-caught');void target.offsetWidth;target.classList.add('plant-target-caught');
- setTimeout(()=>{fx.classList.add('rootbreak-hit');target.classList.remove('plant-target-caught');target.classList.add('root-impact-hit')},760);
- setTimeout(()=>{fx.remove();target.classList.remove('root-impact-hit')},isBoss?2600:2250);
+ target.classList.remove('plant-target-caught','root-impact-hit');void target.offsetWidth;
+ target.classList.add('plant-target-caught');
+ setTimeout(()=>{fx.classList.add('rootbreak-hit');target.classList.remove('plant-target-caught');target.classList.add('root-impact-hit')},820);
+ setTimeout(()=>{fx.remove();target.classList.remove('root-impact-hit')},isBoss?2700:2350);
 }
 function playerAct(k,id){
  if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
