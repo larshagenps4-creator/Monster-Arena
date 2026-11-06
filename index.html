@@ -343,32 +343,33 @@
 @keyframes vine-wrap{0%{opacity:0;transform:translate(-50%,-50%) rotate(-28deg) scale(.15,.25)}35%{opacity:1;transform:translate(-50%,-50%) rotate(12deg) scale(1.05,.85)}68%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.15,1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(18deg) scale(1.35,1.1)}}
 @keyframes root-burst{0%{opacity:0;transform:scale(.2)}35%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.5)}}
 
-/* Compact vines grow directly from the target's arena circle and hug its body. */
-.plant-vine-fx{position:fixed;z-index:2147483600;pointer-events:none;overflow:visible;animation:vine-fx-out 2.4s ease-in-out both}
-.plant-vine-fx svg{width:100%;height:100%;overflow:visible}
-.plant-vine-fx .vine-ground{fill:url(#groundGlow);stroke:#9bdc63;stroke-width:1;transform-box:fill-box;transform-origin:center;animation:vine-ground .7s ease-out both}
-.plant-vine-fx .vine-outline{fill:none;stroke:#214c2b;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:420;stroke-dashoffset:420;animation:vine-draw 1.05s cubic-bezier(.2,.8,.2,1) forwards}
-.plant-vine-fx .vine-main{fill:none;stroke:url(#vineBody);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:420;stroke-dashoffset:420;animation:vine-draw 1.05s cubic-bezier(.2,.8,.2,1) forwards}
-.plant-vine-fx .vine-shine{fill:none;stroke:#c3ef91;stroke-width:1.3;stroke-linecap:round;opacity:.65;stroke-dasharray:420;stroke-dashoffset:420;animation:vine-draw 1.05s .04s ease-out forwards}
-.plant-vine-fx .vine-b{animation-delay:.1s}
-.plant-vine-fx .vine-cross{stroke-width:5.5;stroke:#77c65a;stroke-dasharray:260;stroke-dashoffset:260;animation:vine-draw .75s .85s ease-out forwards}
-.plant-vine-fx .vine-leaves .leaf{fill:url(#leafBody);stroke:#d0f49b;stroke-width:1;opacity:0;transform-box:fill-box;transform-origin:center;filter:drop-shadow(0 1px 1px #173d1c);animation:vine-leaf-pop .4s .95s ease-out forwards}
-.plant-vine-fx .leaf2{animation-delay:1.05s!important}.plant-vine-fx .leaf3{animation-delay:1.12s!important}.plant-vine-fx .leaf4{animation-delay:1.2s!important}
-.plant-target-caught{animation:plant-caught .32s 1s ease-in-out 2}
-.plant-boss .vine-outline{stroke-width:12}.plant-boss .vine-main{stroke-width:8}
-@keyframes vine-draw{0%{stroke-dashoffset:420;opacity:.2}65%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
-@keyframes vine-leaf-pop{0%{opacity:0;scale:.2}75%{opacity:1;scale:1.05}100%{opacity:1;scale:1}}
-@keyframes vine-ground{0%{opacity:0;scale:.3 .5}45%{opacity:1;scale:1.05 1}100%{opacity:.65;scale:1 1}}
-@keyframes vine-fx-out{0%,76%{opacity:1}100%{opacity:0}}
+/* Wurzelbruch: chunky, tapered roots burst from the arena circle in a stylized 3D-fantasy finish. */
+.rootbreak-fx{position:fixed;z-index:2147483600;pointer-events:none;overflow:visible;animation:rootbreak-fade 2.1s ease-out both}
+.rootbreak-fx svg{width:100%;height:100%;overflow:visible}
+.rootbreak-fx .root-ground-glow{fill:url(#rootCircle);opacity:0;transform-box:fill-box;transform-origin:center;animation:root-ring-pop .65s ease-out forwards}
+.rootbreak-fx .root-ring{fill:none;stroke:#a9e86c;stroke-width:2;opacity:0;stroke-dasharray:5 7;animation:root-ring-pop .55s .05s ease-out forwards}
+.rootbreak-fx .root-rocks path{fill:#806e4c;stroke:#b2a078;stroke-width:1;opacity:0;animation:root-debris .55s .2s ease-out forwards}
+.rootbreak-fx .root-back,.rootbreak-fx .root-front{fill:url(#rootWood);stroke:#345c31;stroke-width:2.5;stroke-linejoin:round;transform-box:fill-box;transform-origin:50% 100%;opacity:0;animation:root-rise .72s cubic-bezier(.16,.82,.28,1) forwards}
+.rootbreak-fx .r1{animation-delay:.12s}.rootbreak-fx .r2{animation-delay:.18s}.rootbreak-fx .r3{animation-delay:.28s}.rootbreak-fx .r4{animation-delay:.34s}
+.rootbreak-fx .root-front{fill:url(#rootLight);stroke:#47723a;stroke-width:2}
+.rootbreak-fx .root-veins{fill:none;stroke:#c2d88a;stroke-width:2;stroke-linecap:round;opacity:0;animation:root-veins-in .45s .8s ease-out forwards}
+.rootbreak-fx .root-dust{fill:#b6e879;opacity:0;animation:root-debris .7s .28s ease-out forwards}
+.rootbreak-boss .root-back,.rootbreak-boss .root-front{stroke-width:3.2}
+.plant-target-caught{animation:plant-caught .3s .48s ease-in-out 2}
+@keyframes root-ring-pop{0%{opacity:0;transform:scale(.5,.5)}45%{opacity:1;transform:scale(1.08,1.15)}100%{opacity:.7;transform:scale(1,1)}}
+@keyframes root-rise{0%{opacity:0;transform:scaleY(.08) translateY(8px)}55%{opacity:1;transform:scaleY(1.08) translateY(-2px)}78%{transform:scaleY(.96)}100%{opacity:1;transform:scaleY(1)}}
+@keyframes root-debris{0%{opacity:0;transform:translateY(8px) scale(.4)}35%{opacity:1}100%{opacity:0;transform:translateY(-15px) scale(1.15)}}
+@keyframes root-veins-in{to{opacity:.8}}
+@keyframes rootbreak-fade{0%,72%{opacity:1}100%{opacity:0}}
 @keyframes plant-caught{0%,100%{translate:0 0}35%{translate:-2px 0}70%{translate:2px 0}}
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 19.2 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 19.3 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
-['Blattling','🍃','Pflanze','Common',82,19,8,'Rankenhieb'],
+['Blattling','🍃','Pflanze','Common',82,19,8,'Wurzelbruch'],
 ['Glutfünkchen','🔥','Feuer','Common',82,19,8,'Glutstoß'],
 ['Tropfli','💧','Wasser','Common',82,18,10,'Blubber'],
 ['Blitzling','⚡','Blitz','Rare',96,25,9,'Funkenstoß'],
@@ -486,42 +487,39 @@ function playPlantVines(isBoss,side){
  const target=document.getElementById(side==='player'?'enemySprite':'playerSprite');
  if(!target)return;
  const rect=target.getBoundingClientRect();
- const scale=isBoss?1.08:1;
- const w=Math.max(88,Math.round((rect.width+12)*scale)),h=Math.max(112,Math.round((rect.height+20)*scale));
+ const scale=isBoss?1.12:1;
+ const w=Math.max(100,Math.round((rect.width+26)*scale)),h=Math.max(116,Math.round((rect.height+34)*scale));
  const fx=document.createElement('div');
- fx.className='plant-vine-fx'+(isBoss?' plant-boss':'');
+ fx.className='rootbreak-fx'+(isBoss?' rootbreak-boss':'');
  fx.setAttribute('aria-hidden','true');
  fx.style.left=(rect.left+(rect.width-w)/2)+'px';
- fx.style.top=(rect.top-4)+'px';
+ fx.style.top=(rect.top-12)+'px';
  fx.style.width=w+'px';fx.style.height=h+'px';
  fx.innerHTML=`
- <svg viewBox="0 0 220 190" preserveAspectRatio="none" role="presentation">
+ <svg viewBox="0 0 240 230" preserveAspectRatio="none" role="presentation">
   <defs>
-   <linearGradient id="vineBody" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#28653c"/><stop offset=".45" stop-color="#62b84e"/><stop offset="1" stop-color="#b4e77d"/></linearGradient>
-   <linearGradient id="leafBody" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#267b3b"/><stop offset="1" stop-color="#a4e76e"/></linearGradient>
-   <radialGradient id="groundGlow"><stop stop-color="#a8ee65" stop-opacity=".3"/><stop offset="1" stop-color="#75c94a" stop-opacity="0"/></radialGradient>
-   <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="1.5" result="blur"/><feOffset dy="1" result="offset"/><feComponentTransfer><feFuncA type="linear" slope=".35"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+   <linearGradient id="rootWood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9b7545"/><stop offset=".38" stop-color="#668b3e"/><stop offset=".72" stop-color="#477331"/><stop offset="1" stop-color="#294d2a"/></linearGradient>
+   <linearGradient id="rootLight" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b8d978"/><stop offset="1" stop-color="#54883a"/></linearGradient>
+   <radialGradient id="rootCircle"><stop stop-color="#a4e65b" stop-opacity=".34"/><stop offset=".72" stop-color="#79c94a" stop-opacity=".15"/><stop offset="1" stop-color="#79c94a" stop-opacity="0"/></radialGradient>
+   <filter id="rootShadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="2" result="b"/><feOffset dy="2"/><feComponentTransfer><feFuncA type="linear" slope=".42"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   </defs>
-  <ellipse class="vine-ground" cx="110" cy="178" rx="82" ry="12"/>
-  <g filter="url(#softShadow)">
-   <path class="vine-outline vine-a" d="M48 188 C35 166 45 151 64 135 C81 120 72 104 62 89 C50 70 65 53 84 62 C105 72 94 94 82 108 C69 124 87 139 110 142 C133 145 151 130 137 114 C125 100 126 83 140 71 C157 56 174 72 161 93 C150 111 139 126 158 143 C176 159 184 174 172 188"/>
-   <path class="vine-main vine-a" d="M48 188 C35 166 45 151 64 135 C81 120 72 104 62 89 C50 70 65 53 84 62 C105 72 94 94 82 108 C69 124 87 139 110 142 C133 145 151 130 137 114 C125 100 126 83 140 71 C157 56 174 72 161 93 C150 111 139 126 158 143 C176 159 184 174 172 188"/>
-   <path class="vine-shine vine-a" d="M49 184 C40 164 49 151 67 136 C83 120 75 104 65 90 C56 75 68 60 83 66 C98 73 91 93 79 107"/>
-   <path class="vine-outline vine-b" d="M172 188 C185 165 175 150 157 134 C139 118 148 102 159 87 C174 66 157 51 138 62 C119 73 130 95 142 109 C158 128 137 145 114 148 C92 151 73 137 86 121 C99 105 100 88 86 76"/>
-   <path class="vine-main vine-b" d="M172 188 C185 165 175 150 157 134 C139 118 148 102 159 87 C174 66 157 51 138 62 C119 73 130 95 142 109 C158 128 137 145 114 148 C92 151 73 137 86 121 C99 105 100 88 86 76"/>
-   <path class="vine-shine vine-b" d="M170 184 C180 164 171 151 154 135 C140 120 150 102 162 88 C171 73 157 57 140 66"/>
-   <path class="vine-main vine-cross" d="M64 132 C82 116 96 119 110 132 C124 145 140 145 155 130 M73 148 C91 135 102 137 114 148 C127 159 140 155 149 145"/>
+  <ellipse class="root-ground-glow" cx="120" cy="207" rx="104" ry="22"/>
+  <ellipse class="root-ring" cx="120" cy="207" rx="77" ry="13"/>
+  <g class="root-rocks">
+   <path d="M42 202l-8 -10 12 -8 9 12Z"/><path d="M185 203l9 -13 12 5 -5 12Z"/><path d="M82 213l-5 -8 8 -6 7 9Z"/><path d="M151 214l6 -10 9 5 -4 8Z"/>
   </g>
-  <g class="vine-leaves">
-   <path class="leaf leaf1" d="M72 105 C52 99 47 84 53 73 C70 78 78 91 72 105Z"/>
-   <path class="leaf leaf2" d="M148 103 C168 96 173 81 167 70 C150 76 142 89 148 103Z"/>
-   <path class="leaf leaf3" d="M88 139 C70 134 64 121 69 112 C84 116 93 127 88 139Z"/>
-   <path class="leaf leaf4" d="M132 143 C150 137 156 124 151 115 C136 119 127 131 132 143Z"/>
+  <g filter="url(#rootShadow)">
+   <path class="root-back r1" d="M61 211 C53 190 57 171 70 151 C79 137 82 119 78 101 C93 117 99 136 91 155 C82 176 79 192 88 211Z"/>
+   <path class="root-back r2" d="M179 211 C188 191 183 171 170 151 C161 136 158 118 163 101 C147 117 142 137 150 156 C160 177 163 193 153 211Z"/>
+   <path class="root-front r3" d="M94 214 C87 194 94 176 106 160 C115 148 115 133 109 119 C128 133 132 151 122 169 C113 185 111 199 119 215Z"/>
+   <path class="root-front r4" d="M146 214 C153 194 146 176 134 160 C125 148 125 133 131 119 C112 133 108 151 118 169 C127 185 129 199 121 215Z"/>
   </g>
+  <g class="root-veins"><path d="M69 194Q77 164 82 139"/><path d="M171 194Q163 164 158 139"/><path d="M106 199Q116 174 117 151"/><path d="M134 199Q124 174 123 151"/></g>
+  <g class="root-dust"><circle cx="31" cy="177" r="3"/><circle cx="205" cy="177" r="3.5"/><circle cx="57" cy="157" r="2.5"/><circle cx="183" cy="154" r="2.5"/></g>
  </svg>`;
  document.body.appendChild(fx);
  target.classList.remove('plant-target-caught');void target.offsetWidth;target.classList.add('plant-target-caught');
- setTimeout(()=>{fx.remove();target.classList.remove('plant-target-caught')},isBoss?2950:2550);
+ setTimeout(()=>{fx.remove();target.classList.remove('plant-target-caught')},isBoss?2500:2150);
 }
 function playerAct(k,id){
  if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
