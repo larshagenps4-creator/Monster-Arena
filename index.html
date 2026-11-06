@@ -323,10 +323,29 @@
 @keyframes fx-shadow{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}70%{opacity:1;transform:translate(-50%,-50%) scale(.9)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.7)}}
 @keyframes fx-dragon{0%{opacity:0;transform:translate(-90%,-50%) scale(.2)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.35)}100%{opacity:0;transform:translate(15%,-50%) scale(1.8)}}
 @media(prefers-reduced-motion:reduce){.special-fx,.special-fx *{animation-duration:.01ms!important}}
+
+/* Pflanze: deutlich sichtbare Ranken wachsen vom Boden hoch und wickeln sich um das Ziel. */
+.special-fx.fx-plant{height:min(58vh,430px)!important;width:min(94vw,560px)!important}
+.special-fx.fx-plant .fx-main{display:none!important}
+.special-fx.fx-plant:before{width:66%;height:34%;aspect-ratio:auto;border:0;border-top:10px solid #b6f58b;border-bottom:10px solid #258b38;border-radius:50%;box-shadow:0 0 22px #52ed63,inset 0 0 16px #52ed63;animation:vine-wrap 1.8s ease-in-out both}
+.special-fx.fx-plant:after{inset:58% 4% 0;border-radius:50%;background:radial-gradient(ellipse,#78d94b88 0%,transparent 68%);animation:root-burst .75s ease-out both}
+.special-fx.fx-plant .plant-vines{position:absolute;inset:0;display:block}
+.special-fx.fx-plant .plant-vine{position:absolute;bottom:12%;left:50%;width:0;height:76%;border-left:12px solid #278b35;border-radius:50%;filter:drop-shadow(0 0 5px #a7ff70);transform-origin:bottom center;animation:vine-rise 1.35s cubic-bezier(.16,.8,.25,1) both}
+.special-fx.fx-plant .plant-vine:after{content:"";position:absolute;top:22%;left:-20px;width:30px;height:17px;background:#55c94d;border:2px solid #b4f58a;border-radius:100% 0 100% 0;transform:rotate(-28deg);box-shadow:0 0 8px #4cda55}
+.special-fx.fx-plant .v1{transform:rotate(-52deg) scaleY(0);animation-delay:.02s}
+.special-fx.fx-plant .v2{transform:rotate(-30deg) scaleY(0);animation-delay:.12s}
+.special-fx.fx-plant .v3{transform:rotate(-12deg) scaleY(0);animation-delay:.20s}
+.special-fx.fx-plant .v4{transform:rotate(14deg) scaleY(0);animation-delay:.28s}
+.special-fx.fx-plant .v5{transform:rotate(34deg) scaleY(0);animation-delay:.36s}
+.special-fx.fx-plant .v6{transform:rotate(54deg) scaleY(0);animation-delay:.44s}
+.special-fx.fx-plant .fx-particle{font-size:clamp(35px,10vw,58px);animation-duration:1.8s}
+@keyframes vine-rise{0%{opacity:0;scale:1 0}18%{opacity:1}65%{scale:1 1}100%{opacity:1;scale:1 1}}
+@keyframes vine-wrap{0%{opacity:0;transform:translate(-50%,-50%) rotate(-28deg) scale(.15,.25)}35%{opacity:1;transform:translate(-50%,-50%) rotate(12deg) scale(1.05,.85)}68%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.15,1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(18deg) scale(1.35,1.1)}}
+@keyframes root-burst{0%{opacity:0;transform:scale(.2)}35%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.5)}}
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 18.6 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 18.7 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -440,9 +459,9 @@ function playSpecialEffect(element,isBoss,side){
  const fx=document.createElement('div');
  fx.className='special-fx fx-'+data.cls+(isBoss?' boss-fx':'')+' side-'+side;
  fx.setAttribute('aria-hidden','true');
- fx.innerHTML='<span class="fx-main">'+data.main+'</span>'+data.parts.map((v,i)=>'<span class="fx-particle p'+(i+1)+'">'+v+'</span>').join('');
+ fx.innerHTML='<span class="fx-main">'+data.main+'</span>'+data.parts.map((v,i)=>'<span class="fx-particle p'+(i+1)+'">'+v+'</span>').join('')+(element==='Pflanze'?'<span class="plant-vines"><i class="plant-vine v1"></i><i class="plant-vine v2"></i><i class="plant-vine v3"></i><i class="plant-vine v4"></i><i class="plant-vine v5"></i><i class="plant-vine v6"></i></span>':'');
  document.body.appendChild(fx);
- setTimeout(()=>fx.remove(),isBoss?2500:2100);
+ setTimeout(()=>fx.remove(),element==='Pflanze'?2700:(isBoss?2500:2100));
 }
 function playerAct(k,id){
  if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
