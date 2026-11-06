@@ -432,7 +432,8 @@ function playSpecialEffect(element,isBoss,side){
  scene.appendChild(fx);
  setTimeout(()=>fx.remove(),isBoss?2700:2450);
 }
-\nfunction playerAct(k,id){
+
+function playerAct(k,id){
  if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
  if(k==='switch'){let n=S.owned.find(m=>m.id===id);if(!S.team.includes(id)||!n||n.hp<=0||id===p.id)return;if(p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1);S.active=id;logmsg(`Du wechselst zu ${n.name}.`);playMessages([`Du wechselst zu ${n.name}.`,`${e.name} ist am Zug!`],()=>enemyTurn());return}
  if(k==='special'&&p.cooldown>0)return alert(`Spezialfähigkeit noch ${p.cooldown} eigene Runde(n) Abklingzeit.`);
