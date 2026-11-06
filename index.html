@@ -282,7 +282,42 @@
  .battle-scene #playerSprite{left:28%!important;top:79%!important;}
 }
 
-</style></head><body>
+</style><style id="v196-element-special-effects">
+/* Elementare Spezialeffekte: gut sichtbar, aber kurz und ohne Layoutverschiebung. */
+.special-fx{position:absolute;inset:0;z-index:12;display:grid;place-items:center;overflow:hidden;pointer-events:none;animation:v196-fx-scene 1.7s ease-out both}
+.special-fx .fx-symbol{font-size:clamp(62px,19vw,112px);line-height:1;filter:drop-shadow(0 0 13px var(--fx-glow));animation:v196-fx-symbol 1.65s cubic-bezier(.18,.75,.25,1) both}
+.special-fx:before{content:"";position:absolute;width:34%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--fx-core),transparent 70%);opacity:.8;animation:v196-fx-ring 1.65s ease-out both}
+.special-fx.fx-fire{--fx-glow:#ff6a18;--fx-core:#ff9b35}
+.special-fx.fx-water{--fx-glow:#35c9ff;--fx-core:#38baff}
+.special-fx.fx-plant{--fx-glow:#69e66b;--fx-core:#5ee879}
+.special-fx.fx-lightning{--fx-glow:#fff16a;--fx-core:#fff4a0}
+.special-fx.fx-ice{--fx-glow:#8ceeff;--fx-core:#a6f5ff}
+.special-fx.fx-shadow{--fx-glow:#c16cff;--fx-core:#9c50e8}
+.special-fx.fx-dragon{--fx-glow:#ff9d45;--fx-core:#ff642d}
+.special-fx.fx-fire .fx-symbol{animation-name:v196-fire}
+.special-fx.fx-water .fx-symbol{animation-name:v196-water}
+.special-fx.fx-plant .fx-symbol{animation-name:v196-plant}
+.special-fx.fx-lightning .fx-symbol{animation-name:v196-lightning}
+.special-fx.fx-ice .fx-symbol{animation-name:v196-ice}
+.special-fx.fx-shadow .fx-symbol{animation-name:v196-shadow}
+.special-fx.fx-dragon .fx-symbol{animation-name:v196-dragon}
+@keyframes v196-fx-scene{0%,100%{opacity:0}12%,78%{opacity:1}}
+@keyframes v196-fx-symbol{0%{opacity:0;transform:scale(.25)}25%{opacity:1;transform:scale(1.18)}72%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.3)}}
+@keyframes v196-fx-ring{0%{opacity:0;transform:scale(.2)}30%{opacity:.85}100%{opacity:0;transform:scale(3.2)}}
+@keyframes v196-fire{0%{opacity:0;transform:translateY(48px) scale(.4)}35%{opacity:1;transform:translateY(-8px) scale(1.2)}100%{opacity:0;transform:translateY(-48px) scale(1.45)}}
+@keyframes v196-water{0%{opacity:0;transform:translateX(-90px) scale(.45) rotate(-18deg)}35%{opacity:1;transform:translateX(0) scale(1.25) rotate(8deg)}100%{opacity:0;transform:translateX(75px) scale(1.5) rotate(20deg)}}
+@keyframes v196-plant{0%{opacity:0;transform:scale(.25) rotate(-35deg)}40%{opacity:1;transform:scale(1.2) rotate(12deg)}100%{opacity:0;transform:scale(1.5) rotate(38deg)}}
+@keyframes v196-lightning{0%,100%{opacity:0;filter:brightness(1)}18%,48%{opacity:1;filter:brightness(2.8)}30%,65%{opacity:.35}80%{opacity:1;filter:brightness(2)}}
+@keyframes v196-ice{0%{opacity:0;transform:scale(.2) rotate(-35deg)}35%{opacity:1;transform:scale(1.2) rotate(12deg)}100%{opacity:0;transform:scale(1.55) rotate(35deg)}}
+@keyframes v196-shadow{0%{opacity:0;transform:scale(.2)}35%{opacity:1;transform:scale(1.2)}70%{opacity:1;transform:scale(.9)}100%{opacity:0;transform:scale(1.6)}}
+@keyframes v196-dragon{0%{opacity:0;transform:translateX(-55px) scale(.35)}35%{opacity:1;transform:translateX(8px) scale(1.3)}100%{opacity:0;transform:translateX(48px) scale(1.65)}}
+.special-fx.boss-fx{animation-duration:2.05s}
+.special-fx.boss-fx .fx-symbol{font-size:clamp(88px,25vw,145px);animation-duration:2s}
+.special-fx.boss-fx:before{width:52%;border:3px solid #ffe28a;box-shadow:0 0 35px #ffb84d;background:radial-gradient(circle,#ffbd5a66,transparent 70%);animation-duration:2s}
+.special-fx .boss-mark{position:absolute;top:16%;padding:5px 11px;border-radius:20px;background:#6c1b2a;border:1px solid #ffd36b;color:#ffe7a0;font-size:11px;font-weight:950;letter-spacing:.12em;box-shadow:0 0 16px #ffb84d;animation:v196-fx-symbol 2s ease-out both}
+@media(prefers-reduced-motion:reduce){.special-fx,.special-fx *{animation-duration:.01ms!important}}
+</style>
+</head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
 <main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 18.2 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
@@ -356,7 +391,7 @@ function enemyTurn(){
  
  turnTimer=setTimeout(()=>{
   e=S.enemy;p=active();if(!e||!p){busy=false;render();return}
-  let action='attack',roll=Math.random();if(e.cooldown===0&&(e.boss?roll<.42:roll<.22))action='special';else if(roll>.76)action='defend';
+  let action='attack',roll=Math.random();if(e.cooldown===0&&(e.boss?roll<.42:roll<.22))action='special';else if(roll>.76)action='defend';if(action==='special')playSpecialEffect(e.element,!!e.boss,'enemy');
   let d=0,msg='',lines=[];
   if(action==='defend'){e.guard=true;if(e.cooldown>0)e.cooldown=Math.max(0,e.cooldown-1);lines.push(`${e.name} nimmt eine defensive Haltung ein.`)}
   else{let base=e.atk*(e.slow>0?.65:1);if(e.slow>0)e.slow--;if(p.guard)base*=.3;[d,msg]=hit(e,p,base);if(action==='special'){e.cooldown=4;if(e.element==='Eis'){p.slow=2;lines.push(`${e.name} setzt ${e.special} ein!`)}else if(e.element==='Schatten'){let heal=Math.min(e.max-e.hp,Math.round(d*.4));e.hp+=heal;lines.push(`${e.name} setzt ${e.special} ein und heilt sich um ${heal} LP.`)}else{d=Math.round(d*1.25);lines.push(`${e.name} setzt ${e.special} ein!`)}}else lines.push(`${e.name} greift an!`);p.hp=Math.max(0,p.hp-d);animateHitAfterImpact('player');p.guard=false;lines.push(`${p.name} verliert ${d} HP.`);if(action!=='special'&&e.cooldown>0)e.cooldown=Math.max(0,e.cooldown-1)}
@@ -384,11 +419,22 @@ function animateHitAfterImpact(side){
  setTimeout(apply,40);
 }
 function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!sc)return;let el=document.createElement('div');el.className='impact '+kind;el.textContent=txt;sc.appendChild(el);setTimeout(()=>el.remove(),750)}
-function playerAct(k,id){
+function playSpecialEffect(element,isBoss,side){
+ const scene=$('.battle-scene');if(!scene)return;
+ const fxIcons={Feuer:'🔥💥',Wasser:'🌊💦',Pflanze:'🌿🌵',Blitz:'⚡✨',Eis:'❄️🧊',Schatten:'🌑💜',Drache:'🐉🔥'};
+ const fxClasses={Feuer:'fire',Wasser:'water',Pflanze:'plant',Blitz:'lightning',Eis:'ice',Schatten:'shadow',Drache:'dragon'};
+ const fx=document.createElement('div');
+ fx.className='special-fx fx-'+(fxClasses[element]||'fire')+(isBoss?' boss-fx':'')+' side-'+side;
+ fx.setAttribute('aria-hidden','true');
+ fx.innerHTML='<span class="fx-symbol">'+(fxIcons[element]||'✨')+'</span>'+(isBoss?'<span class="boss-mark">👑 BOSS-SPEZIALANGRIFF</span>':'');
+ scene.appendChild(fx);
+ setTimeout(()=>fx.remove(),isBoss?2100:1750);
+}
+\nfunction playerAct(k,id){
  if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
  if(k==='switch'){let n=S.owned.find(m=>m.id===id);if(!S.team.includes(id)||!n||n.hp<=0||id===p.id)return;if(p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1);S.active=id;logmsg(`Du wechselst zu ${n.name}.`);playMessages([`Du wechselst zu ${n.name}.`,`${e.name} ist am Zug!`],()=>enemyTurn());return}
  if(k==='special'&&p.cooldown>0)return alert(`Spezialfähigkeit noch ${p.cooldown} eigene Runde(n) Abklingzeit.`);
- busy=true;menuMode='none';S.battleTurn='animating';render();animateLunge('player');
+ busy=true;menuMode='none';S.battleTurn='animating';render();animateLunge('player');if(k==='special')playSpecialEffect(p.element,!!e.boss,'player');
  turnTimer=setTimeout(()=>{p=active();e=S.enemy;if(!p||!e){busy=false;render();return}let d=0,msg='',lines=[];
  if(k==='defend'){p.guard=true;p.cooldown=Math.max(0,p.cooldown-3);lines.push(`${p.name} geht in Abwehrhaltung.`)}
  else{let base=p.atk*(p.slow>0?.65:1);if(p.slow>0)p.slow--;if(k==='special'){base=p.atk*1.45*(p.slow>0?.65:1);p.cooldown=4;if(p.element==='Eis'){e.skipTurn=1;lines.push(`${p.name} setzt ${p.special} ein! ${e.name} wird eingefroren und setzt seinen nächsten Zug aus!`)}else if(p.element==='Schatten')lines.push(`${p.name} setzt ${p.special} ein!`);else lines.push(`${p.name} setzt ${p.special} ein!`)}else lines.push(`${p.name} greift an!`);[d,msg]=hit(p,e,base);if(e.guard){d=Math.max(1,Math.round(d*.3));e.guard=false}e.hp=Math.max(0,e.hp-d);lines.push(`${e.name} verliert ${d} HP.`);if(k==='special'&&p.element==='Schatten'){let heal=Math.min(p.max-p.hp,Math.round(d*.55));p.hp+=heal;if(heal)lines.push(`${p.name} heilt sich um ${heal} LP.`)}if(k==='special'&&p.element==='Blitz')e.guard=false;if(k!=='special'&&p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1)}
