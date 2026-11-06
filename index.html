@@ -284,11 +284,11 @@
 
 </style><style id="v196-element-special-effects">
 /* Sichtbare Element-Attacken direkt am getroffenen Monster – ohne Textbanner. */
-.special-fx{position:absolute!important;z-index:30!important;width:44%!important;height:52%!important;display:block!important;pointer-events:none!important;overflow:visible!important;transform:translate(-50%,-50%);animation:fx-arrive .22s ease-out both}
-.special-fx.side-player{left:69%!important;top:43%!important}
-.special-fx.side-enemy{left:28%!important;top:69%!important}
-.special-fx .fx-main{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;font-size:clamp(58px,19vw,112px);line-height:1;filter:drop-shadow(0 0 16px var(--glow));animation:fx-main 1.55s cubic-bezier(.16,.75,.25,1) both}
-.special-fx .fx-particle{position:absolute;left:50%;top:50%;font-size:clamp(25px,8vw,48px);line-height:1;filter:drop-shadow(0 0 9px var(--glow));animation:fx-particle 1.25s ease-out both}
+.special-fx{position:fixed!important;z-index:2147483000!important;left:50%!important;top:50%!important;width:min(92vw,520px)!important;height:min(72vh,520px)!important;display:block!important;pointer-events:none!important;overflow:visible!important;transform:translate(-50%,-50%);animation:fx-arrive .22s ease-out both}
+.special-fx.side-player{left:50%!important;top:54%!important}
+.special-fx.side-enemy{left:50%!important;top:42%!important}
+.special-fx .fx-main{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;font-size:clamp(100px,34vw,190px);line-height:1;filter:drop-shadow(0 0 16px var(--glow));animation:fx-main 1.55s cubic-bezier(.16,.75,.25,1) both}
+.special-fx .fx-particle{position:absolute;left:50%;top:50%;font-size:clamp(42px,13vw,76px);line-height:1;filter:drop-shadow(0 0 9px var(--glow));animation:fx-particle 1.25s ease-out both}
 .special-fx .p1{--dx:-55px;--dy:-55px;animation-delay:.04s}.special-fx .p2{--dx:58px;--dy:-38px;animation-delay:.10s}.special-fx .p3{--dx:-42px;--dy:48px;animation-delay:.16s}.special-fx .p4{--dx:48px;--dy:52px;animation-delay:.22s}
 .special-fx:before{content:"";position:absolute;left:50%;top:50%;width:30%;aspect-ratio:1;border:3px solid var(--glow);border-radius:50%;box-shadow:0 0 24px var(--glow),inset 0 0 20px var(--glow);transform:translate(-50%,-50%);animation:fx-ring 1.15s ease-out both}
 .special-fx:after{content:"";position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle,var(--core),transparent 68%);opacity:.8;animation:fx-flash .55s ease-out both}
@@ -306,9 +306,9 @@
 .special-fx.fx-ice .fx-main{animation-name:fx-ice}
 .special-fx.fx-shadow .fx-main{animation-name:fx-shadow}
 .special-fx.fx-dragon .fx-main{animation-name:fx-dragon}
-.special-fx.fx-plant .fx-particle{font-size:clamp(30px,9vw,54px)}
-.special-fx.fx-lightning .fx-particle{font-size:clamp(34px,10vw,60px)}
-.special-fx.boss-fx .fx-main{font-size:clamp(82px,25vw,145px)}
+.special-fx.fx-plant .fx-particle{font-size:clamp(48px,14vw,82px)}
+.special-fx.fx-lightning .fx-particle{font-size:clamp(54px,16vw,92px)}
+.special-fx.boss-fx .fx-main{font-size:clamp(130px,42vw,230px)}
 .special-fx.boss-fx:before{width:48%;border-width:5px;box-shadow:0 0 42px #ffe28a}
 @keyframes fx-arrive{from{opacity:0;scale:.45}to{opacity:1;scale:1}}
 @keyframes fx-main{0%{opacity:0;scale:.2}28%{opacity:1;scale:1.25}72%{opacity:1;scale:1}100%{opacity:0;scale:1.5}}
@@ -326,7 +326,7 @@
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 18.5 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 18.6 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -427,7 +427,6 @@ function animateHitAfterImpact(side){
 }
 function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!sc)return;let el=document.createElement('div');el.className='impact '+kind;el.textContent=txt;sc.appendChild(el);setTimeout(()=>el.remove(),750)}
 function playSpecialEffect(element,isBoss,side){
- const scene=$('.battle-scene');if(!scene)return;
  const effects={
   Feuer:{main:'🔥',parts:['🔥','💥','✨','🔥'],cls:'fire'},
   Wasser:{main:'🌊',parts:['💦','🌊','💧','💦'],cls:'water'},
@@ -437,13 +436,13 @@ function playSpecialEffect(element,isBoss,side){
   Schatten:{main:'🌑',parts:['🟣','🌑','✨','🟣'],cls:'shadow'},
   Drache:{main:'🐉',parts:['🔥','🐲','💥','🔥'],cls:'dragon'}
  };
- const data=effects[element]||effects.Feuer;
+ const data=effects[element]||effects[String(element||'').toLowerCase()]||effects.Feuer;
  const fx=document.createElement('div');
  fx.className='special-fx fx-'+data.cls+(isBoss?' boss-fx':'')+' side-'+side;
  fx.setAttribute('aria-hidden','true');
  fx.innerHTML='<span class="fx-main">'+data.main+'</span>'+data.parts.map((v,i)=>'<span class="fx-particle p'+(i+1)+'">'+v+'</span>').join('');
- scene.appendChild(fx);
- setTimeout(()=>fx.remove(),isBoss?2300:1900);
+ document.body.appendChild(fx);
+ setTimeout(()=>fx.remove(),isBoss?2500:2100);
 }
 function playerAct(k,id){
  if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
