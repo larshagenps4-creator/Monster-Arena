@@ -342,10 +342,28 @@
 @keyframes vine-rise{0%{opacity:0;scale:1 0}18%{opacity:1}65%{scale:1 1}100%{opacity:1;scale:1 1}}
 @keyframes vine-wrap{0%{opacity:0;transform:translate(-50%,-50%) rotate(-28deg) scale(.15,.25)}35%{opacity:1;transform:translate(-50%,-50%) rotate(12deg) scale(1.05,.85)}68%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.15,1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(18deg) scale(1.35,1.1)}}
 @keyframes root-burst{0%{opacity:0;transform:scale(.2)}35%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.5)}}
+
+/* Plant special attack rebuilt as real animated SVG vines anchored to the target monster. */
+.plant-vine-fx{position:fixed;z-index:2147483600;pointer-events:none;overflow:visible;animation:vine-fx-out 2.8s ease-in-out both}
+.plant-vine-fx svg{width:100%;height:100%;overflow:visible}
+.plant-vine-fx .vine-path{fill:none;stroke:url(#vineGreen);stroke-width:10;stroke-linecap:round;stroke-linejoin:round;filter:url(#vineGlow);stroke-dasharray:460;stroke-dashoffset:460;animation:vine-draw 1.25s cubic-bezier(.2,.8,.2,1) forwards}
+.plant-vine-fx .v-right{animation-delay:.08s;stroke-width:11}
+.plant-vine-fx .v-mid{animation-delay:.18s;stroke-width:8}
+.plant-vine-fx .v-wrap{stroke:#8ee65c;stroke-width:8;stroke-dasharray:300;stroke-dashoffset:300;animation:vine-draw .9s 1s ease-out forwards}
+.plant-vine-fx .vine-leaf{fill:#55bd43;stroke:#c1ff83;stroke-width:2;filter:url(#vineGlow);opacity:0;transform-box:fill-box;transform-origin:center;animation:vine-leaf-pop .55s 1.1s ease-out forwards}
+.plant-vine-fx .l2{animation-delay:1.2s}.plant-vine-fx .l3{animation-delay:1.3s}.plant-vine-fx .l4{animation-delay:1.4s}
+.plant-vine-fx .vine-ground{fill:#9bff4b33;stroke:#a5ff63;stroke-width:3;filter:url(#vineGlow);transform-box:fill-box;transform-origin:center;animation:vine-ground .9s ease-out both}
+.plant-target-caught{animation:plant-caught .42s 1.15s ease-in-out 2}
+.plant-boss .vine-path{stroke-width:14}
+@keyframes vine-draw{0%{stroke-dashoffset:460;opacity:.3}65%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
+@keyframes vine-leaf-pop{0%{opacity:0;scale:.1}75%{opacity:1;scale:1.2}100%{opacity:1;scale:1}}
+@keyframes vine-ground{0%{opacity:0;scale:.15 .6}45%{opacity:1;scale:1.15 1}100%{opacity:.8;scale:1 1}}
+@keyframes vine-fx-out{0%,72%{opacity:1}100%{opacity:0}}
+@keyframes plant-caught{0%,100%{translate:0 0}35%{translate:-4px 0}70%{translate:4px 0}}
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 18.7 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 18.8 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -446,10 +464,10 @@ function animateHitAfterImpact(side){
 }
 function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!sc)return;let el=document.createElement('div');el.className='impact '+kind;el.textContent=txt;sc.appendChild(el);setTimeout(()=>el.remove(),750)}
 function playSpecialEffect(element,isBoss,side){
+ if(element==='Pflanze'){playPlantVines(isBoss,side);return}
  const effects={
   Feuer:{main:'🔥',parts:['🔥','💥','✨','🔥'],cls:'fire'},
   Wasser:{main:'🌊',parts:['💦','🌊','💧','💦'],cls:'water'},
-  Pflanze:{main:'🌿',parts:['🌱','🌿','🍃','🌵'],cls:'plant'},
   Blitz:{main:'⚡',parts:['⚡','✨','⚡','💛'],cls:'lightning'},
   Eis:{main:'🧊',parts:['❄️','🧊','❄️','💎'],cls:'ice'},
   Schatten:{main:'🌑',parts:['🟣','🌑','✨','🟣'],cls:'shadow'},
@@ -459,9 +477,40 @@ function playSpecialEffect(element,isBoss,side){
  const fx=document.createElement('div');
  fx.className='special-fx fx-'+data.cls+(isBoss?' boss-fx':'')+' side-'+side;
  fx.setAttribute('aria-hidden','true');
- fx.innerHTML='<span class="fx-main">'+data.main+'</span>'+data.parts.map((v,i)=>'<span class="fx-particle p'+(i+1)+'">'+v+'</span>').join('')+(element==='Pflanze'?'<span class="plant-vines"><i class="plant-vine v1"></i><i class="plant-vine v2"></i><i class="plant-vine v3"></i><i class="plant-vine v4"></i><i class="plant-vine v5"></i><i class="plant-vine v6"></i></span>':'');
+ fx.innerHTML='<span class="fx-main">'+data.main+'</span>'+data.parts.map((v,i)=>'<span class="fx-particle p'+(i+1)+'">'+v+'</span>').join('');
  document.body.appendChild(fx);
- setTimeout(()=>fx.remove(),element==='Pflanze'?2700:(isBoss?2500:2100));
+ setTimeout(()=>fx.remove(),isBoss?2500:2100);
+}
+function playPlantVines(isBoss,side){
+ const target=document.getElementById(side==='player'?'enemySprite':'playerSprite');
+ if(!target)return;
+ const rect=target.getBoundingClientRect();
+ const w=Math.max(150,rect.width+116),h=Math.max(190,rect.height+138);
+ const fx=document.createElement('div');
+ fx.className='plant-vine-fx'+(isBoss?' plant-boss':'');
+ fx.setAttribute('aria-hidden','true');
+ fx.style.left=(rect.left+(rect.width-w)/2)+'px';
+ fx.style.top=(rect.top-68)+'px';
+ fx.style.width=w+'px';fx.style.height=h+'px';
+ fx.innerHTML=`
+ <svg viewBox="0 0 300 270" preserveAspectRatio="none" role="presentation">
+  <defs>
+   <linearGradient id="vineGreen" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#175b2b"/><stop offset=".48" stop-color="#48bd45"/><stop offset="1" stop-color="#c1ff83"/></linearGradient>
+   <filter id="vineGlow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <ellipse class="vine-ground" cx="150" cy="235" rx="105" ry="19"/>
+  <path class="vine-path v-left" d="M72 265 C48 220 76 194 91 165 C107 133 60 116 83 78 C97 53 116 65 124 91 C133 119 105 137 119 159"/>
+  <path class="vine-path v-right" d="M228 265 C252 220 224 194 209 165 C193 133 240 116 217 78 C203 53 184 65 176 91 C167 119 195 137 181 159"/>
+  <path class="vine-path v-mid" d="M150 270 C124 226 134 198 150 171 C166 198 176 226 150 270"/>
+  <path class="vine-path v-wrap" d="M90 182 C112 151 188 151 210 182 C232 213 190 229 150 211 C110 229 68 213 90 182"/>
+  <path class="vine-leaf l1" d="M90 125 Q43 91 59 66 Q99 69 90 125Z"/>
+  <path class="vine-leaf l2" d="M210 125 Q257 91 241 66 Q201 69 210 125Z"/>
+  <path class="vine-leaf l3" d="M117 194 Q76 178 80 151 Q117 157 117 194Z"/>
+  <path class="vine-leaf l4" d="M183 194 Q224 178 220 151 Q183 157 183 194Z"/>
+ </svg>`;
+ document.body.appendChild(fx);
+ target.classList.remove('plant-target-caught');void target.offsetWidth;target.classList.add('plant-target-caught');
+ setTimeout(()=>{fx.remove();target.classList.remove('plant-target-caught')},isBoss?3300:2850);
 }
 function playerAct(k,id){
  if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
