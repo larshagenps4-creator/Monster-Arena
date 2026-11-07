@@ -343,38 +343,35 @@
 @keyframes vine-wrap{0%{opacity:0;transform:translate(-50%,-50%) rotate(-28deg) scale(.15,.25)}35%{opacity:1;transform:translate(-50%,-50%) rotate(12deg) scale(1.05,.85)}68%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.15,1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(18deg) scale(1.35,1.1)}}
 @keyframes root-burst{0%{opacity:0;transform:scale(.2)}35%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.5)}}
 
-/* Refined Wurzelbruch: compact, asymmetrical bark roots visibly coil around the target. */
-.rootwrap-fx{position:fixed;z-index:2147483646;pointer-events:none;overflow:visible;animation:rw-out 2.25s ease-out both}
+/* Wurzelbruch final pass: smaller roots emerge from the green circle; rear strands pass behind the monster. */
+.rootwrap-fx{position:fixed;pointer-events:none;overflow:visible}
 .rootwrap-fx svg{width:100%;height:100%;overflow:visible}
-.rootwrap-fx .rw-ground{fill:#a8d978;opacity:0;filter:blur(5px);animation:rw-ground .5s ease-out forwards}
-.rootwrap-fx .rw-crack{fill:none;stroke:#d0bd8b;stroke-width:2;stroke-linecap:round;stroke-dasharray:70;stroke-dashoffset:70;animation:rw-crack .34s .08s ease-out forwards}
-.rootwrap-fx .rw-soil path{fill:#806b49;stroke:#bba277;stroke-width:1.2;opacity:0;animation:rw-dirt .6s .24s ease-out forwards}
-.rootwrap-fx .rw-wood{fill:none;stroke:url(#rwWood);stroke-width:13;stroke-linecap:round;stroke-linejoin:round}
-.rootwrap-fx .rw-root{stroke-dasharray:360;stroke-dashoffset:360;animation:rw-grow .78s cubic-bezier(.2,.78,.2,1) forwards}
-.rootwrap-fx .rw-left{animation-delay:.1s}.rootwrap-fx .rw-right{animation-delay:.2s}
-.rootwrap-fx .rw-center{stroke:url(#rwLit);stroke-width:10;animation-delay:.42s}
-.rootwrap-fx .rw-twig{stroke-width:7;stroke:url(#rwLit);stroke-dasharray:80;stroke-dashoffset:80;animation:rw-grow .42s .55s ease-out forwards}
-.rootwrap-fx .rw-twig-right{animation-delay:.62s}
-.rootwrap-fx .rw-bark{fill:none;stroke:#ddc797;stroke-width:1.4;stroke-linecap:round;opacity:0;animation:rw-detail .4s .72s ease-out forwards}
-.rootwrap-fx .rw-wrap-lines{fill:none;stroke:#354b2e;stroke-width:5;stroke-linecap:round;stroke-dasharray:160;stroke-dashoffset:160;animation:rw-wrap .42s .78s ease-out forwards}
-.rootwrap-fx .rw-dust{fill:#c6a875;opacity:0;animation:rw-detail .5s .3s ease-out forwards}
-.rootwrap-fx .rw-hit{fill:none;stroke:#d9f1a1;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;opacity:0;animation:rw-flash .32s .84s ease-out forwards}
-.rootwrap-fx.rootwrap-impact .rw-hit{animation:rw-flash .34s ease-out forwards}
-.rootwrap-boss .rw-wood{stroke-width:15}.rootwrap-boss .rw-center{stroke-width:12}
-.rootwrap-hit{animation:rw-shake .42s ease-out 1}
-@keyframes rw-ground{0%{opacity:0;transform:scale(.5)}45%{opacity:.85}100%{opacity:.38;transform:scale(1)}}
-@keyframes rw-crack{to{stroke-dashoffset:0;opacity:.85}}
-@keyframes rw-dirt{0%{opacity:0;transform:translateY(3px) scale(.5)}35%{opacity:1}100%{opacity:0;transform:translateY(-13px) scale(1.1)}}
-@keyframes rw-grow{0%{stroke-dashoffset:360;opacity:.2}14%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
+.rootwrap-rear{z-index:3;animation:rw-fade 1.95s ease-out both}
+.rootwrap-front{z-index:5;animation:rw-fade 1.95s ease-out both}
+.rootwrap-fx .rw-ground{fill:#9bc96b;opacity:0;filter:blur(3px);animation:rw-ground .4s ease-out forwards}
+.rootwrap-fx .rw-crack{fill:none;stroke:#b9a078;stroke-width:2;stroke-linecap:round;stroke-dasharray:65;stroke-dashoffset:65;animation:rw-crack .32s .05s ease-out forwards}
+.rootwrap-fx .rw-backroots,.rootwrap-fx .rw-frontroots{fill:none;stroke:url(#rwBack);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:340;stroke-dashoffset:340;animation:rw-grow .72s cubic-bezier(.2,.78,.2,1) forwards}
+.rootwrap-fx .rw-frontroots{stroke:url(#rwFront);stroke-width:11}
+.rootwrap-fx .rw-backroots path:nth-child(2){animation-delay:.16s}
+.rootwrap-fx .rw-frontroots path:nth-child(2){animation-delay:.28s}
+.rootwrap-fx .rw-wraplines{fill:none;stroke:#34492d;stroke-width:5;stroke-linecap:round;stroke-dasharray:160;stroke-dashoffset:160;animation:rw-wrap .38s .7s ease-out forwards}
+.rootwrap-fx .rw-bark{fill:none;stroke:#ddc797;stroke-width:1.5;stroke-linecap:round;opacity:0;animation:rw-detail .35s .72s ease-out forwards}
+.rootwrap-fx .rw-hit{fill:none;stroke:#d9f1a1;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;opacity:0;animation:rw-flash .28s .78s ease-out forwards}
+.rootwrap-fx.rootwrap-impact .rw-hit{animation:rw-flash .3s ease-out forwards}
+.rootwrap-boss .rw-backroots,.rootwrap-boss .rw-frontroots{stroke-width:13}
+.rootwrap-hit{animation:rw-shake .38s ease-out 1}
+@keyframes rw-ground{0%{opacity:0;transform:scale(.55)}45%{opacity:.75}100%{opacity:.42;transform:scale(1)}}
+@keyframes rw-crack{to{stroke-dashoffset:0;opacity:.8}}
+@keyframes rw-grow{0%{stroke-dashoffset:340;opacity:.2}18%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
+@keyframes rw-wrap{to{stroke-dashoffset:0;opacity:.9}}
 @keyframes rw-detail{to{opacity:.8}}
-@keyframes rw-wrap{0%{stroke-dashoffset:160;opacity:.2}100%{stroke-dashoffset:0;opacity:.9}}
-@keyframes rw-flash{0%{opacity:0;transform:scale(.7)}35%{opacity:1}100%{opacity:0;transform:scale(1.16)}}
-@keyframes rw-shake{0%,100%{translate:0 0;filter:brightness(1)}24%{translate:-3px -3px;filter:brightness(1.35)}52%{translate:3px 1px;filter:brightness(1.12)}}
-@keyframes rw-out{0%,86%{opacity:1}100%{opacity:0}}
+@keyframes rw-flash{0%{opacity:0;transform:scale(.7)}35%{opacity:1}100%{opacity:0;transform:scale(1.12)}}
+@keyframes rw-shake{0%,100%{translate:0 0;filter:brightness(1)}25%{translate:-2px -2px;filter:brightness(1.3)}55%{translate:2px 1px;filter:brightness(1.1)}}
+@keyframes rw-fade{0%,84%{opacity:1}100%{opacity:0}}
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.0 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.1 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -497,45 +494,26 @@ function playPlantVines(isBoss,side){
  const scene=document.querySelector('.battle-scene');
  if(!target||!scene)return;
  const tr=target.getBoundingClientRect(),sr=scene.getBoundingClientRect();
- const width=Math.min(tr.width*.76,isBoss?116:102),height=Math.min(tr.height*.82,isBoss?132:116);
+ const width=Math.min(tr.width*.62,isBoss?96:84),height=Math.min(tr.height*.70,isBoss?112:98);
  const left=tr.left+(tr.width-width)/2;
- const rootBase=tr.bottom+Math.max(2,tr.height*.055);
- const top=Math.max(sr.top+4,Math.min(sr.bottom-height-4,rootBase-height*.91));
- const fx=document.createElement('div');
- fx.className='rootwrap-fx'+(isBoss?' rootwrap-boss':'');
- fx.setAttribute('aria-hidden','true');
- Object.assign(fx.style,{left:left+'px',top:top+'px',width:width+'px',height:height+'px'});
- fx.innerHTML=`
- <svg viewBox="0 0 220 240" preserveAspectRatio="none">
- <defs>
-  <linearGradient id="rwWood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c7ad7b"/><stop offset=".22" stop-color="#9b8153"/><stop offset=".53" stop-color="#687b48"/><stop offset=".8" stop-color="#435c35"/><stop offset="1" stop-color="#2d432a"/></linearGradient>
-  <linearGradient id="rwLit" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d4bd8b"/><stop offset=".48" stop-color="#9b9b62"/><stop offset="1" stop-color="#52683b"/></linearGradient>
-  <filter id="rwShadow" x="-30%" y="-20%" width="160%" height="150%"><feGaussianBlur in="SourceAlpha" stdDeviation="2" result="b"/><feOffset dy="2"/><feComponentTransfer><feFuncA type="linear" slope=".42"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
- </defs>
- <ellipse class="rw-ground" cx="110" cy="220" rx="88" ry="16"/>
- <path class="rw-crack" d="M110 218l-13 -7 6 -9 -12 -7 M110 218l13 -8 -5 -9 12 -8 M110 218l-4 12 -12 4 M110 218l5 12 12 4"/>
- <g class="rw-soil"><path d="M29 217l-9 -11 11 -10 10 11Z"/><path d="M187 218l9 -12 -11 -9 -10 11Z"/><path d="M54 229l-7 -8 8 -8 9 8Z"/><path d="M164 229l7 -8 -8 -9 -9 8Z"/></g>
- <g filter="url(#rwShadow)" class="rw-wood">
-  <!-- Asymmetric roots: they rise from the arena ring, pass around the sides and cross over the torso. -->
-  <path class="rw-root rw-left" d="M34 220 C29 204 39 191 52 177 C67 162 77 149 70 134 C65 123 51 116 53 102 C55 88 69 79 82 73 C72 91 73 103 87 115 C103 128 106 143 96 157 C85 174 70 184 73 199 C75 208 84 216 94 223"/>
-  <path class="rw-root rw-right" d="M187 220 C193 205 183 191 171 177 C157 160 146 149 153 134 C159 121 173 116 169 101 C166 88 154 80 141 75 C151 91 149 104 136 116 C120 131 116 145 127 159 C139 175 154 185 150 200 C148 210 140 217 130 224"/>
-  <path class="rw-root rw-center" d="M100 225 C91 210 94 195 103 180 C112 164 119 153 111 139 C103 125 96 114 103 99 C109 86 120 77 131 68 C123 88 127 101 137 114 C149 130 149 145 139 160 C128 177 118 190 123 207 C125 215 131 221 137 226"/>
-  <path class="rw-twig rw-twig-left" d="M68 153 C53 148 48 137 50 126 C62 130 70 138 72 147"/>
-  <path class="rw-twig rw-twig-right" d="M153 153 C168 148 174 137 171 126 C160 131 151 139 149 148"/>
- </g>
- <g class="rw-bark">
-  <path d="M42 207Q52 187 69 170T78 139T62 105"/><path d="M179 207Q166 187 151 170T145 139T163 106"/>
-  <path d="M101 211Q110 190 123 172T126 139T113 104"/>
-  <path d="M58 185l8 -8 M162 184l-8 -8 M87 166l8 -7 M133 165l-8 -8 M76 126l8 -6 M146 126l-8 -7"/>
- </g>
- <g class="rw-wrap-lines"><path d="M59 128 C79 111 91 121 108 137 C126 153 144 145 161 126"/><path d="M64 151 C83 137 94 149 109 161 C126 174 140 165 156 150"/></g>
- <g class="rw-dust"><circle cx="32" cy="185" r="2.4"/><circle cx="188" cy="182" r="2.6"/><circle cx="47" cy="165" r="1.8"/><circle cx="174" cy="162" r="1.9"/></g>
- <g class="rw-hit"><path d="M99 95l-10 -12 4 18 -12 -5 13 16 M125 93l10 -12 -4 18 12 -5 -13 16"/></g>
- </svg>`;
- document.body.appendChild(fx);
+ const rootBase=tr.bottom+Math.max(1,tr.height*.025);
+ const top=Math.max(sr.top+2,Math.min(sr.bottom-height-2,rootBase-height*.92));
+ const rear=document.createElement('div'),front=document.createElement('div');
+ rear.className='rootwrap-fx rootwrap-rear';front.className='rootwrap-fx rootwrap-front'+(isBoss?' rootwrap-boss':'');
+ [rear,front].forEach(el=>{el.setAttribute('aria-hidden','true');Object.assign(el.style,{left:left+'px',top:top+'px',width:width+'px',height:height+'px'})});
+ rear.innerHTML=`<svg viewBox="0 0 220 240" preserveAspectRatio="none"><defs><linearGradient id="rwBack" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9b8153"/><stop offset=".5" stop-color="#53683b"/><stop offset="1" stop-color="#30472d"/></linearGradient></defs>
+ <path class="rw-ground" d="M18 220Q110 194 202 220Q110 239 18 220Z"/>
+ <path class="rw-crack" d="M110 222l-15 -9 8 -10 -13 -7 M110 222l15 -9 -8 -10 13 -7"/>
+ <g class="rw-backroots"><path d="M35 221 C28 194 43 174 62 156 C81 137 88 118 76 101 C66 87 64 75 78 59 C77 82 99 92 101 112 C104 137 84 153 75 174 C69 192 85 208 102 224"/><path d="M185 221 C192 194 177 174 158 156 C139 137 132 118 144 101 C154 87 156 75 142 59 C143 82 121 92 119 112 C116 137 136 153 145 174 C151 192 135 208 118 224"/></g></svg>`;
+ front.innerHTML=`<svg viewBox="0 0 220 240" preserveAspectRatio="none"><defs><linearGradient id="rwFront" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d0b783"/><stop offset=".28" stop-color="#92794d"/><stop offset=".62" stop-color="#607744"/><stop offset="1" stop-color="#354c2e"/></linearGradient></defs>
+ <g class="rw-frontroots"><path d="M102 226 C89 207 94 189 107 173 C120 157 126 144 115 129 C104 114 96 102 105 86 C111 75 123 67 135 58 C124 81 133 94 143 108 C158 128 154 146 141 164 C128 183 124 202 139 226"/><path d="M47 222 C44 205 57 194 72 183 C88 171 93 158 84 145 C78 136 68 132 64 119 C79 124 91 135 96 148 C105 169 87 187 80 202 C75 213 83 222 91 229"/></g>
+ <g class="rw-wraplines"><path d="M62 130 C82 116 94 129 110 143 C127 158 145 148 160 132"/><path d="M69 157 C87 145 98 157 111 168 C126 181 140 170 153 157"/></g>
+ <g class="rw-bark"><path d="M53 198l9 -10 M75 174l9 -9 M145 174l-9 -9 M165 198l-9 -10 M106 188l7 -11 M119 116l8 -8"/></g>
+ <path class="rw-hit" d="M97 91l-9 -10 4 16 -10 -4 11 13 M126 91l9 -10 -4 16 10 -4 -11 13"/></svg>`;
+ const parent=target.parentElement||scene;parent.insertBefore(rear,target);document.body.appendChild(front);
  target.classList.remove('rootwrap-hit');void target.offsetWidth;
- setTimeout(()=>{fx.classList.add('rootwrap-impact');target.classList.add('rootwrap-hit')},820);
- setTimeout(()=>{fx.remove();target.classList.remove('rootwrap-hit')},isBoss?2520:2260);
+ setTimeout(()=>{front.classList.add('rootwrap-impact');target.classList.add('rootwrap-hit')},780);
+ setTimeout(()=>{rear.remove();front.remove();target.classList.remove('rootwrap-hit')},isBoss?2200:1950);
 }
 function playerAct(k,id){
  if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
