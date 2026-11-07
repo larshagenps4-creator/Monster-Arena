@@ -378,7 +378,7 @@
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.2 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.3 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -481,7 +481,12 @@ function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!scfunction playPl
  const target=document.getElementById(side==='player'?'enemySprite':'playerSprite');
  const scene=document.querySelector('.battle-scene');
  if(!target||!scene)return;
- const attacker=document.getElementById(side==='player'?'playerSprite':'enemySprite');\n const tr=target.getBoundingClientRect(),sr=scene.getBoundingClientRect();\n const ar=attacker?attacker.getBoundingClientRect():tr;\n const charge=document.createElement('div');charge.className='rootwrap-charge';charge.setAttribute('aria-hidden','true');\n Object.assign(charge.style,{left:(ar.left+ar.width*.12)+'px',top:(ar.bottom- Math.max(5,ar.height*.09))+'px',width:(ar.width*.76)+'px',height:Math.max(15,ar.height*.17)+'px'});document.body.appendChild(charge);\n setTimeout(()=>charge.classList.add('rootwrap-charge-hit'),90);
+ const attacker=document.getElementById(side==='player'?'playerSprite':'enemySprite');
+ const tr=target.getBoundingClientRect(),sr=scene.getBoundingClientRect();
+ const ar=attacker?attacker.getBoundingClientRect():tr;
+ const charge=document.createElement('div');charge.className='rootwrap-charge';charge.setAttribute('aria-hidden','true');
+ Object.assign(charge.style,{left:(ar.left+ar.width*.12)+'px',top:(ar.bottom- Math.max(5,ar.height*.09))+'px',width:(ar.width*.76)+'px',height:Math.max(15,ar.height*.17)+'px'});document.body.appendChild(charge);
+ setTimeout(()=>charge.classList.add('rootwrap-charge-hit'),90);
  const width=Math.min(tr.width*.62,isBoss?96:84),height=Math.min(tr.height*.70,isBoss?112:98);
  const left=tr.left+(tr.width-width)/2;
  const rootBase=tr.bottom+Math.max(1,tr.height*.025);
@@ -621,7 +626,14 @@ function updateArenaRingColors(){
 }
 function render(){$('#coins').textContent=S.coins.toLocaleString('de-DE');let pages={battle,team:teamPage,summon:summonPage,collection,dex:monsterDex,guide,training,quests};$('#view').innerHTML=pages[tab]();updateArenaRingColors();document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));save()}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(busy)return;tab=b.dataset.tab;render()});
-window.G={toggleGuide,dexElement(v){dexElement=v;render()},dexRarity(v){dexRarity=v;render()},dexSelect(i){dexSelected=i;render()},advance:advanceMessage,menu(m){if(busy)return;menuMode=m;render()},healTurn,start,summon,summonTicket,act:playerAct,healAll,train,claim,setTeam,setActive,details(id){let m=S.owned.find(x=>x.id===id);alert(`${m.name}\nSeltenheit: ${m.rarity}\nElement: ${m.element}\nLevel: ${m.level}\nLP: ${m.hp}/${m.max}\nAngriff: ${m.atk}\nVerteidigung: ${m.def}\nSpezial: ${m.special}`)},reset(){if(confirm('Spielstand dieser Testversion löschen?')){localStorage.removeItem('monsterArenaSaveV3');location.reload()}}};
+window.G={toggleGuide,dexElement(v){dexElement=v;render()},dexRarity(v){dexRarity=v;render()},dexSelect(i){dexSelected=i;render()},advance:advanceMessage,menu(m){if(busy)return;menuMode=m;render()},healTurn,start,summon,summonTicket,act:playerAct,healAll,train,claim,setTeam,setActive,details(id){let m=S.owned.find(x=>x.id===id);alert(`${m.name}
+Seltenheit: ${m.rarity}
+Element: ${m.element}
+Level: ${m.level}
+LP: ${m.hp}/${m.max}
+Angriff: ${m.atk}
+Verteidigung: ${m.def}
+Spezial: ${m.special}`)},reset(){if(confirm('Spielstand dieser Testversion löschen?')){localStorage.removeItem('monsterArenaSaveV3');location.reload()}}};
 load();render();
 </script>
 
