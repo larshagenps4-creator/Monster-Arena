@@ -477,6 +477,16 @@ function animateHitAfterImpact(side){
  };
  setTimeout(apply,40);
 }
+function playSpecialEffect(element,isBoss,side){
+ // Keep combat turns running even if a visual effect cannot be displayed.
+ try{
+  if(element==='Pflanze' && typeof playPlantVines==='function'){
+   playPlantVines(!!isBoss,side);
+  }
+ }catch(err){
+  console.warn('Spezialeffekt konnte nicht angezeigt werden:',err);
+ }
+}
 function playPlantVines(isBoss,side){
  const target=document.getElementById(side==='player'?'enemySprite':'playerSprite');
  const scene=document.querySelector('.battle-scene');
