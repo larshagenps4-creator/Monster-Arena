@@ -374,7 +374,7 @@
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 19.9 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.0 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -499,7 +499,8 @@ function playPlantVines(isBoss,side){
  const tr=target.getBoundingClientRect(),sr=scene.getBoundingClientRect();
  const width=Math.min(tr.width*.76,isBoss?116:102),height=Math.min(tr.height*.82,isBoss?132:116);
  const left=tr.left+(tr.width-width)/2;
- const rootBase=tr.bottom+Math.max(2,tr.height*.055);\n const top=Math.max(sr.top+4,Math.min(sr.bottom-height-4,rootBase-height*.91));
+ const rootBase=tr.bottom+Math.max(2,tr.height*.055);
+ const top=Math.max(sr.top+4,Math.min(sr.bottom-height-4,rootBase-height*.91));
  const fx=document.createElement('div');
  fx.className='rootwrap-fx'+(isBoss?' rootwrap-boss':'');
  fx.setAttribute('aria-hidden','true');
