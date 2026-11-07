@@ -477,7 +477,7 @@ function animateHitAfterImpact(side){
  };
  setTimeout(apply,40);
 }
-function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!scfunction playPlantVines(isBoss,side){
+function playPlantVines(isBoss,side){
  const target=document.getElementById(side==='player'?'enemySprite':'playerSprite');
  const scene=document.querySelector('.battle-scene');
  if(!target||!scene)return;
@@ -500,14 +500,6 @@ function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!scfunction playPl
  <g class="rw-backroots"><path d="M35 221 C28 194 43 174 62 156 C81 137 88 118 76 101 C66 87 64 75 78 59 C77 82 99 92 101 112 C104 137 84 153 75 174 C69 192 85 208 102 224"/><path d="M185 221 C192 194 177 174 158 156 C139 137 132 118 144 101 C154 87 156 75 142 59 C143 82 121 92 119 112 C116 137 136 153 145 174 C151 192 135 208 118 224"/></g></svg>`;
  front.innerHTML=`<svg viewBox="0 0 220 240" preserveAspectRatio="none"><defs><linearGradient id="rwFront" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d0b783"/><stop offset=".28" stop-color="#92794d"/><stop offset=".62" stop-color="#607744"/><stop offset="1" stop-color="#354c2e"/></linearGradient></defs>
  <g class="rw-frontroots"><path d="M102 226 C89 207 94 189 107 173 C120 157 126 144 115 129 C104 114 96 102 105 86 C111 75 123 67 135 58 C124 81 133 94 143 108 C158 128 154 146 141 164 C128 183 124 202 139 226"/><path d="M47 222 C44 205 57 194 72 183 C88 171 93 158 84 145 C78 136 68 132 64 119 C79 124 91 135 96 148 C105 169 87 187 80 202 C75 213 83 222 91 229"/></g>
- <g class="rw-wraplines"><path d="M62 130 C82 116 94 129 110 143 C127 158 145 148 160 132"/><path d="M69 157 C87 145 98 157 111 168 C126 181 140 170 153 157"/></g>
- <g class="rw-bark"><path d="M53 198l9 -10 M75 174l9 -9 M145 174l-9 -9 M165 198l-9 -10 M106 188l7 -11 M119 116l8 -8"/></g>
- <path class="rw-hit" d="M97 91l-9 -10 4 16 -10 -4 11 13 M126 91l9 -10 -4 16 10 -4 -11 13"/></svg>`;
- const parent=target.parentElement||scene;parent.insertBefore(rear,target);document.body.appendChild(front);
- target.classList.remove('rootwrap-hit');void target.offsetWidth;
- setTimeout(()=>{front.classList.add('rootwrap-impact');target.classList.add('rootwrap-hit')},780);
- setTimeout(()=>{rear.remove();front.remove();target.classList.remove('rootwrap-hit')},isBoss?2200:1950);
-}<path d="M102 226 C89 207 94 189 107 173 C120 157 126 144 115 129 C104 114 96 102 105 86 C111 75 123 67 135 58 C124 81 133 94 143 108 C158 128 154 146 141 164 C128 183 124 202 139 226"/><path d="M47 222 C44 205 57 194 72 183 C88 171 93 158 84 145 C78 136 68 132 64 119 C79 124 91 135 96 148 C105 169 87 187 80 202 C75 213 83 222 91 229"/></g>
  <g class="rw-wraplines"><path d="M62 130 C82 116 94 129 110 143 C127 158 145 148 160 132"/><path d="M69 157 C87 145 98 157 111 168 C126 181 140 170 153 157"/></g>
  <g class="rw-bark"><path d="M53 198l9 -10 M75 174l9 -9 M145 174l-9 -9 M165 198l-9 -10 M106 188l7 -11 M119 116l8 -8"/></g>
  <path class="rw-hit" d="M97 91l-9 -10 4 16 -10 -4 11 13 M126 91l9 -10 -4 16 10 -4 -11 13"/></svg>`;
