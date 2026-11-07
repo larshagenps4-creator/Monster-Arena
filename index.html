@@ -343,13 +343,6 @@
 @keyframes vine-wrap{0%{opacity:0;transform:translate(-50%,-50%) rotate(-28deg) scale(.15,.25)}35%{opacity:1;transform:translate(-50%,-50%) rotate(12deg) scale(1.05,.85)}68%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.15,1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(18deg) scale(1.35,1.1)}}
 @keyframes root-burst{0%{opacity:0;transform:scale(.2)}35%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.5)}}
 
-/* Wurzelbruch sequence: attacker circle charges first, then roots erupt under the target. */
-.rootwrap-charge{position:fixed;z-index:2147483645;pointer-events:none;border-radius:50%;background:radial-gradient(ellipse at center,rgba(137,255,93,.08) 0 35%,rgba(108,255,63,.8) 55%,rgba(61,220,61,.1) 76%,transparent 78%);filter:drop-shadow(0 0 8px #75ff42);opacity:0;transform:scale(.58);animation:rw-charge-in .48s ease-out forwards}
-.rootwrap-charge:before,.rootwrap-charge:after{content:"";position:absolute;inset:8% 4%;border:2px solid rgba(177,255,130,.9);border-radius:50%;box-shadow:0 0 12px #71ff45,inset 0 0 9px #71ff45}
-.rootwrap-charge:after{inset:22% 18%;border-width:1px;opacity:.75;transform:rotate(-18deg)}
-.rootwrap-charge-hit{animation:rw-charge-pulse .36s ease-out 1}
-@keyframes rw-charge-in{0%{opacity:0;transform:scale(.58)}55%{opacity:1;transform:scale(1.12)}100%{opacity:.9;transform:scale(1)}}
-@keyframes rw-charge-pulse{0%{opacity:.9;filter:drop-shadow(0 0 8px #75ff42)}45%{opacity:1;filter:drop-shadow(0 0 22px #9aff5c) brightness(1.7)}100%{opacity:.1;filter:drop-shadow(0 0 3px #75ff42)}}
 /* Wurzelbruch final pass: smaller roots emerge from the green circle; rear strands pass behind the monster. */
 .rootwrap-fx{position:fixed;pointer-events:none;overflow:visible}
 .rootwrap-fx svg{width:100%;height:100%;overflow:visible}
@@ -378,7 +371,7 @@
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.5 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.1 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -477,26 +470,30 @@ function animateHitAfterImpact(side){
  };
  setTimeout(apply,40);
 }
+function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!sc)return;let el=document.createElement('div');el.className='impact '+kind;el.textContent=txt;sc.appendChild(el);setTimeout(()=>el.remove(),750)}
 function playSpecialEffect(element,isBoss,side){
- // Keep combat turns running even if a visual effect cannot be displayed.
- try{
-  if(element==='Pflanze' && typeof playPlantVines==='function'){
-   playPlantVines(!!isBoss,side);
-  }
- }catch(err){
-  console.warn('Spezialeffekt konnte nicht angezeigt werden:',err);
- }
+ if(element==='Pflanze'){playPlantVines(isBoss,side);return}
+ const effects={
+  Feuer:{main:'🔥',parts:['🔥','💥','✨','🔥'],cls:'fire'},
+  Wasser:{main:'🌊',parts:['💦','🌊','💧','💦'],cls:'water'},
+  Blitz:{main:'⚡',parts:['⚡','✨','⚡','💛'],cls:'lightning'},
+  Eis:{main:'🧊',parts:['❄️','🧊','❄️','💎'],cls:'ice'},
+  Schatten:{main:'🌑',parts:['🟣','🌑','✨','🟣'],cls:'shadow'},
+  Drache:{main:'🐉',parts:['🔥','🐲','💥','🔥'],cls:'dragon'}
+ };
+ const data=effects[element]||effects[String(element||'').toLowerCase()]||effects.Feuer;
+ const fx=document.createElement('div');
+ fx.className='special-fx fx-'+data.cls+(isBoss?' boss-fx':'')+' side-'+side;
+ fx.setAttribute('aria-hidden','true');
+ fx.innerHTML='<span class="fx-main">'+data.main+'</span>'+data.parts.map((v,i)=>'<span class="fx-particle p'+(i+1)+'">'+v+'</span>').join('');
+ document.body.appendChild(fx);
+ setTimeout(()=>fx.remove(),isBoss?2500:2100);
 }
 function playPlantVines(isBoss,side){
  const target=document.getElementById(side==='player'?'enemySprite':'playerSprite');
  const scene=document.querySelector('.battle-scene');
  if(!target||!scene)return;
- const attacker=document.getElementById(side==='player'?'playerSprite':'enemySprite');
  const tr=target.getBoundingClientRect(),sr=scene.getBoundingClientRect();
- const ar=attacker?attacker.getBoundingClientRect():tr;
- const charge=document.createElement('div');charge.className='rootwrap-charge';charge.setAttribute('aria-hidden','true');
- Object.assign(charge.style,{left:(ar.left+ar.width*.12)+'px',top:(ar.bottom- Math.max(5,ar.height*.09))+'px',width:(ar.width*.76)+'px',height:Math.max(15,ar.height*.17)+'px'});document.body.appendChild(charge);
- setTimeout(()=>charge.classList.add('rootwrap-charge-hit'),90);
  const width=Math.min(tr.width*.62,isBoss?96:84),height=Math.min(tr.height*.70,isBoss?112:98);
  const left=tr.left+(tr.width-width)/2;
  const rootBase=tr.bottom+Math.max(1,tr.height*.025);
@@ -628,14 +625,7 @@ function updateArenaRingColors(){
 }
 function render(){$('#coins').textContent=S.coins.toLocaleString('de-DE');let pages={battle,team:teamPage,summon:summonPage,collection,dex:monsterDex,guide,training,quests};$('#view').innerHTML=pages[tab]();updateArenaRingColors();document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));save()}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(busy)return;tab=b.dataset.tab;render()});
-window.G={toggleGuide,dexElement(v){dexElement=v;render()},dexRarity(v){dexRarity=v;render()},dexSelect(i){dexSelected=i;render()},advance:advanceMessage,menu(m){if(busy)return;menuMode=m;render()},healTurn,start,summon,summonTicket,act:playerAct,healAll,train,claim,setTeam,setActive,details(id){let m=S.owned.find(x=>x.id===id);alert(`${m.name}
-Seltenheit: ${m.rarity}
-Element: ${m.element}
-Level: ${m.level}
-LP: ${m.hp}/${m.max}
-Angriff: ${m.atk}
-Verteidigung: ${m.def}
-Spezial: ${m.special}`)},reset(){if(confirm('Spielstand dieser Testversion löschen?')){localStorage.removeItem('monsterArenaSaveV3');location.reload()}}};
+window.G={toggleGuide,dexElement(v){dexElement=v;render()},dexRarity(v){dexRarity=v;render()},dexSelect(i){dexSelected=i;render()},advance:advanceMessage,menu(m){if(busy)return;menuMode=m;render()},healTurn,start,summon,summonTicket,act:playerAct,healAll,train,claim,setTeam,setActive,details(id){let m=S.owned.find(x=>x.id===id);alert(`${m.name}\nSeltenheit: ${m.rarity}\nElement: ${m.element}\nLevel: ${m.level}\nLP: ${m.hp}/${m.max}\nAngriff: ${m.atk}\nVerteidigung: ${m.def}\nSpezial: ${m.special}`)},reset(){if(confirm('Spielstand dieser Testversion löschen?')){localStorage.removeItem('monsterArenaSaveV3');location.reload()}}};
 load();render();
 </script>
 
