@@ -292,7 +292,7 @@
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.8 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.9 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -312,7 +312,8 @@ const book=[
 ['Dracurion','🐉','Drache','Legendary',285,92,40,'Drachenstrahl']
 ]
 const odds={normal:[['Common',90],['Rare',10]],legendary:[['Common',82],['Rare',15],['Legendary',3]]},prices={normal:500,legendary:5000};
-let nextId=1, busy=false,turnTimer=null, messageTimer=null, messageQueue=[], messageDone=null, messageFull='', dexElement='Alle', dexRarity='Alle', dexSelected=0;\nlet testMode=false, normalGameState=null, testPlayerIndex=0, testEnemyIndex=1;
+let nextId=1, busy=false,turnTimer=null, messageTimer=null, messageQueue=[], messageDone=null, messageFull='', dexElement='Alle', dexRarity='Alle', dexSelected=0;
+let testMode=false, normalGameState=null, testPlayerIndex=0, testEnemyIndex=1;
 const fresh={coins:0,owned:[],team:[],active:null,enemy:null,stage:1,wins:0,losses:0,log:['Willkommen in der Monster Arena! Wähle dein Team auf Stufe 1.'],claims:[],daily:'',battleTurn:'player',playerCooldown:{},enemyCooldown:0,enemyLevel:1,bossDefeated:0};
 let S;
 function artFor(m){const art={'Blattling':'assets/test-monsters/blattling.png','Glutfünkchen':'assets/test-monsters/glutfuenkchen.png','Tropfli':'assets/test-monsters/tropfli.png','Blitzling':'assets/monsters/blitzling.png','Eisling':'assets/monsters/eisling.png','Schattilly':'assets/monsters/schattilly.png','Drakli':'assets/monsters/drakli.png','Naturion':'assets/monsters/naturion.png','Pyronox':'assets/monsters/pyronox.png','Aqualor':'assets/monsters/aqualor.png','Voltaran':'assets/monsters/voltaran.png','Frostor':'assets/monsters/frostor.png','Umbrax':'assets/monsters/umbrax.png','Dracurion':'assets/monsters/dracurion.png'};return art[m.name]||'assets/test-monsters/blattling.png'}
