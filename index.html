@@ -282,93 +282,13 @@
  .battle-scene #playerSprite{left:28%!important;top:79%!important;}
 }
 
-</style><style id="v196-element-special-effects">
-/* Sichtbare Element-Attacken direkt am getroffenen Monster – ohne Textbanner. */
-.special-fx{position:fixed!important;z-index:2147483000!important;left:50%!important;top:50%!important;width:min(92vw,520px)!important;height:min(72vh,520px)!important;display:block!important;pointer-events:none!important;overflow:visible!important;transform:translate(-50%,-50%);animation:fx-arrive .22s ease-out both}
-.special-fx.side-player{left:50%!important;top:54%!important}
-.special-fx.side-enemy{left:50%!important;top:42%!important}
-.special-fx .fx-main{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;font-size:clamp(100px,34vw,190px);line-height:1;filter:drop-shadow(0 0 16px var(--glow));animation:fx-main 1.55s cubic-bezier(.16,.75,.25,1) both}
-.special-fx .fx-particle{position:absolute;left:50%;top:50%;font-size:clamp(42px,13vw,76px);line-height:1;filter:drop-shadow(0 0 9px var(--glow));animation:fx-particle 1.25s ease-out both}
-.special-fx .p1{--dx:-55px;--dy:-55px;animation-delay:.04s}.special-fx .p2{--dx:58px;--dy:-38px;animation-delay:.10s}.special-fx .p3{--dx:-42px;--dy:48px;animation-delay:.16s}.special-fx .p4{--dx:48px;--dy:52px;animation-delay:.22s}
-.special-fx:before{content:"";position:absolute;left:50%;top:50%;width:30%;aspect-ratio:1;border:3px solid var(--glow);border-radius:50%;box-shadow:0 0 24px var(--glow),inset 0 0 20px var(--glow);transform:translate(-50%,-50%);animation:fx-ring 1.15s ease-out both}
-.special-fx:after{content:"";position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle,var(--core),transparent 68%);opacity:.8;animation:fx-flash .55s ease-out both}
-.special-fx.fx-fire{--glow:#ff6425;--core:#ff9b35}
-.special-fx.fx-water{--glow:#35c9ff;--core:#38baff}
-.special-fx.fx-plant{--glow:#6bf078;--core:#55d85e}
-.special-fx.fx-lightning{--glow:#fff16a;--core:#fff4a0}
-.special-fx.fx-ice{--glow:#8ceeff;--core:#a6f5ff}
-.special-fx.fx-shadow{--glow:#c16cff;--core:#9c50e8}
-.special-fx.fx-dragon{--glow:#ff9d45;--core:#ff642d}
-.special-fx.fx-fire .fx-main{animation-name:fx-fire}
-.special-fx.fx-water .fx-main{animation-name:fx-water}
-.special-fx.fx-plant .fx-main{animation-name:fx-plant}
-.special-fx.fx-lightning .fx-main{animation-name:fx-lightning}
-.special-fx.fx-ice .fx-main{animation-name:fx-ice}
-.special-fx.fx-shadow .fx-main{animation-name:fx-shadow}
-.special-fx.fx-dragon .fx-main{animation-name:fx-dragon}
-.special-fx.fx-plant .fx-particle{font-size:clamp(48px,14vw,82px)}
-.special-fx.fx-lightning .fx-particle{font-size:clamp(54px,16vw,92px)}
-.special-fx.boss-fx .fx-main{font-size:clamp(130px,42vw,230px)}
-.special-fx.boss-fx:before{width:48%;border-width:5px;box-shadow:0 0 42px #ffe28a}
-@keyframes fx-arrive{from{opacity:0;scale:.45}to{opacity:1;scale:1}}
-@keyframes fx-main{0%{opacity:0;scale:.2}28%{opacity:1;scale:1.25}72%{opacity:1;scale:1}100%{opacity:0;scale:1.5}}
-@keyframes fx-particle{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}28%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.25) rotate(25deg)}}
-@keyframes fx-ring{0%{opacity:0;scale:.2}25%{opacity:1}100%{opacity:0;scale:3.4}}
-@keyframes fx-flash{0%{opacity:0}25%{opacity:.9}100%{opacity:0}}
-@keyframes fx-fire{0%{opacity:0;transform:translate(-50%,35%) scale(.3)}35%{opacity:1;transform:translate(-50%,-55%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-115%) scale(1.5)}}
-@keyframes fx-water{0%{opacity:0;transform:translate(-100%,-50%) scale(.35)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}100%{opacity:0;transform:translate(25%,-50%) scale(1.65)}}
-@keyframes fx-plant{0%{opacity:0;transform:translate(-50%,35%) scale(.25) rotate(-20deg)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotate(8deg)}100%{opacity:0;transform:translate(-50%,-75%) scale(1.45) rotate(-8deg)}}
-@keyframes fx-lightning{0%,100%{opacity:0;filter:brightness(1)}18%,42%{opacity:1;filter:brightness(3)}30%,62%{opacity:.3}78%{opacity:1;filter:brightness(2)}}
-@keyframes fx-ice{0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(-35deg)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.25) rotate(8deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.55) rotate(20deg)}}
-@keyframes fx-shadow{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}70%{opacity:1;transform:translate(-50%,-50%) scale(.9)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.7)}}
-@keyframes fx-dragon{0%{opacity:0;transform:translate(-90%,-50%) scale(.2)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.35)}100%{opacity:0;transform:translate(15%,-50%) scale(1.8)}}
-@media(prefers-reduced-motion:reduce){.special-fx,.special-fx *{animation-duration:.01ms!important}}
-
-/* Pflanze: deutlich sichtbare Ranken wachsen vom Boden hoch und wickeln sich um das Ziel. */
-.special-fx.fx-plant{height:min(58vh,430px)!important;width:min(94vw,560px)!important}
-.special-fx.fx-plant .fx-main{display:none!important}
-.special-fx.fx-plant:before{width:66%;height:34%;aspect-ratio:auto;border:0;border-top:10px solid #b6f58b;border-bottom:10px solid #258b38;border-radius:50%;box-shadow:0 0 22px #52ed63,inset 0 0 16px #52ed63;animation:vine-wrap 1.8s ease-in-out both}
-.special-fx.fx-plant:after{inset:58% 4% 0;border-radius:50%;background:radial-gradient(ellipse,#78d94b88 0%,transparent 68%);animation:root-burst .75s ease-out both}
-.special-fx.fx-plant .plant-vines{position:absolute;inset:0;display:block}
-.special-fx.fx-plant .plant-vine{position:absolute;bottom:12%;left:50%;width:0;height:76%;border-left:12px solid #278b35;border-radius:50%;filter:drop-shadow(0 0 5px #a7ff70);transform-origin:bottom center;animation:vine-rise 1.35s cubic-bezier(.16,.8,.25,1) both}
-.special-fx.fx-plant .plant-vine:after{content:"";position:absolute;top:22%;left:-20px;width:30px;height:17px;background:#55c94d;border:2px solid #b4f58a;border-radius:100% 0 100% 0;transform:rotate(-28deg);box-shadow:0 0 8px #4cda55}
-.special-fx.fx-plant .v1{transform:rotate(-52deg) scaleY(0);animation-delay:.02s}
-.special-fx.fx-plant .v2{transform:rotate(-30deg) scaleY(0);animation-delay:.12s}
-.special-fx.fx-plant .v3{transform:rotate(-12deg) scaleY(0);animation-delay:.20s}
-.special-fx.fx-plant .v4{transform:rotate(14deg) scaleY(0);animation-delay:.28s}
-.special-fx.fx-plant .v5{transform:rotate(34deg) scaleY(0);animation-delay:.36s}
-.special-fx.fx-plant .v6{transform:rotate(54deg) scaleY(0);animation-delay:.44s}
-.special-fx.fx-plant .fx-particle{font-size:clamp(35px,10vw,58px);animation-duration:1.8s}
-@keyframes vine-rise{0%{opacity:0;scale:1 0}18%{opacity:1}65%{scale:1 1}100%{opacity:1;scale:1 1}}
-@keyframes vine-wrap{0%{opacity:0;transform:translate(-50%,-50%) rotate(-28deg) scale(.15,.25)}35%{opacity:1;transform:translate(-50%,-50%) rotate(12deg) scale(1.05,.85)}68%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.15,1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(18deg) scale(1.35,1.1)}}
-@keyframes root-burst{0%{opacity:0;transform:scale(.2)}35%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.5)}}
-
-@keyframes rw-charge-pulse{0%{opacity:.25;transform:scale(.65)}30%{opacity:1;transform:scale(1.12)}100%{opacity:0;transform:scale(1.55)}}
-/* Wurzelbruch final pass: smaller roots emerge from the green circle; rear strands pass behind the monster. */
-.rootwrap-fx{position:fixed;pointer-events:none;overflow:visible}
-.rootwrap-fx svg{width:100%;height:100%;overflow:visible}
-.rootwrap-rear{z-index:3;animation:rw-fade 1.95s ease-out both}
-.rootwrap-front{z-index:5;animation:rw-fade 1.95s ease-out both}
-.rootwrap-fx .rw-ground{fill:#9bc96b;opacity:0;filter:blur(3px);animation:rw-ground .4s ease-out forwards}
-.rootwrap-fx .rw-crack{fill:none;stroke:#b9a078;stroke-width:2;stroke-linecap:round;stroke-dasharray:65;stroke-dashoffset:65;animation:rw-crack .32s .05s ease-out forwards}
-.rootwrap-fx .rw-backroots,.rootwrap-fx .rw-frontroots{fill:none;stroke:url(#rwBack);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:340;stroke-dashoffset:340;animation:rw-grow .72s cubic-bezier(.2,.78,.2,1) forwards}
-.rootwrap-fx .rw-frontroots{stroke:url(#rwFront);stroke-width:11}
-.rootwrap-fx .rw-backroots path:nth-child(2){animation-delay:.16s}
-.rootwrap-fx .rw-frontroots path:nth-child(2){animation-delay:.28s}
-.rootwrap-fx .rw-wraplines{fill:none;stroke:#34492d;stroke-width:5;stroke-linecap:round;stroke-dasharray:160;stroke-dashoffset:160;animation:rw-wrap .38s .7s ease-out forwards}
-.rootwrap-fx .rw-bark{fill:none;stroke:#ddc797;stroke-width:1.5;stroke-linecap:round;opacity:0;animation:rw-detail .35s .72s ease-out forwards}
-.rootwrap-fx .rw-hit{fill:none;stroke:#d9f1a1;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;opacity:0;animation:rw-flash .28s .78s ease-out forwards}
-.rootwrap-fx.rootwrap-impact .rw-hit{animation:rw-flash .3s ease-out forwards}
-.rootwrap-boss .rw-backroots,.rootwrap-boss .rw-frontroots{stroke-width:13}
-.rootwrap-hit{animation:rw-shake .38s ease-out 1}
-@keyframes rw-ground{0%{opacity:0;transform:scale(.55)}45%{opacity:.75}100%{opacity:.42;transform:scale(1)}}
-@keyframes rw-crack{to{stroke-dashoffset:0;opacity:.8}}
-@keyframes rw-grow{0%{stroke-dashoffset:340;opacity:.2}18%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
-@keyframes rw-wrap{to{stroke-dashoffset:0;opacity:.9}}
-@keyframes rw-detail{to{opacity:.8}}
-@keyframes rw-flash{0%{opacity:0;transform:scale(.7)}35%{opacity:1}100%{opacity:0;transform:scale(1.12)}}
-@keyframes rw-shake{0%,100%{translate:0 0;filter:brightness(1)}25%{translate:-2px -2px;filter:brightness(1.3)}55%{translate:2px 1px;filter:brightness(1.1)}}
-@keyframes rw-fade{0%,84%{opacity:1}100%{opacity:0}}
+</style><style id="element-beam-effects">
+.element-beam-draw{filter:drop-shadow(0 0 5px currentColor);animation:element-beam-brighten 1.35s ease-in-out forwards}
+.element-beam-impact{transition:opacity .16s ease-out;opacity:0}
+.element-beam-impact.show{opacity:.9;animation:element-impact-pulse .42s ease-out forwards}
+@keyframes element-beam-brighten{0%{opacity:.12;filter:brightness(1) drop-shadow(0 0 2px currentColor)}45%{opacity:.78;filter:brightness(1.8) drop-shadow(0 0 8px currentColor)}78%{opacity:1;filter:brightness(2.8) drop-shadow(0 0 16px currentColor)}100%{opacity:1;filter:brightness(3.5) drop-shadow(0 0 22px currentColor)}}
+@keyframes element-impact-pulse{0%{opacity:0;transform:scale(.25)}35%{opacity:1;transform:scale(1.25)}100%{opacity:0;transform:scale(2.2)}}
+@media(prefers-reduced-motion:reduce){.element-beam-draw{animation-duration:.5s!important}}
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
@@ -376,20 +296,20 @@
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
-['Blattling','🍃','Pflanze','Common',82,19,8,'Wurzelbruch'],
-['Glutfünkchen','🔥','Feuer','Common',82,19,8,'Glutstoß'],
-['Tropfli','💧','Wasser','Common',82,18,10,'Blubber'],
-['Blitzling','⚡','Blitz','Rare',96,25,9,'Funkenstoß'],
-['Eisling','❄️','Eis','Rare',98,22,12,'Frosthieb'],
-['Schattilly','🌑','Schatten','Rare',100,26,9,'Schattenklaue'],
-['Drakli','🐉','Drache','Rare',105,28,12,'Drachenhauch'],
-['Naturion','🌿','Pflanze','Legendary',260,72,38,'Urwurzel'],
-['Pyronox','🔥','Feuer','Legendary',250,82,30,'Sonneninferno'],
-['Aqualor','💧','Wasser','Legendary',270,70,42,'Flutkoloss'],
-['Voltaran','⚡','Blitz','Legendary',245,88,28,'Himmelssturm'],
-['Frostor','❄️','Eis','Legendary',265,76,40,'Ewiger Winter'],
-['Umbrax','🌑','Schatten','Legendary',255,84,34,'Nachtzehrer'],
-['Dracurion','🐉','Drache','Legendary',285,92,40,'Weltenbrand']
+['Blattling','🍃','Pflanze','Common',82,19,8,'Pflanzenstrahl'],
+['Glutfünkchen','🔥','Feuer','Common',82,19,8,'Feuerstrahl'],
+['Tropfli','💧','Wasser','Common',82,18,10,'Wasserstrahl'],
+['Blitzling','⚡','Blitz','Rare',96,25,9,'Blitzstrahl'],
+['Eisling','❄️','Eis','Rare',98,22,12,'Eisstrahl'],
+['Schattilly','🌑','Schatten','Rare',100,26,9,'Schattenstrahl'],
+['Drakli','🐉','Drache','Rare',105,28,12,'Drachenstrahl'],
+['Naturion','🌿','Pflanze','Legendary',260,72,38,'Pflanzenstrahl'],
+['Pyronox','🔥','Feuer','Legendary',250,82,30,'Feuerstrahl'],
+['Aqualor','💧','Wasser','Legendary',270,70,42,'Wasserstrahl'],
+['Voltaran','⚡','Blitz','Legendary',245,88,28,'Blitzstrahl'],
+['Frostor','❄️','Eis','Legendary',265,76,40,'Eisstrahl'],
+['Umbrax','🌑','Schatten','Legendary',255,84,34,'Schattenstrahl'],
+['Dracurion','🐉','Drache','Legendary',285,92,40,'Drachenstrahl']
 ]
 const odds={normal:[['Common',90],['Rare',10]],legendary:[['Common',82],['Rare',15],['Legendary',3]]},prices={normal:500,legendary:5000};
 let nextId=1, busy=false,turnTimer=null, messageTimer=null, messageQueue=[], messageDone=null, messageFull='', dexElement='Alle', dexRarity='Alle', dexSelected=0;
@@ -400,7 +320,7 @@ function monsterArt(m,cls='monster-art'){return `<img class="${cls}" src="${artF
 function battleMonsterArt(m){const src=artFor(m);return `<img class="battle-art" src="${src}" alt="${m.name}" loading="eager">`}
 function make(t,l=1){let mx=Math.round(t[4]*(1+(l-1)*.12));let m={id:nextId++,name:t[0],emoji:t[1],element:t[2],rarity:t[3],level:l,xp:0,max:mx,hp:mx,atk:Math.round(t[5]*(1+(l-1)*.1)),def:Math.round(t[6]*(1+(l-1)*.08)),special:t[7],slow:0,skipTurn:0,guard:false,cooldown:0};m.sprite=artFor(m);return m}
 function save(){try{localStorage.setItem('monsterArenaSaveV3',JSON.stringify(S))}catch(e){}}
-function load(){try{S={...fresh,...JSON.parse(localStorage.getItem('monsterArenaSaveV3')||'{}')}}catch{S={...fresh}}S.owned=Array.isArray(S.owned)?S.owned.filter(m=>book.some(t=>t[0]===m.name)):[];S.team=Array.isArray(S.team)?S.team:[];S.log=Array.isArray(S.log)?S.log:[];S.claims=Array.isArray(S.claims)?S.claims:[];S.stage=Math.max(1,Number(S.stage)||1);if(!S.owned.length){let m=make(book[0]);S.owned=[m];S.team=[m.id];S.active=m.id}S.owned.forEach(m=>{m.sprite=artFor(m)});S.team=S.team.filter((id,i,arr)=>S.owned.some(m=>m.id===id)&&arr.indexOf(id)===i).slice(0,5);if(!S.team.length)S.team=[S.owned[0].id];if(!S.team.includes(S.active)||!S.owned.some(m=>m.id===S.active&&m.hp>0))S.active=S.team.find(id=>S.owned.find(m=>m.id===id)?.hp>0)||S.team[0];nextId=Math.max(1,...S.owned.map(m=>m.id+1));save()}
+function load(){try{S={...fresh,...JSON.parse(localStorage.getItem('monsterArenaSaveV3')||'{}')}}catch{S={...fresh}}S.owned=Array.isArray(S.owned)?S.owned.filter(m=>book.some(t=>t[0]===m.name)):[];S.team=Array.isArray(S.team)?S.team:[];S.log=Array.isArray(S.log)?S.log:[];S.claims=Array.isArray(S.claims)?S.claims:[];S.stage=Math.max(1,Number(S.stage)||1);if(!S.owned.length){let m=make(book[0]);S.owned=[m];S.team=[m.id];S.active=m.id}S.owned.forEach(m=>{m.sprite=artFor(m);m.special=({Pflanze:'Pflanzenstrahl',Feuer:'Feuerstrahl',Wasser:'Wasserstrahl',Blitz:'Blitzstrahl',Eis:'Eisstrahl',Schatten:'Schattenstrahl',Drache:'Drachenstrahl'})[m.element]||m.special});S.team=S.team.filter((id,i,arr)=>S.owned.some(m=>m.id===id)&&arr.indexOf(id)===i).slice(0,5);if(!S.team.length)S.team=[S.owned[0].id];if(!S.team.includes(S.active)||!S.owned.some(m=>m.id===S.active&&m.hp>0))S.active=S.team.find(id=>S.owned.find(m=>m.id===id)?.hp>0)||S.team[0];nextId=Math.max(1,...S.owned.map(m=>m.id+1));save()}
 const active=()=>S.owned.find(m=>m.id===S.active),teamMons=()=>S.team.map(id=>S.owned.find(m=>m.id===id)).filter(Boolean),logmsg=t=>{S.log.unshift(t);S.log=S.log.slice(0,35);save()};
 function playMessages(lines,done){clearInterval(messageTimer);messageQueue=[...lines];messageDone=done||null;busy=true;menuMode='none';nextMessage()}
 function nextMessage(){if(!messageQueue.length){busy=false;let cb=messageDone;messageDone=null;render();if(cb)cb();return}messageFull=messageQueue.shift();let i=0;let node=$('.battle-message-text');if(!node){render();node=$('.battle-message-text')}if(!node){busy=false;return}node.textContent='';messageTimer=setInterval(()=>{node=$('.battle-message-text');if(!node){clearInterval(messageTimer);return}i++;node.textContent=messageFull.slice(0,i);if(i>=messageFull.length){clearInterval(messageTimer);let hint=$('.message-hint');if(hint)hint.textContent='Tippe zum Fortfahren';}},30)}
@@ -473,73 +393,44 @@ function animateHitAfterImpact(side){
 }
 function showImpact(txt,kind=''){let sc=$('.battle-scene');if(!sc)return;let el=document.createElement('div');el.className='impact '+kind;el.textContent=txt;sc.appendChild(el);setTimeout(()=>el.remove(),750)}
 function playSpecialEffect(element,isBoss,side){
- if(element==='Pflanze'){playPlantVines(isBoss,side);return}
- const effects={
-  Feuer:{main:'🔥',parts:['🔥','💥','✨','🔥'],cls:'fire'},
-  Wasser:{main:'🌊',parts:['💦','🌊','💧','💦'],cls:'water'},
-  Blitz:{main:'⚡',parts:['⚡','✨','⚡','💛'],cls:'lightning'},
-  Eis:{main:'🧊',parts:['❄️','🧊','❄️','💎'],cls:'ice'},
-  Schatten:{main:'🌑',parts:['🟣','🌑','✨','🟣'],cls:'shadow'},
-  Drache:{main:'🐉',parts:['🔥','🐲','💥','🔥'],cls:'dragon'}
- };
- const data=effects[element]||effects[String(element||'').toLowerCase()]||effects.Feuer;
- const fx=document.createElement('div');
- fx.className='special-fx fx-'+data.cls+(isBoss?' boss-fx':'')+' side-'+side;
- fx.setAttribute('aria-hidden','true');
- fx.innerHTML='<span class="fx-main">'+data.main+'</span>'+data.parts.map((v,i)=>'<span class="fx-particle p'+(i+1)+'">'+v+'</span>').join('');
- document.body.appendChild(fx);
- setTimeout(()=>fx.remove(),isBoss?2500:2100);
-}
-function playPlantVines(isBoss,side){
  const target=document.getElementById(side==='player'?'enemySprite':'playerSprite');
- const scene=document.querySelector('.battle-scene');
- if(!target||!scene)return;
- const tr=target.getBoundingClientRect(),sr=scene.getBoundingClientRect();
  const attacker=document.getElementById(side==='player'?'playerSprite':'enemySprite');
- if(attacker){
-  const ar=attacker.getBoundingClientRect();
-  const sx=ar.left+ar.width*.5, sy=ar.bottom-ar.height*.08;
-  const ex=tr.left+tr.width*.5, ey=tr.bottom-tr.height*.08;
-  const dx=ex-sx, dy=ey-sy;
-  const midx=sx+dx*.5, midy=sy+dy*.5-Math.min(48,Math.abs(dx)*.12);
-  const trail=document.createElementNS('http://www.w3.org/2000/svg','svg');
-  trail.setAttribute('viewBox',`0 0 ${Math.max(document.documentElement.clientWidth,1)} ${Math.max(document.documentElement.clientHeight,1)}`);
-  Object.assign(trail.style,{position:'fixed',inset:'0',width:'100vw',height:'100vh',zIndex:'4',pointerEvents:'none',overflow:'visible'});
-  trail.setAttribute('aria-hidden','true');
-  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
-  path.setAttribute('d',`M ${sx} ${sy} Q ${midx} ${midy} ${ex} ${ey}`);
-  path.setAttribute('fill','none');path.setAttribute('stroke','#8cff55');path.setAttribute('stroke-width',String(isBoss?10:7));
-  path.setAttribute('stroke-linecap','round');path.style.filter='drop-shadow(0 0 7px #73ff36)';
-  trail.appendChild(path);document.body.appendChild(trail);
-  const length=path.getTotalLength();path.style.strokeDasharray=String(length);path.style.strokeDashoffset=String(length);
-  path.style.transition='stroke-dashoffset .72s ease-out';
-  requestAnimationFrame(()=>{path.style.strokeDashoffset='0'});
-  const pulse=document.createElement('div');pulse.setAttribute('aria-hidden','true');
-  Object.assign(pulse.style,{position:'fixed',left:(ar.left+ar.width*.18)+'px',top:(ar.bottom-ar.height*.18)+'px',width:(ar.width*.64)+'px',height:Math.max(12,ar.height*.18)+'px',border:'3px solid #9cff68',borderRadius:'50%',background:'rgba(95,255,48,.3)',boxShadow:'0 0 12px #75ff42,0 0 26px #75ff42',zIndex:'6',pointerEvents:'none',animation:'rw-charge-pulse .72s ease-out forwards'});
-  document.body.appendChild(pulse);
-  setTimeout(()=>{trail.remove();pulse.remove()},900);
- }
- const width=Math.min(tr.width*.62,isBoss?96:84),height=Math.min(tr.height*.70,isBoss?112:98);
- const left=tr.left+(tr.width-width)/2;
- const rootBase=tr.bottom+Math.max(1,tr.height*.025);
- const top=Math.max(sr.top+2,Math.min(sr.bottom-height-2,rootBase-height*.92));
- const rear=document.createElement('div'),front=document.createElement('div');
- rear.className='rootwrap-fx rootwrap-rear';front.className='rootwrap-fx rootwrap-front'+(isBoss?' rootwrap-boss':'');
- [rear,front].forEach(el=>{el.setAttribute('aria-hidden','true');Object.assign(el.style,{left:left+'px',top:top+'px',width:width+'px',height:height+'px'})});
- rear.innerHTML=`<svg viewBox="0 0 220 240" preserveAspectRatio="none"><defs><linearGradient id="rwBack" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9b8153"/><stop offset=".5" stop-color="#53683b"/><stop offset="1" stop-color="#30472d"/></linearGradient></defs>
- <path class="rw-ground" d="M18 220Q110 194 202 220Q110 239 18 220Z"/>
- <path class="rw-crack" d="M110 222l-15 -9 8 -10 -13 -7 M110 222l15 -9 -8 -10 13 -7"/>
- <g class="rw-backroots"><path d="M35 221 C28 194 43 174 62 156 C81 137 88 118 76 101 C66 87 64 75 78 59 C77 82 99 92 101 112 C104 137 84 153 75 174 C69 192 85 208 102 224"/><path d="M185 221 C192 194 177 174 158 156 C139 137 132 118 144 101 C154 87 156 75 142 59 C143 82 121 92 119 112 C116 137 136 153 145 174 C151 192 135 208 118 224"/></g></svg>`;
- front.innerHTML=`<svg viewBox="0 0 220 240" preserveAspectRatio="none"><defs><linearGradient id="rwFront" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d0b783"/><stop offset=".28" stop-color="#92794d"/><stop offset=".62" stop-color="#607744"/><stop offset="1" stop-color="#354c2e"/></linearGradient></defs>
- <g class="rw-frontroots"><path d="M102 226 C89 207 94 189 107 173 C120 157 126 144 115 129 C104 114 96 102 105 86 C111 75 123 67 135 58 C124 81 133 94 143 108 C158 128 154 146 141 164 C128 183 124 202 139 226"/><path d="M47 222 C44 205 57 194 72 183 C88 171 93 158 84 145 C78 136 68 132 64 119 C79 124 91 135 96 148 C105 169 87 187 80 202 C75 213 83 222 91 229"/></g>
- <g class="rw-wraplines"><path d="M62 130 C82 116 94 129 110 143 C127 158 145 148 160 132"/><path d="M69 157 C87 145 98 157 111 168 C126 181 140 170 153 157"/></g>
- <g class="rw-bark"><path d="M53 198l9 -10 M75 174l9 -9 M145 174l-9 -9 M165 198l-9 -10 M106 188l7 -11 M119 116l8 -8"/></g>
- <path class="rw-hit" d="M97 91l-9 -10 4 16 -10 -4 11 13 M126 91l9 -10 -4 16 10 -4 -11 13"/></svg>`;
- const parent=target.parentElement||scene;parent.insertBefore(rear,target);document.body.appendChild(front);
- target.classList.remove('rootwrap-hit');void target.offsetWidth;
- setTimeout(()=>{front.classList.add('rootwrap-impact');target.classList.add('rootwrap-hit')},780);
- setTimeout(()=>{rear.remove();front.remove();target.classList.remove('rootwrap-hit')},isBoss?2200:1950);
+ if(!target||!attacker)return;
+ const palette={
+  Pflanze:{name:'Pflanzenstrahl',color:'#72ff55',core:'#eaffd8'},
+  Feuer:{name:'Feuerstrahl',color:'#ff572b',core:'#fff0b0'},
+  Wasser:{name:'Wasserstrahl',color:'#31c9ff',core:'#e4fbff'},
+  Blitz:{name:'Blitzstrahl',color:'#fff044',core:'#ffffff'},
+  Eis:{name:'Eisstrahl',color:'#91efff',core:'#ffffff'},
+  Schatten:{name:'Schattenstrahl',color:'#bd62ff',core:'#f4d7ff'},
+  Drache:{name:'Drachenstrahl',color:'#ff9a35',core:'#fff0b8'}
+ };
+ const data=palette[element]||palette.Pflanze;
+ const a=attacker.getBoundingClientRect(),t=target.getBoundingClientRect();
+ const sx=a.left+a.width*.5,sy=a.top+a.height*.48;
+ const ex=t.left+t.width*.5,ey=t.top+t.height*.48;
+ const dx=ex-sx,dy=ey-sy;
+ const bend=Math.max(-28,Math.min(28,dx*.035));
+ const d=`M ${sx} ${sy} Q ${(sx+ex)/2+bend} ${(sy+ey)/2-12} ${ex} ${ey}`;
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ svg.setAttribute('viewBox',`0 0 ${Math.max(innerWidth,1)} ${Math.max(innerHeight,1)}`);
+ Object.assign(svg.style,{position:'fixed',inset:'0',width:'100vw',height:'100vh',zIndex:'2147483000',pointerEvents:'none',overflow:'visible'});
+ svg.setAttribute('aria-hidden','true');
+ const ns='http://www.w3.org/2000/svg';
+ const makePath=(width,opacity,blur)=>{const p=document.createElementNS(ns,'path');p.setAttribute('d',d);p.setAttribute('fill','none');p.setAttribute('stroke',data.color);p.setAttribute('stroke-width',String(width));p.setAttribute('stroke-linecap','round');p.style.opacity=String(opacity);if(blur)p.style.filter=`blur(${blur}px)`;p.classList.add('element-beam-draw');return p};
+ const glow=makePath(isBoss?25:19,.48,9),body=makePath(isBoss?11:8,.9,2),core=makePath(isBoss?4:3,1,0);
+ [glow,body,core].forEach(p=>svg.appendChild(p));
+ const orb=document.createElementNS(ns,'circle');orb.setAttribute('r',isBoss?'11':'8');orb.setAttribute('fill',data.core);orb.setAttribute('stroke',data.color);orb.setAttribute('stroke-width','4');orb.style.filter=`drop-shadow(0 0 8px ${data.color}) drop-shadow(0 0 16px ${data.color})`;
+ const motion=document.createElementNS(ns,'animateMotion');motion.setAttribute('dur','1.35s');motion.setAttribute('repeatCount','1');motion.setAttribute('fill','freeze');motion.setAttribute('path',d);orb.appendChild(motion);svg.appendChild(orb);
+ const flash=document.createElementNS(ns,'circle');flash.setAttribute('cx',String(ex));flash.setAttribute('cy',String(ey));flash.setAttribute('r',isBoss?'28':'20');flash.setAttribute('fill',data.core);flash.style.opacity='0';flash.style.filter=`blur(8px) drop-shadow(0 0 16px ${data.color})`;flash.classList.add('element-beam-impact');svg.appendChild(flash);
+ document.body.appendChild(svg);
+ const len=glow.getTotalLength();
+ [glow,body,core].forEach(p=>{p.style.strokeDasharray=String(len);p.style.strokeDashoffset=String(len);p.style.animationDuration='1.35s';p.style.animationTimingFunction='ease-in-out';p.style.animationFillMode='forwards';});
+ requestAnimationFrame(()=>[glow,body,core].forEach(p=>p.style.strokeDashoffset='0'));
+ setTimeout(()=>flash.classList.add('show'),1250);
+ setTimeout(()=>svg.remove(),1900);
 }
+
 function playerAct(k,id){
  if(busy||!S.enemy||S.battleTurn!=='player')return;let p=active(),e=S.enemy;if(!p||!e||p.hp<=0)return;
  if(k==='switch'){let n=S.owned.find(m=>m.id===id);if(!S.team.includes(id)||!n||n.hp<=0||id===p.id)return;if(p.cooldown>0)p.cooldown=Math.max(0,p.cooldown-1);S.active=id;logmsg(`Du wechselst zu ${n.name}.`);playMessages([`Du wechselst zu ${n.name}.`,`${e.name} ist am Zug!`],()=>enemyTurn());return}
