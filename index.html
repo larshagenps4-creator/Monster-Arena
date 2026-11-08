@@ -343,6 +343,7 @@
 @keyframes vine-wrap{0%{opacity:0;transform:translate(-50%,-50%) rotate(-28deg) scale(.15,.25)}35%{opacity:1;transform:translate(-50%,-50%) rotate(12deg) scale(1.05,.85)}68%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.15,1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(18deg) scale(1.35,1.1)}}
 @keyframes root-burst{0%{opacity:0;transform:scale(.2)}35%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.5)}}
 
+@keyframes rw-charge-pulse{0%{opacity:.25;transform:scale(.65)}30%{opacity:1;transform:scale(1.12)}100%{opacity:0;transform:scale(1.55)}}
 /* Wurzelbruch final pass: smaller roots emerge from the green circle; rear strands pass behind the monster. */
 .rootwrap-fx{position:fixed;pointer-events:none;overflow:visible}
 .rootwrap-fx svg{width:100%;height:100%;overflow:visible}
@@ -494,6 +495,30 @@ function playPlantVines(isBoss,side){
  const scene=document.querySelector('.battle-scene');
  if(!target||!scene)return;
  const tr=target.getBoundingClientRect(),sr=scene.getBoundingClientRect();
+ const attacker=document.getElementById(side==='player'?'playerSprite':'enemySprite');
+ if(attacker){
+  const ar=attacker.getBoundingClientRect();
+  const sx=ar.left+ar.width*.5, sy=ar.bottom-ar.height*.08;
+  const ex=tr.left+tr.width*.5, ey=tr.bottom-tr.height*.08;
+  const dx=ex-sx, dy=ey-sy;
+  const midx=sx+dx*.5, midy=sy+dy*.5-Math.min(48,Math.abs(dx)*.12);
+  const trail=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  trail.setAttribute('viewBox',`0 0 ${Math.max(document.documentElement.clientWidth,1)} ${Math.max(document.documentElement.clientHeight,1)}`);
+  Object.assign(trail.style,{position:'fixed',inset:'0',width:'100vw',height:'100vh',zIndex:'4',pointerEvents:'none',overflow:'visible'});
+  trail.setAttribute('aria-hidden','true');
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d',`M ${sx} ${sy} Q ${midx} ${midy} ${ex} ${ey}`);
+  path.setAttribute('fill','none');path.setAttribute('stroke','#8cff55');path.setAttribute('stroke-width',String(isBoss?10:7));
+  path.setAttribute('stroke-linecap','round');path.style.filter='drop-shadow(0 0 7px #73ff36)';
+  trail.appendChild(path);document.body.appendChild(trail);
+  const length=path.getTotalLength();path.style.strokeDasharray=String(length);path.style.strokeDashoffset=String(length);
+  path.style.transition='stroke-dashoffset .72s ease-out';
+  requestAnimationFrame(()=>{path.style.strokeDashoffset='0'});
+  const pulse=document.createElement('div');pulse.setAttribute('aria-hidden','true');
+  Object.assign(pulse.style,{position:'fixed',left:(ar.left+ar.width*.18)+'px',top:(ar.bottom-ar.height*.18)+'px',width:(ar.width*.64)+'px',height:Math.max(12,ar.height*.18)+'px',border:'3px solid #9cff68',borderRadius:'50%',background:'rgba(95,255,48,.3)',boxShadow:'0 0 12px #75ff42,0 0 26px #75ff42',zIndex:'6',pointerEvents:'none',animation:'rw-charge-pulse .72s ease-out forwards'});
+  document.body.appendChild(pulse);
+  setTimeout(()=>{trail.remove();pulse.remove()},900);
+ }
  const width=Math.min(tr.width*.62,isBoss?96:84),height=Math.min(tr.height*.70,isBoss?112:98);
  const left=tr.left+(tr.width-width)/2;
  const rootBase=tr.bottom+Math.max(1,tr.height*.025);
