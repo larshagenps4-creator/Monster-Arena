@@ -571,7 +571,7 @@ function updateArenaRingColors(){
    const a=mctx.getImageData(0,0,c.width,c.height).data,hue=((targetHue%360)+360)%360;
    let cr=0,cg=0,cb=0;
    if(hue<60){cr=1;cg=hue/60}else if(hue<120){cr=(120-hue)/60;cg=1}else if(hue<180){cg=1;cb=(hue-120)/60}else if(hue<240){cg=(240-hue)/60;cb=1}else if(hue<300){cr=(hue-240)/60;cb=1}else{cr=1;cb=(360-hue)/60}
-   const out=rctx.createImageData(c.width,c.height),d=out.data;
+   const layer=document.createElement('canvas');layer.width=c.width;layer.height=c.height;const lctx=layer.getContext('2d');const out=lctx.createImageData(c.width,c.height),d=out.data;
    for(let i=0;i<a.length;i+=4){
     const lum=(a[i]+a[i+1]+a[i+2])/765,alpha=a[i+3]/255;
     if(alpha<.025||lum<.035)continue;
@@ -579,7 +579,7 @@ function updateArenaRingColors(){
     d[i]=Math.round(cr*glow*255);d[i+1]=Math.round(cg*glow*255);d[i+2]=Math.round(cb*glow*255);
     d[i+3]=Math.round(alpha*Math.min(1,lum*1.25)*255);
    }
-   rctx.putImageData(out,0,0);
+   lctx.putImageData(out,0,0);rctx.drawImage(layer,0,0);
   }
   apply(pm,ph,player);apply(em,eh,enemy);ctx.drawImage(rings,0,0);
   const url=c.toDataURL('image/webp',.94);arenaColorCache={key,url};scene.style.setProperty('background-image',`url("${url}")`,'important');
