@@ -30,6 +30,6 @@
 <!-- arena floor -->
 <path d="M0 600Q600 555 1200 600V900H0Z" fill="url(#floor)"/><path d="M0 600Q600 555 1200 600V900H0Z" fill="url(#pavers)"/><path d="M0 680Q600 640 1200 680M0 790Q600 755 1200 790" stroke="#d9e6ef" stroke-opacity=".15" stroke-width="6" fill="none"/>
 <!-- No baked-in circles: element rings are generated dynamically. -->
-<ellipse cx="900" cy="650" rx="220" ry="65" fill="none" stroke="#58eaff" stroke-width="8"/>
+
 <rect width="1200" height="900" fill="#06172b" opacity=".06"/>
 </svg>
