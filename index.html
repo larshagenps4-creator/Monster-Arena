@@ -434,6 +434,7 @@ function playSpecialEffect(element,isBoss,side){
   p.style.setProperty('--beam-length',String(length));
   p.style.animation='element-beam-grow 1.35s linear forwards';
  });
+ setTimeout(()=>svg.remove(),1500);
 }
 
 function playerAct(k,id){
