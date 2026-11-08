@@ -292,7 +292,7 @@
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.13 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.14 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -619,7 +619,28 @@ function endTest(){
  clearInterval(messageTimer);clearTimeout(turnTimer);messageQueue=[];messageFull='';busy=false;
  S=normalGameState;normalGameState=null;testMode=false;menuMode='root';tab='testarena';render();
 }
-function render(){$('#coins').textContent=testMode?'—':S.coins.toLocaleString('de-DE');let pages={battle, testarena:testArena,team:teamPage,summon:summonPage,collection,dex:monsterDex,guide,training,quests};$('#view').innerHTML=pages[tab]();if(tab==='testarena'||tab==='battle')updateArenaRingColors();document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));save()}
+function centerVisibleBattleMonsters(){
+ document.querySelectorAll('.battle-scene .battle-art').forEach(img=>{
+  const align=()=>{
+   if(!img.naturalWidth||!img.naturalHeight)return;
+   try{
+    const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;
+    const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(img,0,0);
+    const a=x.getImageData(0,0,c.width,c.height).data;let x0=c.width,y0=c.height,x1=-1,y1=-1;
+    for(let y=0;y<c.height;y++)for(let xx=0;xx<c.width;xx++)if(a[(y*c.width+xx)*4+3]>12){if(xx<x0)x0=xx;if(xx>x1)x1=xx;if(y<y0)y0=y;if(y>y1)y1=y}
+    if(x1<0)return;
+    const w=img.clientWidth,h=img.clientHeight;if(!w||!h)return;
+    const scale=Math.min(w/img.naturalWidth,h/img.naturalHeight);
+    const ox=(w-img.naturalWidth*scale)/2,oy=(h-img.naturalHeight*scale)/2;
+    const visibleCenterX=ox+((x0+x1+1)/2)*scale,visibleBottomY=oy+(y1+1)*scale;
+    const dx=w/2-visibleCenterX,dy=h-visibleBottomY;
+    img.style.translate=dx.toFixed(2)+'px '+dy.toFixed(2)+'px';
+   }catch(e){console.warn('Monster-Ausrichtung übersprungen:',img.alt,e)}
+  };
+  if(img.complete)align();else img.addEventListener('load',align,{once:true});
+ });
+}
+function render(){$('#coins').textContent=testMode?'—':S.coins.toLocaleString('de-DE');let pages={battle, testarena:testArena,team:teamPage,summon:summonPage,collection,dex:monsterDex,guide,training,quests};$('#view').innerHTML=pages[tab]();if(tab==='testarena'||tab==='battle'){centerVisibleBattleMonsters();updateArenaRingColors();}document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));save()}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(busy)return;const next=b.dataset.tab;if(testMode&&next!=='testarena'){S=normalGameState;normalGameState=null;testMode=false;busy=false;clearInterval(messageTimer);clearTimeout(turnTimer);messageQueue=[];messageFull='';menuMode='root'}tab=next;render()});
 window.G={toggleGuide,testPlayer(v){testPlayerIndex=Math.max(0,Math.min(book.length-1,Number(v)||0));render()},testEnemy(v){testEnemyIndex=Math.max(0,Math.min(book.length-1,Number(v)||0));render()},startTest:startTestFight,endTest,testHeal(){if(!testMode||busy)return;let p=active();if(p)p.hp=p.max;menuMode='root';render()},dexElement(v){dexElement=v;render()},dexRarity(v){dexRarity=v;render()},dexSelect(i){dexSelected=i;render()},advance:advanceMessage,menu(m){if(busy)return;menuMode=m;render()},healTurn,start,summon,summonTicket,act:playerAct,healAll,train,claim,setTeam,setActive,details(id){let m=S.owned.find(x=>x.id===id);alert(`${m.name}\nSeltenheit: ${m.rarity}\nElement: ${m.element}\nLevel: ${m.level}\nLP: ${m.hp}/${m.max}\nAngriff: ${m.atk}\nVerteidigung: ${m.def}\nSpezial: ${m.special}`)},reset(){if(confirm('Spielstand dieser Testversion löschen?')){localStorage.removeItem('monsterArenaSaveV3');location.reload()}}};
 load();render();
