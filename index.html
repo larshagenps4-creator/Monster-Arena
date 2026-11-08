@@ -560,7 +560,8 @@ function updateArenaRingColors(){
   apply(pm,ph);apply(em,eh);ctx.putImageData(data,0,0);const url=c.toDataURL('image/webp',.94);arenaColorCache={key,url};scene.style.setProperty('background-image',`url("${url}")`,'important');
  }).catch(err=>console.warn('Arena-Ringfarben konnten nicht geladen werden',err)).finally(()=>{arenaColorBusy=false;updateArenaRingColors()});
 }
-function restoreFromTest(){if(!testMode)return;S=normalGameState;normalGameState=null;testMode=false;busy=false;menuMode='root'}\nfunction testMonster(t){let m=make(t,1);m.id=90000+(book.indexOf(t)+1);m.hp=m.max;m.guard=false;m.slow=0;m.skipTurn=0;m.cooldown=0;return m}
+function restoreFromTest(){if(!testMode)return;S=normalGameState;normalGameState=null;testMode=false;busy=false;menuMode='root'}
+function testMonster(t){let m=make(t,1);m.id=90000+(book.indexOf(t)+1);m.hp=m.max;m.guard=false;m.slow=0;m.skipTurn=0;m.cooldown=0;return m}
 function testArena(){
  if(testMode&&S.enemy)return testBattle();
  const p=book[testPlayerIndex],e=book[testEnemyIndex];
