@@ -284,12 +284,15 @@
 
 </style><style id="element-beam-effects">
 @keyframes element-beam-grow{from{stroke-dashoffset:var(--beam-length,1000)}to{stroke-dashoffset:0}}
+@keyframes element-beam-pulse{0%{opacity:.92}100%{opacity:1}}
+@keyframes element-impact-flash{0%{opacity:0;transform:scale(.35)}35%{opacity:.42;transform:scale(1)}100%{opacity:0;transform:scale(1.65)}}
+@keyframes element-impact-ring{0%{opacity:0;stroke-width:5;transform:scale(.5)}35%{opacity:.8}100%{opacity:0;stroke-width:1;transform:scale(2.2)}}
 .element-beam-grow{pointer-events:none}
 @media(prefers-reduced-motion:reduce){.element-beam-grow{animation-duration:1.35s!important}}
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.5 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.6 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -405,8 +408,7 @@ function playSpecialEffect(element,isBoss,side){
  const a=attacker.getBoundingClientRect(),t=target.getBoundingClientRect();
  const sx=a.left+a.width*.5,sy=a.top+a.height*.48;
  const ex=t.left+t.width*.5,ey=t.top+t.height*.48;
- const dx=ex-sx,dy=ey-sy;
- const bend=Math.max(-28,Math.min(28,dx*.035));
+ const dx=ex-sx,bend=Math.max(-28,Math.min(28,dx*.035));
  const d=`M ${sx} ${sy} Q ${(sx+ex)/2+bend} ${(sy+ey)/2-12} ${ex} ${ey}`;
  const ns='http://www.w3.org/2000/svg';
  const svg=document.createElementNS(ns,'svg');
@@ -421,19 +423,33 @@ function playSpecialEffect(element,isBoss,side){
   if(blur)p.style.filter=`blur(${blur}px)`;
   svg.appendChild(p);return p;
  };
- // Soft translucent beam: its three layers all grow from the attacker to the target.
- const glow=makePath(isBoss?27:22,.30,10);
- const body=makePath(isBoss?15:12,.28,4);
- const core=makePath(isBoss?6:4,.24,1);
+ // Broad, soft translucent beam with a gentle, constant pulse.
+ const glow=makePath(isBoss?34:29,.25,13);
+ const body=makePath(isBoss?21:17,.27,6);
+ const core=makePath(isBoss?7:5,.24,1.5);
  document.body.appendChild(svg);
  const length=glow.getTotalLength();
  [glow,body,core].forEach(p=>{
   p.style.strokeDasharray=String(length);
   p.style.strokeDashoffset=String(length);
   p.style.setProperty('--beam-length',String(length));
-  p.style.animation='element-beam-grow 1.35s linear forwards';
+  p.style.animation='element-beam-grow 1.35s linear forwards, element-beam-pulse .58s ease-in-out 1.35s 2 alternate';
  });
- setTimeout(()=>svg.remove(),1500);
+ // A brief soft flash and expanding ring appear only when the beam reaches the target.
+ const flash=document.createElementNS(ns,'circle');
+ flash.setAttribute('cx',String(ex));flash.setAttribute('cy',String(ey));
+ flash.setAttribute('r',isBoss?'25':'19');flash.setAttribute('fill',data.color);
+ flash.style.opacity='0';flash.style.filter=`blur(8px) drop-shadow(0 0 14px ${data.color})`;
+ const ring=document.createElementNS(ns,'circle');
+ ring.setAttribute('cx',String(ex));ring.setAttribute('cy',String(ey));
+ ring.setAttribute('r','8');ring.setAttribute('fill','none');ring.setAttribute('stroke',data.color);
+ ring.setAttribute('stroke-width',isBoss?'5':'3');ring.style.opacity='0';
+ svg.appendChild(flash);svg.appendChild(ring);
+ setTimeout(()=>{
+  flash.style.animation='element-impact-flash .38s ease-out forwards';
+  ring.style.animation='element-impact-ring .42s ease-out forwards';
+ },1350);
+ setTimeout(()=>svg.remove(),1900);
 }
 
 function playerAct(k,id){
