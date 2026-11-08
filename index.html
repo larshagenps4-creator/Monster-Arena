@@ -292,7 +292,7 @@
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.14 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.15 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -620,6 +620,8 @@ function endTest(){
  S=normalGameState;normalGameState=null;testMode=false;menuMode='root';tab='testarena';render();
 }
 function centerVisibleBattleMonsters(){
+ const scene=document.querySelector('.battle-scene');
+ if(!scene)return;
  document.querySelectorAll('.battle-scene .battle-art').forEach(img=>{
   const align=()=>{
    if(!img.naturalWidth||!img.naturalHeight)return;
@@ -630,11 +632,16 @@ function centerVisibleBattleMonsters(){
     for(let y=0;y<c.height;y++)for(let xx=0;xx<c.width;xx++)if(a[(y*c.width+xx)*4+3]>12){if(xx<x0)x0=xx;if(xx>x1)x1=xx;if(y<y0)y0=y;if(y>y1)y1=y}
     if(x1<0)return;
     const w=img.clientWidth,h=img.clientHeight;if(!w||!h)return;
-    const scale=Math.min(w/img.naturalWidth,h/img.naturalHeight);
-    const ox=(w-img.naturalWidth*scale)/2,oy=(h-img.naturalHeight*scale)/2;
-    const visibleCenterX=ox+((x0+x1+1)/2)*scale,visibleBottomY=oy+(y1+1)*scale;
-    const dx=w/2-visibleCenterX,dy=h-visibleBottomY;
-    img.style.translate=dx.toFixed(2)+'px '+dy.toFixed(2)+'px';
+    const fit=Math.min(w/img.naturalWidth,h/img.naturalHeight);
+    const ox=(w-img.naturalWidth*fit)/2,oy=(h-img.naturalHeight*fit)/2;
+    const visibleCenterX=ox+((x0+x1+1)/2)*fit,visibleBottomY=oy+(y1+1)*fit;
+    img.style.translate=(w/2-visibleCenterX).toFixed(2)+'px '+(h-visibleBottomY).toFixed(2)+'px';
+    const rarity=book.find(t=>t[0]===img.alt)?.[3]||'Common';
+    const targetHeight=Math.min(scene.clientHeight*(rarity==='Legendary'?.43:.33),rarity==='Legendary'?180:140);
+    const visibleHeight=(y1-y0+1)*fit;
+    const visualScale=Math.max(.75,Math.min(1.8,targetHeight/Math.max(1,visibleHeight)));
+    img.style.transformOrigin='center bottom';
+    img.style.scale=visualScale.toFixed(3);
    }catch(e){console.warn('Monster-Ausrichtung übersprungen:',img.alt,e)}
   };
   if(img.complete)align();else img.addEventListener('load',align,{once:true});
@@ -734,7 +741,7 @@ load();render();
 .dex-filters{display:flex;gap:6px;overflow-x:auto;padding:7px 0;scrollbar-width:thin}.dex-filters button{white-space:nowrap;font-size:12px;padding:8px 10px}.dex-filters button.active{background:#7652e8;border-color:#a28cff}.dex-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(180px,.8fr);gap:12px;margin-top:10px}.dex-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start}.dex-tile{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;padding:7px 4px;background:#1b2942;border-radius:12px}.dex-tile img{width:100%;height:78px;object-fit:contain;filter:drop-shadow(0 5px 5px #0008)}.dex-tile b{font-size:11px;text-align:center;overflow-wrap:anywhere}.dex-tile small{font-size:10px;color:#a9b8d1}.dex-tile .rarity{font-size:9px}.dex-detail{position:sticky;top:8px;align-self:start;text-align:center;background:#1b2942;border:1px solid #3b4c6c;border-radius:14px;padding:12px}.dex-detail img{width:100%;height:150px;object-fit:contain;filter:drop-shadow(0 7px 7px #0008)}.dex-detail .notice{text-align:left}.dex-detail h3{margin:5px 0}.dex-detail .stats{justify-content:center}.dex-detail .pill{font-size:11px}@media(max-width:600px){.dex-layout{grid-template-columns:1fr}.dex-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dex-detail{position:static;display:grid;grid-template-columns:100px 1fr;column-gap:10px;text-align:left;align-items:center}.dex-detail img{grid-row:span 5;height:120px}.dex-detail .stats{justify-content:flex-start}.dex-detail .notice{grid-column:1/-1}}
 </style>
 
-<style id="dracurion-size-normal-and-test">
-/* Dracurion erhält in beiden Arenen denselben optischen Größen-Ausgleich; die vorhandene Seiten-Skalierung und Angriffsbewegung bleiben erhalten. */
-#playerSprite .battle-art[alt="Dracurion"],#enemySprite .battle-art[alt="Dracurion"]{scale:1.28!important;transform-origin:center bottom!important}
+<style id="monster-rarity-visual-sizing">
+/* Sichtbare Monsterhöhe statt Bilddatei-Größe: Common/Rare gleich, Legendary einheitlich größer. */
+.battle-scene .battle-art{transform-origin:center bottom!important}
 </style>
