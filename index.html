@@ -283,16 +283,13 @@
 }
 
 </style><style id="element-beam-effects">
-.element-beam-draw{filter:drop-shadow(0 0 5px currentColor);animation:element-beam-brighten 1.35s ease-in-out forwards}
-.element-beam-impact{transition:opacity .16s ease-out;opacity:0}
-.element-beam-impact.show{opacity:.9;animation:element-impact-pulse .42s ease-out forwards}
-@keyframes element-beam-brighten{0%{opacity:.12;filter:brightness(1) drop-shadow(0 0 2px currentColor)}45%{opacity:.78;filter:brightness(1.8) drop-shadow(0 0 8px currentColor)}78%{opacity:1;filter:brightness(2.8) drop-shadow(0 0 16px currentColor)}100%{opacity:1;filter:brightness(3.5) drop-shadow(0 0 22px currentColor)}}
-@keyframes element-impact-pulse{0%{opacity:0;transform:scale(.25)}35%{opacity:1;transform:scale(1.25)}100%{opacity:0;transform:scale(2.2)}}
-@media(prefers-reduced-motion:reduce){.element-beam-draw{animation-duration:.5s!important}}
+@keyframes element-beam-grow{from{stroke-dashoffset:var(--beam-length,1000)}to{stroke-dashoffset:0}}
+.element-beam-grow{pointer-events:none}
+@media(prefers-reduced-motion:reduce){.element-beam-grow{animation-duration:1.35s!important}}
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.2 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.3 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -397,13 +394,13 @@ function playSpecialEffect(element,isBoss,side){
  const attacker=document.getElementById(side==='player'?'playerSprite':'enemySprite');
  if(!target||!attacker)return;
  const palette={
-  Pflanze:{name:'Pflanzenstrahl',color:'#72ff55',core:'#eaffd8'},
-  Feuer:{name:'Feuerstrahl',color:'#ff572b',core:'#fff0b0'},
-  Wasser:{name:'Wasserstrahl',color:'#31c9ff',core:'#e4fbff'},
-  Blitz:{name:'Blitzstrahl',color:'#fff044',core:'#ffffff'},
-  Eis:{name:'Eisstrahl',color:'#91efff',core:'#ffffff'},
-  Schatten:{name:'Schattenstrahl',color:'#bd62ff',core:'#f4d7ff'},
-  Drache:{name:'Drachenstrahl',color:'#ff9a35',core:'#fff0b8'}
+  Pflanze:{name:'Pflanzenstrahl',color:'#72ff55'},
+  Feuer:{name:'Feuerstrahl',color:'#ff572b'},
+  Wasser:{name:'Wasserstrahl',color:'#31c9ff'},
+  Blitz:{name:'Blitzstrahl',color:'#fff044'},
+  Eis:{name:'Eisstrahl',color:'#91efff'},
+  Schatten:{name:'Schattenstrahl',color:'#bd62ff'},
+  Drache:{name:'Drachenstrahl',color:'#ff9a35'}
  };
  const data=palette[element]||palette.Pflanze;
  const a=attacker.getBoundingClientRect(),t=target.getBoundingClientRect();
@@ -412,23 +409,31 @@ function playSpecialEffect(element,isBoss,side){
  const dx=ex-sx,dy=ey-sy;
  const bend=Math.max(-28,Math.min(28,dx*.035));
  const d=`M ${sx} ${sy} Q ${(sx+ex)/2+bend} ${(sy+ey)/2-12} ${ex} ${ey}`;
- const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
- svg.setAttribute('viewBox',`0 0 ${Math.max(innerWidth,1)} ${Math.max(innerHeight,1)}`);
- Object.assign(svg.style,{position:'fixed',inset:'0',width:'100vw',height:'100vh',zIndex:'2147483000',pointerEvents:'none',overflow:'visible',color:data.color});
- svg.setAttribute('aria-hidden','true');
  const ns='http://www.w3.org/2000/svg';
- const makePath=(width,opacity,blur)=>{const p=document.createElementNS(ns,'path');p.setAttribute('d',d);p.setAttribute('fill','none');p.setAttribute('stroke',data.color);p.setAttribute('stroke-width',String(width));p.setAttribute('stroke-linecap','round');p.style.opacity=String(opacity);if(blur)p.style.filter=`blur(${blur}px)`;p.classList.add('element-beam-draw');return p};
- const glow=makePath(isBoss?25:19,.48,9),body=makePath(isBoss?11:8,.9,2),core=makePath(isBoss?4:3,1,0);
- [glow,body,core].forEach(p=>svg.appendChild(p));
- const orb=document.createElementNS(ns,'circle');orb.setAttribute('r',isBoss?'11':'8');orb.setAttribute('fill',data.core);orb.setAttribute('stroke',data.color);orb.setAttribute('stroke-width','4');orb.style.filter=`drop-shadow(0 0 8px ${data.color}) drop-shadow(0 0 16px ${data.color})`;
- const motion=document.createElementNS(ns,'animateMotion');motion.setAttribute('dur','1.35s');motion.setAttribute('repeatCount','1');motion.setAttribute('fill','freeze');motion.setAttribute('path',d);orb.appendChild(motion);svg.appendChild(orb);
- const flash=document.createElementNS(ns,'circle');flash.setAttribute('cx',String(ex));flash.setAttribute('cy',String(ey));flash.setAttribute('r',isBoss?'28':'20');flash.setAttribute('fill',data.core);flash.style.opacity='0';flash.style.filter=`blur(8px) drop-shadow(0 0 16px ${data.color})`;flash.classList.add('element-beam-impact');svg.appendChild(flash);
+ const svg=document.createElementNS(ns,'svg');
+ svg.setAttribute('viewBox',`0 0 ${Math.max(innerWidth,1)} ${Math.max(innerHeight,1)}`);
+ Object.assign(svg.style,{position:'fixed',inset:'0',width:'100vw',height:'100vh',zIndex:'2147483000',pointerEvents:'none',overflow:'visible'});
+ svg.setAttribute('aria-hidden','true');
+ const makePath=(width,opacity,blur)=>{
+  const p=document.createElementNS(ns,'path');
+  p.setAttribute('d',d);p.setAttribute('fill','none');p.setAttribute('stroke',data.color);
+  p.setAttribute('stroke-width',String(width));p.setAttribute('stroke-linecap','round');
+  p.style.opacity=String(opacity);
+  if(blur)p.style.filter=`blur(${blur}px)`;
+  svg.appendChild(p);return p;
+ };
+ // Soft translucent beam: its three layers all grow from the attacker to the target.
+ const glow=makePath(isBoss?27:22,.30,10);
+ const body=makePath(isBoss?15:12,.28,4);
+ const core=makePath(isBoss?6:4,.24,1);
  document.body.appendChild(svg);
- const len=glow.getTotalLength();
- [glow,body,core].forEach(p=>{p.style.strokeDasharray=String(len);p.style.strokeDashoffset=String(len);p.style.animationDuration='1.35s';p.style.animationTimingFunction='ease-in-out';p.style.animationFillMode='forwards';});
- requestAnimationFrame(()=>[glow,body,core].forEach(p=>p.style.strokeDashoffset='0'));
- setTimeout(()=>flash.classList.add('show'),1250);
- setTimeout(()=>svg.remove(),1900);
+ const length=glow.getTotalLength();
+ [glow,body,core].forEach(p=>{
+  p.style.strokeDasharray=String(length);
+  p.style.strokeDashoffset=String(length);
+  p.style.setProperty('--beam-length',String(length));
+  p.style.animation='element-beam-grow 1.35s linear forwards';
+ });
 }
 
 function playerAct(k,id){
