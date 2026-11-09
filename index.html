@@ -553,37 +553,47 @@ function updateArenaRingColors(){
  const key=(testMode?'test':'arena')+'_'+ph+'_'+eh+'_'+player.name+'_'+enemy.name;
  if(arenaColorCache&&arenaColorCache.key===key){scene.style.setProperty('background-image',`url("${arenaColorCache.url}")`,'important');return}
  if(arenaColorBusy)return;arenaColorBusy=true;
- Promise.all(['assets/arena-background.svg','assets/ring-mask-player.png','assets/ring-mask-enemy.png'].map(src=>new Promise((resolve,reject)=>{let im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=src}))).then(([bg,pm,em])=>{
-  // Bare arena first; colored rings are drawn as separate transparent layers.
-  const c=document.createElement('canvas');c.width=1536;c.height=1024;
-  const ctx=c.getContext('2d');ctx.drawImage(bg,0,0,c.width,c.height);
-  const rings=document.createElement('canvas');rings.width=c.width;rings.height=c.height;
-  const rctx=rings.getContext('2d',{willReadFrequently:true});
+ Promise.all(['assets/arena-background-v14.png','assets/ring-mask-player.png','assets/ring-mask-enemy.png'].map(src=>new Promise((resolve,reject)=>{let im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=src}))).then(([bg,pm,em])=>{
+  const c=document.createElement('canvas');c.width=bg.naturalWidth;c.height=bg.naturalHeight;
+  const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(bg,0,0);
+  const data=ctx.getImageData(0,0,c.width,c.height),p=data.data;
   function apply(maskImg,targetHue,monster){
    const mc=document.createElement('canvas');mc.width=c.width;mc.height=c.height;
    const mctx=mc.getContext('2d',{willReadFrequently:true});mctx.drawImage(maskImg,0,0,c.width,c.height);
    const enlarge=testMode||monster.name==='Dracurion';
-   if(enlarge){
-    const raw=mctx.getImageData(0,0,c.width,c.height).data;let x0=c.width,y0=c.height,x1=0,y1=0;
-    for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(raw[(y*c.width+x)*4+3]>8){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
+   if(enlarge){const raw=mctx.getImageData(0,0,c.width,c.height).data;let x0=c.width,y0=c.height,x1=0,y1=0;
+    for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(raw[(y*c.width+x)*4]>8){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
     if(x1>x0&&y1>y0){const cx=(x0+x1)/2,cy=(y0+y1)/2;mctx.clearRect(0,0,c.width,c.height);mctx.save();mctx.translate(cx,cy);mctx.scale(1.12,1.12);mctx.drawImage(maskImg,-cx,-cy,c.width,c.height);mctx.restore()}
    }
-   const a=mctx.getImageData(0,0,c.width,c.height).data,hue=((targetHue%360)+360)%360;
-   let cr=0,cg=0,cb=0;
-   if(hue<60){cr=1;cg=hue/60}else if(hue<120){cr=(120-hue)/60;cg=1}else if(hue<180){cg=1;cb=(hue-120)/60}else if(hue<240){cg=(240-hue)/60;cb=1}else if(hue<300){cr=(hue-240)/60;cb=1}else{cr=1;cb=(360-hue)/60}
-   const layer=document.createElement('canvas');layer.width=c.width;layer.height=c.height;const lctx=layer.getContext('2d');const out=lctx.createImageData(c.width,c.height),d=out.data;
-   for(let i=0;i<a.length;i+=4){
-    const lum=(a[i]+a[i+1]+a[i+2])/765,alpha=a[i+3]/255;
-    if(alpha<.025||lum<.035)continue;
-    const glow=.42+.58*lum;
-    d[i]=Math.round(cr*glow*255);d[i+1]=Math.round(cg*glow*255);d[i+2]=Math.round(cb*glow*255);
-    d[i+3]=Math.round(alpha*Math.min(1,lum*1.25)*255);
+   const a=mctx.getImageData(0,0,c.width,c.height).data;let x0=c.width,y0=c.height,x1=0,y1=0;
+   for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(a[(y*c.width+x)*4]>8){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
+   if(x1<=x0||y1<=y0)return;
+   const cx=(x0+x1)/2,cy=(y0+y1)/2,rx=(x1-x0)/2,ry=(y1-y0)/2,hue=((targetHue%360)+360)%360;
+   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){
+    const i=(y*c.width+x)*4,alpha=a[i]/255;if(p[i+3]===0)continue;
+    let r=p[i]/255,g=p[i+1]/255,b=p[i+2]/255;
+    const mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;let oldHue=0,sat=0,L=(mx+mn)/2;
+    if(d>0){sat=d/(1-Math.abs(2*L-1));if(mx===r)oldHue=60*(((g-b)/d)%6);else if(mx===g)oldHue=60*((b-r)/d+2);else oldHue=60*((r-g)/d+4);if(oldHue<0)oldHue+=360}
+    const nx=(x-cx)/rx,ny=(y-cy)/ry,rad=Math.sqrt(nx*nx+ny*ny);
+    // Replace the complete ring annulus with the selected element hue.
+    // Do not blend the old green ring color back into the result.
+    const ringArea=rad>.20&&rad<1.02;
+    // The source arena has a separate green floor-disc in the transparent
+    // center of each ring mask. Recolor only green pixels in that small center.
+    const centerGreen=rad<=.24&&oldHue>=65&&oldHue<=170&&sat>.18;
+    if(!ringArea&&!centerGreen&&alpha<.025)continue;
+    const strength=(ringArea||centerGreen)?1:Math.min(1,alpha*1.35);
+    const targetSat=(ringArea||centerGreen)?Math.max(.68,Math.min(.92,sat||.78)):sat;
+    const C=(1-Math.abs(2*L-1))*targetSat,X=C*(1-Math.abs((hue/60)%2-1)),m=L-C/2;
+    let nr=0,ng=0,nb=0;
+    if(hue<60){nr=C;ng=X}else if(hue<120){nr=X;ng=C}else if(hue<180){ng=C;nb=X}else if(hue<240){ng=X;nb=C}else if(hue<300){nr=X;nb=C}else{nr=C;nb=X}
+    nr+=m;ng+=m;nb+=m;
+    p[i]=Math.round((r*(1-strength)+nr*strength)*255);p[i+1]=Math.round((g*(1-strength)+ng*strength)*255);p[i+2]=Math.round((b*(1-strength)+nb*strength)*255);
    }
-   lctx.putImageData(out,0,0);rctx.drawImage(layer,0,0);
   }
-  apply(pm,ph,player);apply(em,eh,enemy);ctx.drawImage(rings,0,0);
+  apply(pm,ph,player);apply(em,eh,enemy);ctx.putImageData(data,0,0);
   const url=c.toDataURL('image/webp',.94);arenaColorCache={key,url};scene.style.setProperty('background-image',`url("${url}")`,'important');
- }).catch(err=>console.warn('Elementringe konnten nicht erstellt werden',err)).finally(()=>{arenaColorBusy=false;updateArenaRingColors()});
+ }).catch(err=>console.warn('Arena-Ringfarben konnten nicht geladen werden',err)).finally(()=>{arenaColorBusy=false;updateArenaRingColors()});
 }
 function restoreFromTest(){if(!testMode)return;S=normalGameState;normalGameState=null;testMode=false;busy=false;menuMode='root'}
 function testMonster(t){let m=make(t,1);m.id=90000+(book.indexOf(t)+1);m.hp=m.max;m.guard=false;m.slow=0;m.skipTurn=0;m.cooldown=0;return m}
