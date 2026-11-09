@@ -292,30 +292,30 @@
 </style>
 
 
-<style id="v2030-reference-proportions">
-/* V20.30: Proportionen aus der bestätigten Referenz – Ringe relativ zur Arena, nicht zum Handybildschirm. */
+<style id="v2031-reference-proportions">
+/* V20.31: Monster und Bodenringe an den relativen Größen der Referenz ausrichten. */
 .battle-scene{container-type:inline-size!important}
 .battle-scene #enemySprite,.battle-scene #playerSprite{
  position:absolute!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;
- width:clamp(100px,29vw,140px)!important;height:clamp(100px,29vw,140px)!important;
+ width:clamp(110px,29cqw,190px)!important;height:clamp(110px,29cqw,190px)!important;
  margin:0!important;padding:0!important;overflow:visible!important;z-index:6!important;
  background:transparent!important;border:0!important;box-shadow:none!important;
  transform:translate(-50%,-100%)!important;
 }
 .battle-scene #enemySprite{left:68%!important;top:52%!important;right:auto!important;bottom:auto!important}
-.battle-scene #playerSprite{left:32%!important;top:63%!important;right:auto!important;bottom:auto!important}
-/* Zielmaß: ca. 30 % der Arena-Breite und 8 % der Arena-Breite in der Höhe. */
+.battle-scene #playerSprite{left:32%!important;top:52%!important;right:auto!important;bottom:auto!important}
+/* Zielmaß wie Referenz: breite, deutlich höhere Bodenellipse ohne starke Perspektiv-Stauchung. */
 .battle-scene .battle-sprite::before{
  content:"";position:absolute!important;z-index:0!important;left:50%!important;top:100%!important;bottom:auto!important;
- width:30cqw!important;height:8cqw!important;
- box-sizing:border-box!important;transform:translate(-50%,-50%) perspective(220px) rotateX(48deg)!important;
+ width:36cqw!important;height:16cqw!important;
+ box-sizing:border-box!important;transform:translate(-50%,-50%)!important;
  transform-origin:center center!important;border:3px solid var(--element-ring-edge,#8be8ff)!important;border-radius:50%!important;
- background:var(--element-ring-fill,rgba(139,232,255,.04))!important;
- box-shadow:0 0 3px 1px var(--element-ring-glow,#8be8ff),0 0 9px 2px var(--element-ring-glow,#8be8ff88)!important;
+ background:var(--element-ring-fill,rgba(139,232,255,.025))!important;
+ box-shadow:0 0 4px 1px var(--element-ring-glow,#8be8ff),0 0 12px 3px var(--element-ring-glow,#8be8ff88)!important;
  pointer-events:none!important
 }
 .battle-scene .battle-sprite .battle-art{position:relative!important;z-index:1!important;object-fit:contain!important;object-position:center bottom!important}
-.battle-scene .battle-sprite[data-element="Feuer"]{--element-ring-edge:#ff554d;--element-ring-fill:rgba(255,54,48,.035);--element-ring-glow:#ff4038}
+.battle-scene .battle-sprite[data-element="Feuer"]{--element-ring-edge:#ff554d;--element-ring-fill:rgba(255,54,48,.025);--element-ring-glow:#ff4038}
 .battle-scene .battle-sprite[data-element="Wasser"]{--element-ring-edge:#48b8ff;--element-ring-fill:rgba(42,155,255,.035);--element-ring-glow:#38aaff}
 .battle-scene .battle-sprite[data-element="Pflanze"]{--element-ring-edge:#39ff52;--element-ring-fill:rgba(32,255,64,.035);--element-ring-glow:#24ff43}
 .battle-scene .battle-sprite[data-element="Blitz"]{--element-ring-edge:#ffe84b;--element-ring-fill:rgba(255,220,38,.035);--element-ring-glow:#ffdf32}
@@ -326,7 +326,7 @@
 
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.30 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.31 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
