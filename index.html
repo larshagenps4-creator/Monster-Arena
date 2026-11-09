@@ -292,10 +292,26 @@
 </style>
 
 
-<style id="v2026-reference-style-element-rings">
-/* V20.26: leuchtende Boden-Ellipsen wie Referenzbild 2 */
-.battle-scene .battle-sprite{position:relative!important;z-index:4!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important}
-.battle-scene .battle-sprite::before{content:"";position:absolute!important;z-index:-1!important;left:50%!important;top:86%!important;bottom:auto!important;width:clamp(154px,46vw,210px)!important;height:clamp(52px,16vw,76px)!important;box-sizing:border-box!important;transform:translate(-50%,-50%) perspective(220px) rotateX(48deg)!important;transform-origin:center center!important;border:4px solid var(--element-ring-edge,#8be8ff)!important;border-radius:50%!important;background:var(--element-ring-fill,rgba(139,232,255,.22))!important;box-shadow:0 0 5px 2px var(--element-ring-glow,#8be8ff),0 0 17px 5px var(--element-ring-glow,#8be8ff88),inset 0 0 13px var(--element-ring-glow,#8be8ff88)!important;pointer-events:none!important}
+<style id="v2027-reference-style-element-rings">
+/* V20.27: Positionen, Größen und Leuchteffekt an die bestätigte Referenz angeglichen */
+.battle-scene #enemySprite,.battle-scene #playerSprite{
+ position:absolute!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;
+ width:clamp(112px,30vw,170px)!important;height:clamp(112px,30vw,170px)!important;
+ margin:0!important;padding:0!important;overflow:visible!important;z-index:6!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ transform:translate(-50%,-100%)!important;
+}
+.battle-scene #enemySprite{left:68%!important;top:50%!important;right:auto!important;bottom:auto!important}
+.battle-scene #playerSprite{left:32%!important;top:70%!important;right:auto!important;bottom:auto!important}
+.battle-scene .battle-sprite::before{
+ content:"";position:absolute!important;z-index:-1!important;left:50%!important;top:100%!important;bottom:auto!important;
+ width:clamp(0px,27vw,340px)!important;height:clamp(0px,12.5vw,130px)!important;
+ box-sizing:border-box!important;transform:translate(-50%,-50%) perspective(220px) rotateX(48deg)!important;
+ transform-origin:center center!important;border:3px solid var(--element-ring-edge,#8be8ff)!important;border-radius:50%!important;
+ background:var(--element-ring-fill,rgba(139,232,255,.22))!important;
+ box-shadow:0 0 5px 2px var(--element-ring-glow,#8be8ff),0 0 17px 5px var(--element-ring-glow,#8be8ff88),inset 0 0 13px var(--element-ring-glow,#8be8ff88)!important;
+ pointer-events:none!important
+}
 .battle-scene .battle-sprite .battle-art{position:relative!important;z-index:1!important;object-fit:contain!important;object-position:center bottom!important}
 .battle-scene .battle-sprite[data-element="Feuer"]{--element-ring-edge:#ff554d;--element-ring-fill:rgba(255,54,48,.24);--element-ring-glow:#ff4038}
 .battle-scene .battle-sprite[data-element="Wasser"]{--element-ring-edge:#48b8ff;--element-ring-fill:rgba(42,155,255,.24);--element-ring-glow:#38aaff}
@@ -304,7 +320,6 @@
 .battle-scene .battle-sprite[data-element="Eis"]{--element-ring-edge:#91efff;--element-ring-fill:rgba(101,224,255,.24);--element-ring-glow:#83eaff}
 .battle-scene .battle-sprite[data-element="Schatten"]{--element-ring-edge:#bd8aff;--element-ring-fill:rgba(157,91,255,.24);--element-ring-glow:#a96aff}
 .battle-scene .battle-sprite[data-element="Drache"]{--element-ring-edge:#ffad54;--element-ring-fill:rgba(255,132,45,.24);--element-ring-glow:#ff963d}
-@media(max-width:520px){.battle-scene .battle-sprite::before{width:clamp(150px,46vw,190px)!important;height:clamp(50px,16vw,68px)!important}}
 </style>
 
 </head><body>
