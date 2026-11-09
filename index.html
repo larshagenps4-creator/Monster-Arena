@@ -292,20 +292,20 @@
 </style>
 
 
-<style id="v2027-reference-style-element-rings">
-/* V20.27: Positionen, Größen und Leuchteffekt an die bestätigte Referenz angeglichen */
+<style id="v2028-reference-style-element-rings">
+/* V20.28: gleiche Ringmaße und Referenzpositionen; Monster mittig auf dem Ring */
 .battle-scene #enemySprite,.battle-scene #playerSprite{
  position:absolute!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;
- width:clamp(112px,30vw,170px)!important;height:clamp(112px,30vw,170px)!important;
+ width:clamp(105px,27vw,150px)!important;height:clamp(105px,27vw,150px)!important;
  margin:0!important;padding:0!important;overflow:visible!important;z-index:6!important;
  background:transparent!important;border:0!important;box-shadow:none!important;
  transform:translate(-50%,-100%)!important;
 }
-.battle-scene #enemySprite{left:68%!important;top:50%!important;right:auto!important;bottom:auto!important}
+.battle-scene #enemySprite{left:68%!important;top:49%!important;right:auto!important;bottom:auto!important}
 .battle-scene #playerSprite{left:32%!important;top:70%!important;right:auto!important;bottom:auto!important}
 .battle-scene .battle-sprite::before{
- content:"";position:absolute!important;z-index:-1!important;left:50%!important;top:100%!important;bottom:auto!important;
- width:clamp(0px,27vw,340px)!important;height:clamp(0px,12.5vw,130px)!important;
+ content:"";position:absolute!important;z-index:0!important;left:50%!important;top:100%!important;bottom:auto!important;
+ width:clamp(105px,29vw,300px)!important;height:clamp(42px,14vw,110px)!important;
  box-sizing:border-box!important;transform:translate(-50%,-50%) perspective(220px) rotateX(48deg)!important;
  transform-origin:center center!important;border:3px solid var(--element-ring-edge,#8be8ff)!important;border-radius:50%!important;
  background:var(--element-ring-fill,rgba(139,232,255,.22))!important;
@@ -324,7 +324,7 @@
 
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.27 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.28 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -609,7 +609,7 @@ function centerVisibleBattleMonsters(){
     const visibleCenterX=ox+((x0+x1+1)/2)*fit,visibleBottomY=oy+(y1+1)*fit;
     img.style.translate=(w/2-visibleCenterX).toFixed(2)+'px '+(h-visibleBottomY).toFixed(2)+'px';
     const rarity=book.find(t=>t[0]===img.alt)?.[3]||'Common';
-    const targetHeight=Math.min(scene.clientHeight*(rarity==='Legendary'?.43:.33),rarity==='Legendary'?180:140);
+    const targetHeight=Math.min(scene.clientHeight*(rarity==='Legendary'?.36:.28),rarity==='Legendary'?165:130);
     const visibleHeight=(y1-y0+1)*fit;
     const visualScale=Math.max(.75,Math.min(1.8,targetHeight/Math.max(1,visibleHeight)));
     img.style.transformOrigin='center bottom';
