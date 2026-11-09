@@ -292,7 +292,7 @@
 </style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.21 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.22 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -675,6 +675,49 @@ load();render();
 @media(max-width:390px){.battle-scene .scene-top .combatant,.battle-scene .fight-row .combatant{width:47%!important;max-width:47%!important;flex-basis:47%!important}.battle-scene .combat-vitals{font-size:8px!important}}
 </style>
 </body></html>
+<style id="v2022-equal-filled-circular-ground-rings">
+/* V20.22: gleiche, kreisrunde und vollflächig gefärbte Bodenkreise für jedes Monster. */
+.battle-scene .battle-sprite{
+ position:absolute!important;
+ display:flex!important;
+ align-items:flex-end!important;
+ justify-content:center!important;
+}
+.battle-scene .battle-sprite::before{
+ content:"";
+ position:absolute;
+ left:50%;
+ bottom:-50%;
+ width:clamp(120px,34vw,170px);
+ height:auto;
+ aspect-ratio:1 / 1;
+ transform:translateX(-50%);
+ border:0!important;
+ border-radius:50%;
+ background:var(--element-ring-fill,rgba(150,210,255,.46));
+ box-shadow:none!important;
+ pointer-events:none;
+ z-index:0;
+}
+.battle-scene .battle-sprite .battle-art{
+ position:relative!important;
+ z-index:1!important;
+}
+.battle-scene .battle-sprite[data-element="Feuer"]{--element-ring-fill:rgba(255,58,45,.52)}
+.battle-scene .battle-sprite[data-element="Wasser"]{--element-ring-fill:rgba(35,139,255,.52)}
+.battle-scene .battle-sprite[data-element="Pflanze"]{--element-ring-fill:rgba(65,190,65,.52)}
+.battle-scene .battle-sprite[data-element="Blitz"]{--element-ring-fill:rgba(255,211,35,.56)}
+.battle-scene .battle-sprite[data-element="Eis"]{--element-ring-fill:rgba(95,211,255,.54)}
+.battle-scene .battle-sprite[data-element="Schatten"]{--element-ring-fill:rgba(151,82,220,.54)}
+.battle-scene .battle-sprite[data-element="Drache"]{--element-ring-fill:rgba(232,119,38,.54)}
+/* Fußpunkte bleiben die Positionsanker; sichtbare Monstergrafiken werden separat zentriert. */
+.battle-scene #enemySprite{left:69%!important;top:58%!important}
+.battle-scene #playerSprite{left:28%!important;top:81%!important}
+@media(max-width:520px){
+ .battle-scene .battle-sprite::before{width:clamp(120px,34vw,150px)}
+}
+</style>
+
 <style id="v2021-solid-round-element-discs">
 /* V20.21: identische, vollflächige Kreise unter jedem Monster. Ringgröße hängt nicht von der Monstergrafik ab. */
 .battle-scene .battle-sprite::before{
@@ -709,22 +752,4 @@ load();render();
 .battle-scene .battle-art{transform-origin:center bottom!important}
 </style>
 
-<style id="v20-independent-element-rings">
-/* Eigenständige Elementringe unter den Monstern – unabhängig vom Arena-Hintergrund. */
-.battle-scene .battle-sprite::before{
- content:"";position:absolute;z-index:0;left:50%;bottom:-1%;
- width:108%;height:16%;transform:translateX(-50%);
- border:2px solid var(--element-ring,#9be7ff);border-radius:50%;
- background:radial-gradient(ellipse at center,transparent 62%,var(--element-ring-soft,#9be7ff18) 88%,transparent 100%);
- box-shadow:0 0 5px var(--element-ring),inset 0 0 4px var(--element-ring-soft);
- pointer-events:none;
-}
-.battle-scene .battle-sprite .battle-art{position:relative;z-index:1}
-.battle-scene .battle-sprite[data-element="Feuer"]{--element-ring:#ff553d;--element-ring-soft:#ff553d55}
-.battle-scene .battle-sprite[data-element="Wasser"]{--element-ring:#39a9ff;--element-ring-soft:#39a9ff55}
-.battle-scene .battle-sprite[data-element="Pflanze"]{--element-ring:#62d66d;--element-ring-soft:#62d66d55}
-.battle-scene .battle-sprite[data-element="Blitz"]{--element-ring:#ffe34d;--element-ring-soft:#ffe34d66}
-.battle-scene .battle-sprite[data-element="Eis"]{--element-ring:#8ceaff;--element-ring-soft:#8ceaff66}
-.battle-scene .battle-sprite[data-element="Schatten"]{--element-ring:#b47aff;--element-ring-soft:#b47aff66}
-.battle-scene .battle-sprite[data-element="Drache"]{--element-ring:#ff9c45;--element-ring-soft:#ff9c4555}
-</style>
+
