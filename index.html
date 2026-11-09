@@ -711,25 +711,29 @@ load();render();
 @media(max-width:390px){.battle-scene .scene-top .combatant,.battle-scene .fight-row .combatant{width:47%!important;max-width:47%!important;flex-basis:47%!important}.battle-scene .combat-vitals{font-size:8px!important}}
 </style>
 <style id="v2032-reference-final-override">
-/* V20.32: finale Referenz-Proportionen. Dieser Block steht bewusst nach allen älteren Arena-Regeln. */
+/* V20.33: Positionen, Monstergrößen und leuchtende Ringe exakt an Bild 2 ausrichten. */
 .battle-scene{container-type:inline-size!important}
 .battle-scene #enemySprite,.battle-scene #playerSprite{
- width:clamp(150px,36cqw,210px)!important;height:clamp(150px,36cqw,210px)!important;
+ width:clamp(190px,42cqw,260px)!important;height:clamp(190px,42cqw,260px)!important;
  display:flex!important;align-items:flex-end!important;justify-content:center!important;
  overflow:visible!important;z-index:6!important;transform:translate(-50%,-100%)!important;
 }
-/* Die Fußpunkte liegen genau im Zentrum der jeweiligen Ellipse. */
-.battle-scene #enemySprite{left:68%!important;top:49%!important;right:auto!important;bottom:auto!important}
-.battle-scene #playerSprite{left:32%!important;top:70%!important;right:auto!important;bottom:auto!important}
-.battle-scene .battle-sprite::before{
- left:50%!important;top:100%!important;width:36cqw!important;height:13cqw!important;
- transform:translate(-50%,-50%)!important;border:2px solid var(--element-ring-edge,#8be8ff)!important;
- border-radius:50%!important;background:rgba(0,0,0,.015)!important;
- box-shadow:0 0 2px var(--element-ring-glow,#8be8ff),0 0 6px var(--element-ring-glow,#8be8ff88)!important;
+/* Ringmittelpunkte: Gegner oben rechts, eigenes Monster unten links. */
+.battle-scene #enemySprite{left:70%!important;top:49%!important;right:auto!important;bottom:auto!important}
+.battle-scene #playerSprite{left:30%!important;top:67%!important;right:auto!important;bottom:auto!important}
+/* Beide Monster gleich groß; alte Verkleinerung des Gegners ausdrücklich aufheben. */
+.battle-scene #enemySprite .battle-art,.battle-scene #playerSprite .battle-art{
+ width:100%!important;height:100%!important;transform:scale(1)!important;
+ object-fit:contain!important;object-position:center bottom!important;
 }
-.battle-scene .battle-sprite .battle-art{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important}
+.battle-scene .battle-sprite::before{
+ left:50%!important;top:100%!important;width:38cqw!important;height:15cqw!important;
+ transform:translate(-50%,-50%)!important;border:3px solid var(--element-ring-edge,#8be8ff)!important;
+ border-radius:50%!important;background:rgba(0,0,0,.025)!important;
+ box-shadow:0 0 4px 2px var(--element-ring-glow,#8be8ff),0 0 13px 5px var(--element-ring-glow,#8be8ff),0 0 24px 8px var(--element-ring-glow,#8be8ff)!important;
+}
 @media(max-width:520px){
- .battle-scene #enemySprite,.battle-scene #playerSprite{width:clamp(150px,36cqw,210px)!important;height:clamp(150px,36cqw,210px)!important}
+ .battle-scene #enemySprite,.battle-scene #playerSprite{width:clamp(190px,42cqw,260px)!important;height:clamp(190px,42cqw,260px)!important}
 }
 </style>
 </body></html>
