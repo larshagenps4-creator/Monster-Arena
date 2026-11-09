@@ -194,7 +194,7 @@
  position:relative!important;display:block!important;isolation:isolate!important;overflow:hidden!important;
  width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:1.30/1!important;
  margin:8px 0 10px!important;padding:0!important;border:2px solid #66b4d7!important;border-radius:24px!important;
- background:#183047 url('assets/arena-background-v14.png') center center/100% 100% no-repeat!important;
+ background:#183047 url('assets/28BE178E-2B3B-4B16-B88B-804604AC868D.png') center center/100% 100% no-repeat!important;
  box-shadow:0 7px 22px #0008,inset 0 0 18px #06152b66!important;
 }
 .battle-scene:before,.battle-scene:after{display:none!important}
@@ -486,8 +486,8 @@ function battle(){
  let last=messageFull||S.log[0]||'Der Kampf beginnt!';
  return `<div class="panel battle-panel"><div class="row"><h2>🏟️ Arena · Stufe ${S.stage}</h2><span class="pill">${e.boss?'👑 BOSS':'Kampf'}</span></div>${e.boss?`<div class="boss-banner">👑 BOSS HERAUSFORDERUNG – STUFE ${S.stage}</div>`:''}
  <div class="battle-scene"><button class="element-open" onclick="G.toggleGuide()">📘 Elemente</button>
- <div class="scene-top"><div class="combatant enemy" id="enemyCard"><div class="row"><b>${esc(e.name)}</b><span class="tag">${elementIcon(e.element)} Lv. ${e.level}</span></div>${combatBar(e)}</div><div class="battle-sprite enemy-sprite" id="enemySprite">${battleMonsterArt(e)}</div></div>
- <div class="fight-row"><div class="battle-sprite player-sprite" id="playerSprite">${battleMonsterArt(p)}</div><div class="combatant player" id="playerCard"><div class="row"><b>${esc(p.name)}</b><span class="tag">${elementIcon(p.element)} Lv. ${p.level}</span></div>${combatBar(p)}${expBar(p)}</div></div></div>
+ <div class="scene-top"><div class="combatant enemy" id="enemyCard"><div class="row"><b>${esc(e.name)}</b><span class="tag">${elementIcon(e.element)} Lv. ${e.level}</span></div>${combatBar(e)}</div><div class="battle-sprite enemy-sprite" id="enemySprite" data-element="${e.element}">${battleMonsterArt(e)}</div></div>
+ <div class="fight-row"><div class="battle-sprite player-sprite" id="playerSprite" data-element="${p.element}">${battleMonsterArt(p)}</div><div class="combatant player" id="playerCard"><div class="row"><b>${esc(p.name)}</b><span class="tag">${elementIcon(p.element)} Lv. ${p.level}</span></div>${combatBar(p)}${expBar(p)}</div></div></div>
  <div class="battle-console"><div class="battle-message ${busyNow?'waiting':''} ${menuMode!=='none'?'menu-open':''}" aria-live="polite"><span class="battle-message-text" onclick="G.advance()">${esc(last)}</span><small class="message-hint" onclick="G.advance()">${busyNow?'Text wird angezeigt …':''}</small>${controls}</div></div>
  <div class="battle-team-switch"><h3>Teamwechsel (verbraucht deinen Zug)</h3><div class="actions">${teamMons().filter(m=>m.id!==p.id&&m.hp>0).map(m=>`<button onclick="G.act('switch',${m.id})" ${busyNow?'disabled':''}>${m.emoji} ${m.name} · ${m.hp} LP</button>`).join('')||'<span class="muted">Keine anderen kampffähigen Teammonster.</span>'}</div></div></div>`;
 }
@@ -529,72 +529,6 @@ function monsterDex(){
  return `<section class="panel"><div class="row"><h2>📖 Monsterdex</h2><span class="pill">${book.length}/14 Monster · 7 Elemente</span></div><p class="muted small">Entdecke alle Monster der Arena – unabhängig davon, ob du sie bereits besitzt.</p><div class="dex-filters">${elButtons}</div><div class="dex-filters rarity-filters">${rarButtons}</div><div class="dex-layout"><div class="dex-grid">${tiles}</div><aside class="dex-detail"><img src="${artFor({name:selected[0],element:selected[2],rarity:selected[3]})}" alt="${selected[0]}"><h3>${selected[0]}</h3><div class="rarity ${selected[3]}">${selected[3]}</div><div class="pill">${selected[1]} ${selected[2]}</div><div style="margin:7px 0;font-weight:850;color:${selectedOwned?'#5ee7b2':'#c2cad8'}">${selectedOwned?'✓ Bereits in deiner Sammlung':'🔒 Noch nicht im Besitz'}</div><div class="stats"><span class="pill">❤️ ${selected[4]} LP</span><span class="pill">⚔️ ${selected[5]}</span><span class="pill">🛡️ ${selected[6]}</span></div><div class="notice"><b>Spezialfähigkeit</b><br>${selected[7]}</div><p class="muted small">${selectedOwned?'Dieses Monster befindet sich bereits in deiner Sammlung.':'Beschwöre dieses Monster, um es deiner Sammlung hinzuzufügen.'}</p></aside></div></section>`;
 }
 
-let arenaColorCache=null, arenaColorBusy=false;
-const ARENA_ELEMENT_HUES={Feuer:4,Wasser:220,Pflanze:112,Blitz:48,Eis:190,Schatten:275,Drache:174};
-function rgbToHslHue(r,g,b){let mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;if(!d)return 0;let h=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4;return (h*60+360)%360}
-function hueRgb(h,s,v){
- // Einheitliche, kräftige HSL-Farbgebung: Die Helligkeitsstruktur des Originalrings
- // bleibt erhalten, die Sättigung wird aber für alle Elemente auf ein vergleichbares
- // Niveau angehoben. So wirkt insbesondere Wasser nicht mehr blass gegenüber Pflanze.
- const H=((h%360)+360)%360/360;
- const L=Math.max(.28,Math.min(.68,.25+.38*Math.sqrt(Math.max(0,Math.min(1,v)))));
- const S=.99;
- const C=(1-Math.abs(2*L-1))*S;
- const X=C*(1-Math.abs((H*6)%2-1));
- const m=L-C/2;
- let r=0,g=0,b=0;
- if(H<1/6){r=C;g=X}else if(H<2/6){r=X;g=C}else if(H<3/6){g=C;b=X}else if(H<4/6){g=X;b=C}else if(H<5/6){r=X;b=C}else{r=C;b=X}
- return [r+m,g+m,b+m];
-}
-function updateArenaRingColors(){
- const scene=document.querySelector('.battle-scene');if(!scene||!S.enemy)return;
- const player=active(),enemy=S.enemy;if(!player||!enemy)return;
- const ph=ARENA_ELEMENT_HUES[player.element]??112,eh=ARENA_ELEMENT_HUES[enemy.element]??112;
- const key=(testMode?'test':'arena')+'_'+ph+'_'+eh+'_'+player.name+'_'+enemy.name;
- if(arenaColorCache&&arenaColorCache.key===key){scene.style.setProperty('background-image',`url("${arenaColorCache.url}")`,'important');return}
- if(arenaColorBusy)return;arenaColorBusy=true;
- Promise.all(['assets/arena-background-v14.png','assets/ring-mask-player.png','assets/ring-mask-enemy.png'].map(src=>new Promise((resolve,reject)=>{let im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=src}))).then(([bg,pm,em])=>{
-  const c=document.createElement('canvas');c.width=bg.naturalWidth;c.height=bg.naturalHeight;
-  const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(bg,0,0);
-  const data=ctx.getImageData(0,0,c.width,c.height),p=data.data;
-  function apply(maskImg,targetHue,monster){
-   const mc=document.createElement('canvas');mc.width=c.width;mc.height=c.height;
-   const mctx=mc.getContext('2d',{willReadFrequently:true});mctx.drawImage(maskImg,0,0,c.width,c.height);
-   const enlarge=testMode||monster.name==='Dracurion';
-   if(enlarge){const raw=mctx.getImageData(0,0,c.width,c.height).data;let x0=c.width,y0=c.height,x1=0,y1=0;
-    for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(raw[(y*c.width+x)*4]>8){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
-    if(x1>x0&&y1>y0){const cx=(x0+x1)/2,cy=(y0+y1)/2;mctx.clearRect(0,0,c.width,c.height);mctx.save();mctx.translate(cx,cy);mctx.scale(1.12,1.12);mctx.drawImage(maskImg,-cx,-cy,c.width,c.height);mctx.restore()}
-   }
-   const a=mctx.getImageData(0,0,c.width,c.height).data;let x0=c.width,y0=c.height,x1=0,y1=0;
-   for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(a[(y*c.width+x)*4]>8){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
-   if(x1<=x0||y1<=y0)return;
-   const cx=(x0+x1)/2,cy=(y0+y1)/2,rx=(x1-x0)/2,ry=(y1-y0)/2,hue=((targetHue%360)+360)%360;
-   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){
-    const i=(y*c.width+x)*4,alpha=a[i]/255;if(p[i+3]===0)continue;
-    let r=p[i]/255,g=p[i+1]/255,b=p[i+2]/255;
-    const mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;let oldHue=0,sat=0,L=(mx+mn)/2;
-    if(d>0){sat=d/(1-Math.abs(2*L-1));if(mx===r)oldHue=60*(((g-b)/d)%6);else if(mx===g)oldHue=60*((b-r)/d+2);else oldHue=60*((r-g)/d+4);if(oldHue<0)oldHue+=360}
-    const nx=(x-cx)/rx,ny=(y-cy)/ry,rad=Math.sqrt(nx*nx+ny*ny);
-    // Replace the complete ring annulus with the selected element hue.
-    // Do not blend the old green ring color back into the result.
-    const ringArea=rad>.20&&rad<1.02;
-    // The source arena has a separate green floor-disc in the transparent
-    // center of each ring mask. Recolor only green pixels in that small center.
-    const centerGreen=rad<=.24&&oldHue>=65&&oldHue<=170&&sat>.18;
-    if(!ringArea&&!centerGreen&&alpha<.025)continue;
-    const strength=(ringArea||centerGreen)?1:Math.min(1,alpha*1.35);
-    const targetSat=(ringArea||centerGreen)?Math.max(.68,Math.min(.92,sat||.78)):sat;
-    const C=(1-Math.abs(2*L-1))*targetSat,X=C*(1-Math.abs((hue/60)%2-1)),m=L-C/2;
-    let nr=0,ng=0,nb=0;
-    if(hue<60){nr=C;ng=X}else if(hue<120){nr=X;ng=C}else if(hue<180){ng=C;nb=X}else if(hue<240){ng=X;nb=C}else if(hue<300){nr=X;nb=C}else{nr=C;nb=X}
-    nr+=m;ng+=m;nb+=m;
-    p[i]=Math.round((r*(1-strength)+nr*strength)*255);p[i+1]=Math.round((g*(1-strength)+ng*strength)*255);p[i+2]=Math.round((b*(1-strength)+nb*strength)*255);
-   }
-  }
-  apply(pm,ph,player);apply(em,eh,enemy);ctx.putImageData(data,0,0);
-  const url=c.toDataURL('image/webp',.94);arenaColorCache={key,url};scene.style.setProperty('background-image',`url("${url}")`,'important');
- }).catch(err=>console.warn('Arena-Ringfarben konnten nicht geladen werden',err)).finally(()=>{arenaColorBusy=false;updateArenaRingColors()});
-}
 function restoreFromTest(){if(!testMode)return;S=normalGameState;normalGameState=null;testMode=false;busy=false;menuMode='root'}
 function testMonster(t){let m=make(t,1);m.id=90000+(book.indexOf(t)+1);m.hp=m.max;m.guard=false;m.slow=0;m.skipTurn=0;m.cooldown=0;return m}
 function testArena(){
@@ -653,7 +587,7 @@ function centerVisibleBattleMonsters(){
   if(img.complete)align();else img.addEventListener('load',align,{once:true});
  });
 }
-function render(){$('#coins').textContent=testMode?'—':S.coins.toLocaleString('de-DE');let pages={battle, testarena:testArena,team:teamPage,summon:summonPage,collection,dex:monsterDex,guide,training,quests};$('#view').innerHTML=pages[tab]();if(tab==='testarena'||tab==='battle'){centerVisibleBattleMonsters();updateArenaRingColors();}document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));save()}
+function render(){$('#coins').textContent=testMode?'—':S.coins.toLocaleString('de-DE');let pages={battle, testarena:testArena,team:teamPage,summon:summonPage,collection,dex:monsterDex,guide,training,quests};$('#view').innerHTML=pages[tab]();if(tab==='testarena'||tab==='battle'){centerVisibleBattleMonsters();}document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));save()}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(busy)return;const next=b.dataset.tab;if(testMode&&next!=='testarena'){S=normalGameState;normalGameState=null;testMode=false;busy=false;clearInterval(messageTimer);clearTimeout(turnTimer);messageQueue=[];messageFull='';menuMode='root'}tab=next;render()});
 window.G={toggleGuide,testPlayer(v){testPlayerIndex=Math.max(0,Math.min(book.length-1,Number(v)||0));render()},testEnemy(v){testEnemyIndex=Math.max(0,Math.min(book.length-1,Number(v)||0));render()},startTest:startTestFight,endTest,testHeal(){if(!testMode||busy)return;let p=active();if(p)p.hp=p.max;menuMode='root';render()},dexElement(v){dexElement=v;render()},dexRarity(v){dexRarity=v;render()},dexSelect(i){dexSelected=i;render()},advance:advanceMessage,menu(m){if(busy)return;menuMode=m;render()},healTurn,start,summon,summonTicket,act:playerAct,healAll,train,claim,setTeam,setActive,details(id){let m=S.owned.find(x=>x.id===id);alert(`${m.name}\nSeltenheit: ${m.rarity}\nElement: ${m.element}\nLevel: ${m.level}\nLP: ${m.hp}/${m.max}\nAngriff: ${m.atk}\nVerteidigung: ${m.def}\nSpezial: ${m.special}`)},reset(){if(confirm('Spielstand dieser Testversion löschen?')){localStorage.removeItem('monsterArenaSaveV3');location.reload()}}};
 load();render();
@@ -750,4 +684,23 @@ load();render();
 <style id="monster-rarity-visual-sizing">
 /* Sichtbare Monsterhöhe statt Bilddatei-Größe: Common/Rare gleich, Legendary einheitlich größer. */
 .battle-scene .battle-art{transform-origin:center bottom!important}
+</style>
+
+<style id="v20-independent-element-rings">
+/* Eigenständige Elementringe unter den Monstern – unabhängig vom Arena-Hintergrund. */
+.battle-scene .battle-sprite::before{
+ content:"";position:absolute;z-index:-1;left:50%;bottom:5%;
+ width:138%;height:30%;transform:translateX(-50%);
+ border:3px solid var(--element-ring,#9be7ff);border-radius:50%;
+ background:radial-gradient(ellipse at center,transparent 48%,var(--element-ring-soft,#9be7ff22) 72%,transparent 100%);
+ box-shadow:0 0 9px var(--element-ring),inset 0 0 8px var(--element-ring-soft);
+ pointer-events:none;
+}
+.battle-scene .battle-sprite[data-element="Feuer"]{--element-ring:#ff553d;--element-ring-soft:#ff553d55}
+.battle-scene .battle-sprite[data-element="Wasser"]{--element-ring:#39a9ff;--element-ring-soft:#39a9ff55}
+.battle-scene .battle-sprite[data-element="Pflanze"]{--element-ring:#62d66d;--element-ring-soft:#62d66d55}
+.battle-scene .battle-sprite[data-element="Blitz"]{--element-ring:#ffe34d;--element-ring-soft:#ffe34d66}
+.battle-scene .battle-sprite[data-element="Eis"]{--element-ring:#8ceaff;--element-ring-soft:#8ceaff66}
+.battle-scene .battle-sprite[data-element="Schatten"]{--element-ring:#b47aff;--element-ring-soft:#b47aff66}
+.battle-scene .battle-sprite[data-element="Drache"]{--element-ring:#ff9c45;--element-ring-soft:#ff9c4555}
 </style>
