@@ -324,9 +324,32 @@
 .battle-scene .battle-sprite[data-element="Drache"]{--element-ring-edge:#ffad54;--element-ring-fill:rgba(255,132,45,.035);--element-ring-glow:#ff963d}
 </style>
 
+
+<style id="v2032-reference-final-override">
+/* V20.32: finale Referenz-Proportionen. Dieser Block steht bewusst nach allen älteren Arena-Regeln. */
+.battle-scene{container-type:inline-size!important}
+.battle-scene #enemySprite,.battle-scene #playerSprite{
+ width:clamp(150px,36cqw,210px)!important;height:clamp(150px,36cqw,210px)!important;
+ display:flex!important;align-items:flex-end!important;justify-content:center!important;
+ overflow:visible!important;z-index:6!important;transform:translate(-50%,-100%)!important;
+}
+/* Die Fußpunkte liegen genau im Zentrum der jeweiligen Ellipse. */
+.battle-scene #enemySprite{left:68%!important;top:49%!important;right:auto!important;bottom:auto!important}
+.battle-scene #playerSprite{left:32%!important;top:70%!important;right:auto!important;bottom:auto!important}
+.battle-scene .battle-sprite::before{
+ left:50%!important;top:100%!important;width:36cqw!important;height:13cqw!important;
+ transform:translate(-50%,-50%)!important;border:2px solid var(--element-ring-edge,#8be8ff)!important;
+ border-radius:50%!important;background:rgba(0,0,0,.015)!important;
+ box-shadow:0 0 2px var(--element-ring-glow,#8be8ff),0 0 6px var(--element-ring-glow,#8be8ff88)!important;
+}
+.battle-scene .battle-sprite .battle-art{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important}
+@media(max-width:520px){
+ .battle-scene #enemySprite,.battle-scene #playerSprite{width:clamp(150px,36cqw,210px)!important;height:clamp(150px,36cqw,210px)!important}
+}
+</style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.31 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.32 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
