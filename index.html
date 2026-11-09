@@ -545,7 +545,7 @@ function testBattle(){
  if(menuMode==='fight'){let specialDamage=hit(p,e,p.atk*1.45)[0];controls=`<div class="menu-sub"><div class="row"><b>⚔️ Attacken</b><button onclick="G.menu('root')">↩ Zurück</button></div><div class="actions"><button class="red" onclick="G.act('attack')" ${busyNow?'disabled':''}>Angriff<br><small>${hit(p,e)[0]} Schaden</small></button><button class="primary" onclick="G.act('special')" ${busyNow||p.cooldown>0?'disabled':''}>Spezial<br><small>${p.cooldown?`Noch ${p.cooldown} Runden`:`${specialDamage} Schaden · ${esc(p.special)}`}</small></button><button class="cyan" onclick="G.act('defend')" ${busyNow?'disabled':''}>Abwehr<br><small>70% Schutz · Spezial ablink. −3</small></button></div></div>`}
  if(menuMode==='heal')controls=`<div class="menu-sub"><div class="row"><b>💚 Heilung</b><button onclick="G.menu('root')">↩ Zurück</button></div><p class="small muted">In der Testarena kostenlos und ohne Zugverlust.</p><button class="green" onclick="G.testHeal()" ${busyNow||p.hp>=p.max?'disabled':''}>Monster vollständig heilen</button></div>`;
  const last=messageFull||S.log[0]||'Testkampf bereit!';
- return `<div class="panel battle-panel"><div class="row"><h2>🧪 Testarena</h2><button onclick="G.endTest()">✕ Test beenden</button></div><div class="battle-scene test-battle"><div class="scene-top"><div class="combatant enemy" id="enemyCard"><div class="row"><b>${esc(e.name)}</b><span class="tag">${elementIcon(e.element)} Lv. 1</span></div>${combatBar(e)}</div><div class="battle-sprite enemy-sprite" id="enemySprite">${battleMonsterArt(e)}</div></div><div class="fight-row"><div class="battle-sprite player-sprite" id="playerSprite">${battleMonsterArt(p)}</div><div class="combatant player" id="playerCard"><div class="row"><b>${esc(p.name)}</b><span class="tag">${elementIcon(p.element)} Lv. 1</span></div>${combatBar(p)}</div></div></div><div class="battle-console"><div class="battle-message ${busyNow?'waiting':''}"><span class="battle-message-text" onclick="G.advance()">${esc(last)}</span><small class="message-hint" onclick="G.advance()">${busyNow?'Text wird angezeigt …':''}</small>${controls}</div></div><div class="notice">Nur ein Testkampf: keine Belohnungen, keine EXP und keine Änderung an deinem normalen Spielstand.</div></div>`;
+ return `<div class="panel battle-panel"><div class="row"><h2>🧪 Testarena</h2><button onclick="G.endTest()">✕ Test beenden</button></div><div class="battle-scene test-battle"><div class="scene-top"><div class="combatant enemy" id="enemyCard"><div class="row"><b>${esc(e.name)}</b><span class="tag">${elementIcon(e.element)} Lv. 1</span></div>${combatBar(e)}</div><div class="battle-sprite enemy-sprite" id="enemySprite" data-element="${e.element}">${battleMonsterArt(e)}</div></div><div class="fight-row"><div class="battle-sprite player-sprite" id="playerSprite" data-element="${p.element}">${battleMonsterArt(p)}</div><div class="combatant player" id="playerCard"><div class="row"><b>${esc(p.name)}</b><span class="tag">${elementIcon(p.element)} Lv. 1</span></div>${combatBar(p)}</div></div></div><div class="battle-console"><div class="battle-message ${busyNow?'waiting':''}"><span class="battle-message-text" onclick="G.advance()">${esc(last)}</span><small class="message-hint" onclick="G.advance()">${busyNow?'Text wird angezeigt …':''}</small>${controls}</div></div><div class="notice">Nur ein Testkampf: keine Belohnungen, keine EXP und keine Änderung an deinem normalen Spielstand.</div></div>`;
 }
 function startTestFight(){
  if(testMode)return;
@@ -689,13 +689,14 @@ load();render();
 <style id="v20-independent-element-rings">
 /* Eigenständige Elementringe unter den Monstern – unabhängig vom Arena-Hintergrund. */
 .battle-scene .battle-sprite::before{
- content:"";position:absolute;z-index:-1;left:50%;bottom:5%;
- width:138%;height:30%;transform:translateX(-50%);
- border:3px solid var(--element-ring,#9be7ff);border-radius:50%;
- background:radial-gradient(ellipse at center,transparent 48%,var(--element-ring-soft,#9be7ff22) 72%,transparent 100%);
- box-shadow:0 0 9px var(--element-ring),inset 0 0 8px var(--element-ring-soft);
+ content:"";position:absolute;z-index:0;left:50%;bottom:-1%;
+ width:108%;height:16%;transform:translateX(-50%);
+ border:2px solid var(--element-ring,#9be7ff);border-radius:50%;
+ background:radial-gradient(ellipse at center,transparent 62%,var(--element-ring-soft,#9be7ff18) 88%,transparent 100%);
+ box-shadow:0 0 5px var(--element-ring),inset 0 0 4px var(--element-ring-soft);
  pointer-events:none;
 }
+.battle-scene .battle-sprite .battle-art{position:relative;z-index:1}
 .battle-scene .battle-sprite[data-element="Feuer"]{--element-ring:#ff553d;--element-ring-soft:#ff553d55}
 .battle-scene .battle-sprite[data-element="Wasser"]{--element-ring:#39a9ff;--element-ring-soft:#39a9ff55}
 .battle-scene .battle-sprite[data-element="Pflanze"]{--element-ring:#62d66d;--element-ring-soft:#62d66d55}
