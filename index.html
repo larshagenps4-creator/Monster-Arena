@@ -290,9 +290,52 @@
 .element-beam-grow{pointer-events:none}
 @media(prefers-reduced-motion:reduce){.element-beam-grow{animation-duration:1.35s!important}}
 </style>
+
+<style id="v2023-perspective-floor-element-rings">
+/* V20.23: Bodenkreise nach der Referenz – flach perspektivisch, farbige Kante, leicht getönte Mitte. */
+.battle-scene .battle-sprite{
+ position:absolute!important;
+ display:flex!important;
+ align-items:flex-end!important;
+ justify-content:center!important;
+}
+.battle-scene .battle-sprite::before{
+ content:"";
+ position:absolute;
+ z-index:0;
+ left:50%;
+ bottom:-13%;
+ width:clamp(142px,39vw,190px);
+ height:clamp(54px,15vw,76px);
+ box-sizing:border-box;
+ transform:translateX(-50%) perspective(150px) rotateX(54deg);
+ transform-origin:center center;
+ border:4px solid var(--element-ring-edge,#8be8ff);
+ border-radius:50%;
+ background:var(--element-ring-fill,rgba(139,232,255,.16));
+ box-shadow:0 0 7px var(--element-ring-glow,#8be8ff88),inset 0 0 5px var(--element-ring-glow,#8be8ff55);
+ pointer-events:none;
+}
+.battle-scene .battle-sprite .battle-art{
+ position:relative!important;
+ z-index:1!important;
+}
+.battle-scene .battle-sprite[data-element="Feuer"]{--element-ring-edge:#ff594b;--element-ring-fill:rgba(255,65,52,.16);--element-ring-glow:#ff594b88}
+.battle-scene .battle-sprite[data-element="Wasser"]{--element-ring-edge:#45aaff;--element-ring-fill:rgba(48,151,255,.16);--element-ring-glow:#45aaff88}
+.battle-scene .battle-sprite[data-element="Pflanze"]{--element-ring-edge:#69db76;--element-ring-fill:rgba(77,198,91,.16);--element-ring-glow:#69db7688}
+.battle-scene .battle-sprite[data-element="Blitz"]{--element-ring-edge:#ffe04b;--element-ring-fill:rgba(255,218,55,.17);--element-ring-glow:#ffe04b88}
+.battle-scene .battle-sprite[data-element="Eis"]{--element-ring-edge:#91eaff;--element-ring-fill:rgba(115,222,255,.16);--element-ring-glow:#91eaff88}
+.battle-scene .battle-sprite[data-element="Schatten"]{--element-ring-edge:#b58aff;--element-ring-fill:rgba(157,105,235,.16);--element-ring-glow:#b58aff88}
+.battle-scene .battle-sprite[data-element="Drache"]{--element-ring-edge:#ffa04e;--element-ring-fill:rgba(239,132,55,.16);--element-ring-glow:#ffa04e88}
+.battle-scene #enemySprite{left:69%!important;top:58%!important}
+.battle-scene #playerSprite{left:28%!important;top:81%!important}
+@media(max-width:520px){
+ .battle-scene .battle-sprite::before{width:clamp(142px,39vw,190px);height:clamp(54px,15vw,76px)}
+}
+</style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.22 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.23 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -675,71 +718,9 @@ load();render();
 @media(max-width:390px){.battle-scene .scene-top .combatant,.battle-scene .fight-row .combatant{width:47%!important;max-width:47%!important;flex-basis:47%!important}.battle-scene .combat-vitals{font-size:8px!important}}
 </style>
 </body></html>
-<style id="v2022-equal-filled-circular-ground-rings">
-/* V20.22: gleiche, kreisrunde und vollflächig gefärbte Bodenkreise für jedes Monster. */
-.battle-scene .battle-sprite{
- position:absolute!important;
- display:flex!important;
- align-items:flex-end!important;
- justify-content:center!important;
-}
-.battle-scene .battle-sprite::before{
- content:"";
- position:absolute;
- left:50%;
- bottom:-50%;
- width:clamp(120px,34vw,170px);
- height:auto;
- aspect-ratio:1 / 1;
- transform:translateX(-50%);
- border:0!important;
- border-radius:50%;
- background:var(--element-ring-fill,rgba(150,210,255,.46));
- box-shadow:none!important;
- pointer-events:none;
- z-index:0;
-}
-.battle-scene .battle-sprite .battle-art{
- position:relative!important;
- z-index:1!important;
-}
-.battle-scene .battle-sprite[data-element="Feuer"]{--element-ring-fill:rgba(255,58,45,.52)}
-.battle-scene .battle-sprite[data-element="Wasser"]{--element-ring-fill:rgba(35,139,255,.52)}
-.battle-scene .battle-sprite[data-element="Pflanze"]{--element-ring-fill:rgba(65,190,65,.52)}
-.battle-scene .battle-sprite[data-element="Blitz"]{--element-ring-fill:rgba(255,211,35,.56)}
-.battle-scene .battle-sprite[data-element="Eis"]{--element-ring-fill:rgba(95,211,255,.54)}
-.battle-scene .battle-sprite[data-element="Schatten"]{--element-ring-fill:rgba(151,82,220,.54)}
-.battle-scene .battle-sprite[data-element="Drache"]{--element-ring-fill:rgba(232,119,38,.54)}
-/* Fußpunkte bleiben die Positionsanker; sichtbare Monstergrafiken werden separat zentriert. */
-.battle-scene #enemySprite{left:69%!important;top:58%!important}
-.battle-scene #playerSprite{left:28%!important;top:81%!important}
-@media(max-width:520px){
- .battle-scene .battle-sprite::before{width:clamp(120px,34vw,150px)}
-}
-</style>
 
-<style id="v2021-solid-round-element-discs">
-/* V20.21: identische, vollflächige Kreise unter jedem Monster. Ringgröße hängt nicht von der Monstergrafik ab. */
-.battle-scene .battle-sprite::before{
- content:"";position:absolute;z-index:0;left:50%;
- bottom:calc(clamp(108px,32vw,132px) / -2);
- width:clamp(108px,32vw,132px);height:clamp(108px,32vw,132px);
- transform:translateX(-50%);border:0;border-radius:50%;
- background:var(--element-ring-fill,rgba(140,220,255,.58));
- box-shadow:none;pointer-events:none;
-}
-.battle-scene .battle-sprite .battle-art{position:relative;z-index:1}
-.battle-scene .battle-sprite[data-element="Feuer"]{--element-ring-fill:rgba(255,62,48,.58)}
-.battle-scene .battle-sprite[data-element="Wasser"]{--element-ring-fill:rgba(45,151,255,.58)}
-.battle-scene .battle-sprite[data-element="Pflanze"]{--element-ring-fill:rgba(75,194,75,.58)}
-.battle-scene .battle-sprite[data-element="Blitz"]{--element-ring-fill:rgba(255,213,48,.62)}
-.battle-scene .battle-sprite[data-element="Eis"]{--element-ring-fill:rgba(111,221,255,.6)}
-.battle-scene .battle-sprite[data-element="Schatten"]{--element-ring-fill:rgba(157,92,230,.6)}
-.battle-scene .battle-sprite[data-element="Drache"]{--element-ring-fill:rgba(236,128,48,.6)}
-/* Bestehende Fußpunkte der Monster beibehalten. */
-.battle-scene #enemySprite{left:69%!important;top:58%!important}
-.battle-scene #playerSprite{left:28%!important;top:81%!important}
-</style>
+
+
 
 
 
