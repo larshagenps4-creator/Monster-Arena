@@ -291,8 +291,9 @@
 @media(prefers-reduced-motion:reduce){.element-beam-grow{animation-duration:1.35s!important}}
 </style>
 
-<style id="v2023-perspective-floor-element-rings">
-/* V20.23: Bodenkreise nach der Referenz – flach perspektivisch, farbige Kante, leicht getönte Mitte. */
+
+<style id="v2024-aligned-equal-floor-rings">
+/* V20.24: identische Ringe, dichter zusammen, vollständig auf Steinboden; Mittelpunkt exakt am Fußanker. */
 .battle-scene .battle-sprite{
  position:absolute!important;
  display:flex!important;
@@ -304,9 +305,11 @@
  position:absolute;
  z-index:0;
  left:50%;
- bottom:-13%;
- width:clamp(142px,39vw,190px);
- height:clamp(54px,15vw,76px);
+ bottom:-50%;
+ width:42%;
+ height:14%;
+ min-height:52px;
+ max-height:68px;
  box-sizing:border-box;
  transform:translateX(-50%) perspective(150px) rotateX(54deg);
  transform-origin:center center;
@@ -319,6 +322,7 @@
 .battle-scene .battle-sprite .battle-art{
  position:relative!important;
  z-index:1!important;
+ object-position:center bottom!important;
 }
 .battle-scene .battle-sprite[data-element="Feuer"]{--element-ring-edge:#ff594b;--element-ring-fill:rgba(255,65,52,.16);--element-ring-glow:#ff594b88}
 .battle-scene .battle-sprite[data-element="Wasser"]{--element-ring-edge:#45aaff;--element-ring-fill:rgba(48,151,255,.16);--element-ring-glow:#45aaff88}
@@ -327,15 +331,17 @@
 .battle-scene .battle-sprite[data-element="Eis"]{--element-ring-edge:#91eaff;--element-ring-fill:rgba(115,222,255,.16);--element-ring-glow:#91eaff88}
 .battle-scene .battle-sprite[data-element="Schatten"]{--element-ring-edge:#b58aff;--element-ring-fill:rgba(157,105,235,.16);--element-ring-glow:#b58aff88}
 .battle-scene .battle-sprite[data-element="Drache"]{--element-ring-edge:#ffa04e;--element-ring-fill:rgba(239,132,55,.16);--element-ring-glow:#ffa04e88}
-.battle-scene #enemySprite{left:69%!important;top:58%!important}
-.battle-scene #playerSprite{left:28%!important;top:81%!important}
+/* Fußanker: Gegner nach unten auf den Steinboden; beide Monster näher zur Arenamitte. */
+.battle-scene #enemySprite{left:62%!important;top:67%!important}
+.battle-scene #playerSprite{left:37%!important;top:82%!important}
 @media(max-width:520px){
- .battle-scene .battle-sprite::before{width:clamp(142px,39vw,190px);height:clamp(54px,15vw,76px)}
+ .battle-scene .battle-sprite::before{width:42%;height:14%;min-height:52px;max-height:68px}
 }
 </style>
+
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.23 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.24 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
