@@ -17,12 +17,11 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Install dependencies
-        run: npm install
+      - name: Verify runner Node and install dependencies
+        run: |
+          node --version
+          npm --version
+          npm install --no-package-lock
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
       - name: Run iPhone-sized arena tests
