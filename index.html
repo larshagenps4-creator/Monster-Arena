@@ -736,6 +736,32 @@ load();render();
  .battle-scene #enemySprite,.battle-scene #playerSprite{width:clamp(190px,42cqw,260px)!important;height:clamp(190px,42cqw,260px)!important}
 }
 </style>
+
+<style id="v2035-arena-scale-reference">
+/* V20.35: mehr sichtbare Arena und kleinere Monster nach der verbindlichen Handy-Referenz. */
+.battle-scene{
+  height:clamp(300px,77vw,340px)!important;
+  min-height:300px!important;
+  aspect-ratio:1.2/1!important;
+  background-position:center center!important;
+  background-size:cover!important;
+}
+.battle-scene #enemySprite,.battle-scene #playerSprite{
+  width:clamp(145px,30cqw,190px)!important;
+  height:clamp(145px,30cqw,190px)!important;
+}
+.battle-scene #enemySprite{left:70%!important;top:52%!important}
+.battle-scene #playerSprite{left:30%!important;top:68%!important}
+.battle-scene #enemySprite .battle-art,.battle-scene #playerSprite .battle-art{
+  transform:scale(.88)!important;
+  transform-origin:center bottom!important;
+}
+.battle-scene .battle-sprite::before{
+  width:38cqw!important;
+  height:15cqw!important;
+}
+</style>
+
 </body></html>
 
 
