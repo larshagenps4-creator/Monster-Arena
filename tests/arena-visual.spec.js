@@ -108,10 +108,17 @@ async function measureAlignment(page) {
 function assertCentered(measurements) {
   for (const m of measurements) {
     expect(m.loaded, `${m.monster} (${m.position}) image must load`).toBe(true);
+    // Foot pixels and outer bounds can be biased by tails, wings or uneven paws.
+    // Validate the visible silhouette center and alpha-weighted center instead.
+    const silhouetteTolerance = m.ringCenter.width * 0.04;
     expect(
-      Math.abs(m.horizontalOffset),
-      `${m.monster} (${m.position}) horizontal foot-anchor offset: ${m.horizontalOffset.toFixed(1)}px; allowed ±${m.horizontalTolerance.toFixed(1)}px`
-    ).toBeLessThanOrEqual(m.horizontalTolerance);
+      Math.abs(m.boundsCenterOffset),
+      `${m.monster} (${m.position}) visible silhouette center offset: ${m.boundsCenterOffset.toFixed(1)}px; allowed ±${silhouetteTolerance.toFixed(1)}px`
+    ).toBeLessThanOrEqual(silhouetteTolerance);
+    expect(
+      Math.abs(m.alphaCentroidOffset),
+      `${m.monster} (${m.position}) alpha centroid offset: ${m.alphaCentroidOffset.toFixed(1)}px; allowed ±${silhouetteTolerance.toFixed(1)}px`
+    ).toBeLessThanOrEqual(silhouetteTolerance);
     expect(
       Math.abs(m.verticalOffset),
       `${m.monster} (${m.position}) foot-to-ring-center offset: ${m.verticalOffset.toFixed(1)}px; allowed ±${m.verticalTolerance.toFixed(1)}px`
