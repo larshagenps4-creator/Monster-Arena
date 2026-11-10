@@ -135,11 +135,13 @@ test('all 14 monsters are visually centered in their rings in both arena positio
     await openTestBattle(page, 0, i);
     const measurements = await measureAlignment(page);
     report.push({ player: monsters[0], enemy: monsters[i], measurements });
-    assertCentered(measurements);
     await page.screenshot({ path: `test-results/arena-enemy-${String(i).padStart(2, '0')}-${monsters[i]}.png`, fullPage: true });
   }
 
   fs.mkdirSync('test-results', { recursive: true });
   fs.writeFileSync('test-results/arena-alignment-report.json', JSON.stringify(report, null, 2));
+  // Run assertions only after every monster and both positions have been measured,
+  // so a single offset cannot prevent the complete diagnostic report being saved.
+  for (const entry of report) assertCentered(entry.measurements);
   expect(browserErrors, 'browser JavaScript errors').toEqual([]);
 });
