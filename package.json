@@ -1,0 +1,10 @@
+{
+  "name": "monster-arena-browser-tests",
+  "private": true,
+  "scripts": {
+    "test:arena": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1"
+  }
+}
