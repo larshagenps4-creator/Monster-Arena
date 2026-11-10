@@ -45,23 +45,39 @@ async function measureAlignment(page) {
         }
       }
     }
-    const anchorTop = Math.max(minY, Math.floor(maxY - (maxY - minY + 1) * 0.22));
-    let weightedX = 0, weight = 0;
+    // Match the production alignment anchor exactly: weighted centers of
+    // each occupied row in the lowest 18% of the visible silhouette.
+    const anchorTop = Math.max(minY, Math.floor(maxY - (maxY - minY + 1) * 0.18));
+    let anchorSum = 0, anchorWeight = 0;
     for (let y = anchorTop; y <= maxY; y++) {
+      let first = canvas.width, last = -1, count = 0;
       for (let x = 0; x < canvas.width; x++) {
-        const alpha = pixels[(y * canvas.width + x) * 4 + 3];
-        if (alpha > 40) { weightedX += x * alpha; weight += alpha; }
+        if (pixels[(y * canvas.width + x) * 4 + 3] > 40) {
+          first = Math.min(first, x);
+          last = Math.max(last, x);
+          count++;
+        }
+      }
+      if (last >= first && count) {
+        anchorSum += ((first + last + 1) / 2) * count;
+        anchorWeight += count;
       }
     }
-    const anchorX = weightedX / Math.max(1, weight);
+    const anchorX = anchorWeight ? anchorSum / anchorWeight : (canvas.width / 2);
     const anchorBottom = maxY + 1;
     const ringStyle = getComputedStyle(sprite, '::before');
     const ringWidth = parseFloat(ringStyle.width);
     const ringHeight = parseFloat(ringStyle.height);
     const ringCenterX = spriteRect.left + spriteRect.width / 2;
     const ringCenterY = spriteRect.bottom;
-    const visibleAnchorX = imageRect.left + (anchorX / canvas.width) * imageRect.width;
-    const visibleBottomY = imageRect.top + (anchorBottom / canvas.height) * imageRect.height;
+
+    // object-fit:contain creates letterboxing; account for it instead of
+    // stretching the natural image coordinates across the whole img element.
+    const fit = Math.min(imageRect.width / canvas.width, imageRect.height / canvas.height);
+    const ox = (imageRect.width - canvas.width * fit) / 2;
+    const oy = (imageRect.height - canvas.height * fit) / 2;
+    const visibleAnchorX = imageRect.left + ox + anchorX * fit;
+    const visibleBottomY = imageRect.top + oy + anchorBottom * fit;
 
     return {
       position: id,
