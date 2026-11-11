@@ -605,18 +605,20 @@ function centerVisibleBattleMonsters(){
     const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;
     const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(img,0,0);
     const a=x.getImageData(0,0,c.width,c.height).data;
-    let x0=c.width,y0=c.height,x1=-1,y1=-1;
+    let x0=c.width,y0=c.height,x1=-1,y1=-1,weightedX=0,alphaWeight=0;
     for(let y=0;y<c.height;y++)for(let xx=0;xx<c.width;xx++){
-     if(a[(y*c.width+xx)*4+3]>40){if(xx<x0)x0=xx;if(xx>x1)x1=xx;if(y<y0)y0=y;if(y>y1)y1=y}
+     const alpha=a[(y*c.width+xx)*4+3];
+     if(alpha>40){
+      if(xx<x0)x0=xx;if(xx>x1)x1=xx;if(y<y0)y0=y;if(y>y1)y1=y;
+      weightedX+=xx*alpha;alphaWeight+=alpha;
+     }
     }
-    if(x1<0)return;
+    if(x1<0||!alphaWeight)return;
     const rarity=book.find(t=>t[0]===img.alt)?.[3]||'Common';
     const legendary=rarity==='Legendary';
-    /* Alle Monster am tatsächlichen unteren Körper-/Fußbereich ausrichten.
-       Die Gesamtbildmitte ist bei asymmetrischen Silhouetten (z.B. Blitzling)
-       nicht der Standpunkt und verschiebt das Monster sichtbar aus dem Ring. */
-    /* Center the full visible silhouette horizontally above its ring. */
-    const anchorX=(x0+x1+1)/2;
+    /* Alpha-gewichteter Schwerpunkt der sichtbaren Monsterpixel statt
+       der Mitte transparenter Bildränder oder eines einzelnen Fußankers. */
+    const anchorX=weightedX/alphaWeight;
     const w=img.clientWidth,h=img.clientHeight;if(!w||!h)return;
     const fit=Math.min(w/img.naturalWidth,h/img.naturalHeight);
     const ox=(w-img.naturalWidth*fit)/2,oy=(h-img.naturalHeight*fit)/2;
