@@ -1,0 +1,37 @@
+name: Monster Arena visual tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [setup/playwright-arena-visual-tests]
+
+permissions:
+  contents: read
+
+jobs:
+  arena-visual-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Verify runner Node and install dependencies
+        run: |
+          node --version
+          npm --version
+          npm install --no-package-lock
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: Run iPhone-sized arena tests
+        run: npm run test:arena
+      - name: Upload screenshots and geometry report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: monster-arena-visual-test-results
+          path: |
+            test-results/
+          if-no-files-found: warn
+          retention-days: 14
