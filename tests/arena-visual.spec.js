@@ -36,7 +36,6 @@ async function measureAlignment(page) {
     const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
     let minY = canvas.height, maxY = -1, minX = canvas.width, maxX = -1;
-    let alphaSumX = 0, alphaWeight = 0;
     for (let y = 0; y < canvas.height; y++) {
       for (let x = 0; x < canvas.width; x++) {
         if (pixels[(y * canvas.width + x) * 4 + 3] > 40) {
@@ -44,12 +43,10 @@ async function measureAlignment(page) {
           maxY = Math.max(maxY, y);
           minX = Math.min(minX, x);
           maxX = Math.max(maxX, x);
-          alphaSumX += x;
-          alphaWeight++;
         }
       }
     }
-    const alphaCentroidX = alphaWeight ? alphaSumX / alphaWeight : canvas.width / 2;
+    const silhouetteCenterX = minX <= maxX ? (minX + maxX + 1) / 2 : canvas.width / 2;
     const anchorBottom = maxY + 1;
 
     // Use the untransformed layout box and explicitly apply the CSS matrix.
@@ -59,7 +56,7 @@ async function measureAlignment(page) {
     const fit = Math.min(boxW / canvas.width, boxH / canvas.height);
     const ox = (boxW - canvas.width * fit) / 2;
     const oy = (boxH - canvas.height * fit) / 2;
-    const localX = ox + alphaCentroidX * fit;
+    const localX = ox + silhouetteCenterX * fit;
     const localY = oy + anchorBottom * fit;
     const style = getComputedStyle(img);
     const matrix = new DOMMatrixReadOnly(style.transform === 'none' ? undefined : style.transform);
@@ -79,8 +76,8 @@ async function measureAlignment(page) {
       position: id,
       monster: img.alt,
       ringCenter: { x: ringCenterX, y: ringCenterY, width: ringWidth, height: ringHeight },
-      visibleAlphaCenterX: visibleAnchorX,
-      alphaCentroidOffset: visibleAnchorX - ringCenterX,
+      visibleSilhouetteCenterX: visibleAnchorX,
+      silhouetteCenterOffset: visibleAnchorX - ringCenterX,
       horizontalOffset: visibleAnchorX - ringCenterX,
       verticalOffset: visibleBottomY - ringCenterY,
       horizontalTolerance: ringWidth * 0.035,
@@ -96,8 +93,8 @@ function assertCentered(measurements) {
     expect(m.loaded, `${m.monster} (${m.position}) image must load`).toBe(true);
     // The visible silhouette itself must be centered, not just its feet.
     expect(
-      Math.abs(m.alphaCentroidOffset),
-      `${m.monster} (${m.position}) visible-silhouette center offset: ${m.alphaCentroidOffset.toFixed(2)}px; allowed ±${m.horizontalTolerance.toFixed(2)}px`
+      Math.abs(m.silhouetteCenterOffset),
+      `${m.monster} (${m.position}) visible-silhouette bounding-center offset: ${m.silhouetteCenterOffset.toFixed(2)}px; allowed ±${m.horizontalTolerance.toFixed(2)}px`
     ).toBeLessThanOrEqual(m.horizontalTolerance);
     expect(
       Math.abs(m.verticalOffset),
