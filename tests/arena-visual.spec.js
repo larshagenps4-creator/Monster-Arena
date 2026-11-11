@@ -21,8 +21,8 @@ async function openTestBattle(page, playerIndex, enemyIndex) {
   await page.waitForTimeout(250);
 }
 
-// Measures the visible feet/stance anchor, not the center of transparent
-// padding or asymmetric wings/tails. The ring center is the center of ::before.
+// Measures the alpha-weighted center of the visible monster silhouette.
+// The ring center is the center of ::before; transparent padding is excluded.
 async function measureAlignment(page) {
   return page.evaluate(() => ['playerSprite', 'enemySprite'].map(id => {
     const sprite = document.getElementById(id);
@@ -49,23 +49,7 @@ async function measureAlignment(page) {
         }
       }
     }
-    const anchorTop = Math.max(minY, Math.floor(maxY - (maxY - minY + 1) * 0.18));
-    let anchorSum = 0, anchorWeight = 0;
-    for (let y = anchorTop; y <= maxY; y++) {
-      let first = canvas.width, last = -1, count = 0;
-      for (let x = 0; x < canvas.width; x++) {
-        if (pixels[(y * canvas.width + x) * 4 + 3] > 40) {
-          first = Math.min(first, x);
-          last = Math.max(last, x);
-          count++;
-        }
-      }
-      if (last >= first && count) {
-        anchorSum += ((first + last + 1) / 2) * count;
-        anchorWeight += count;
-      }
-    }
-    const anchorX = anchorWeight ? anchorSum / anchorWeight : canvas.width / 2;
+    const alphaCentroidX = alphaWeight ? alphaSumX / alphaWeight : canvas.width / 2;
     const anchorBottom = maxY + 1;
 
     // Use the untransformed layout box and explicitly apply the CSS matrix.
@@ -75,7 +59,7 @@ async function measureAlignment(page) {
     const fit = Math.min(boxW / canvas.width, boxH / canvas.height);
     const ox = (boxW - canvas.width * fit) / 2;
     const oy = (boxH - canvas.height * fit) / 2;
-    const localX = ox + anchorX * fit;
+    const localX = ox + alphaCentroidX * fit;
     const localY = oy + anchorBottom * fit;
     const style = getComputedStyle(img);
     const matrix = new DOMMatrixReadOnly(style.transform === 'none' ? undefined : style.transform);
@@ -95,11 +79,7 @@ async function measureAlignment(page) {
       position: id,
       monster: img.alt,
       ringCenter: { x: ringCenterX, y: ringCenterY, width: ringWidth, height: ringHeight },
-      visibleFootAnchor: { x: visibleAnchorX, y: visibleBottomY },
-      visibleBoundsCenterX: spriteRect.left + img.offsetLeft + transformedX,
-      visibleAlphaCenterX: spriteRect.left + img.offsetLeft + transformedX,
-      footAnchorOffset: visibleAnchorX - ringCenterX,
-      boundsCenterOffset: visibleAnchorX - ringCenterX,
+      visibleAlphaCenterX: visibleAnchorX,
       alphaCentroidOffset: visibleAnchorX - ringCenterX,
       horizontalOffset: visibleAnchorX - ringCenterX,
       verticalOffset: visibleBottomY - ringCenterY,
@@ -114,12 +94,10 @@ async function measureAlignment(page) {
 function assertCentered(measurements) {
   for (const m of measurements) {
     expect(m.loaded, `${m.monster} (${m.position}) image must load`).toBe(true);
-    // The game centers each monster by its visible foot/stance anchor.
-    // Alpha centroids and bounding-box centers are intentionally not used:
-    // wings, tails and other asymmetric features can shift those measures.
+    // The visible silhouette itself must be centered, not just its feet.
     expect(
-      Math.abs(m.footAnchorOffset),
-      `${m.monster} (${m.position}) foot-anchor horizontal offset: ${m.footAnchorOffset.toFixed(2)}px; allowed ±${m.horizontalTolerance.toFixed(2)}px`
+      Math.abs(m.alphaCentroidOffset),
+      `${m.monster} (${m.position}) visible-silhouette center offset: ${m.alphaCentroidOffset.toFixed(2)}px; allowed ±${m.horizontalTolerance.toFixed(2)}px`
     ).toBeLessThanOrEqual(m.horizontalTolerance);
     expect(
       Math.abs(m.verticalOffset),
