@@ -615,16 +615,8 @@ function centerVisibleBattleMonsters(){
     /* Alle Monster am tatsächlichen unteren Körper-/Fußbereich ausrichten.
        Die Gesamtbildmitte ist bei asymmetrischen Silhouetten (z.B. Blitzling)
        nicht der Standpunkt und verschiebt das Monster sichtbar aus dem Ring. */
-    /* Horizontal visual center of the actual non-transparent silhouette.
-       Keep the lower visible edge as the foot anchor so the monster still
-       stands on the ring while its visible body is centered above it. */
-    let anchorX=0,alphaWeight=0;
-    for(let y=y0;y<=y1;y++)for(let xx=x0;xx<=x1;xx++){
-     const alpha=a[(y*c.width+xx)*4+3];
-     if(alpha>40){anchorX+=xx*alpha;alphaWeight+=alpha}
-    }
-    if(!alphaWeight)return;
-    anchorX/=alphaWeight;
+    /* Center the full visible silhouette horizontally above its ring. */
+    const anchorX=(x0+x1+1)/2;
     const w=img.clientWidth,h=img.clientHeight;if(!w||!h)return;
     const fit=Math.min(w/img.naturalWidth,h/img.naturalHeight);
     const ox=(w-img.naturalWidth*fit)/2,oy=(h-img.naturalHeight*fit)/2;
