@@ -108,13 +108,13 @@ async function measureAlignment(page) {
 function assertCentered(measurements) {
   for (const m of measurements) {
     expect(m.loaded, `${m.monster} (${m.position}) image must load`).toBe(true);
-    // Alpha-weighted visible center is more robust than feet or the outer
-    // bounding box, both of which can be skewed by asymmetric appendages.
-    const silhouetteTolerance = m.ringCenter.width * 0.06 + 0.1; // avoid sub-pixel floating-point boundary failures
+    // The game centers each monster by its visible foot/stance anchor.
+    // Alpha centroids and bounding-box centers are intentionally not used:
+    // wings, tails and other asymmetric features can shift those measures.
     expect(
-      Math.abs(m.alphaCentroidOffset),
-      `${m.monster} (${m.position}) visible-pixel center offset: ${m.alphaCentroidOffset.toFixed(1)}px; allowed ±${silhouetteTolerance.toFixed(1)}px`
-    ).toBeLessThanOrEqual(silhouetteTolerance);
+      Math.abs(m.footAnchorOffset),
+      `${m.monster} (${m.position}) foot-anchor horizontal offset: ${m.footAnchorOffset.toFixed(2)}px; allowed ±${m.horizontalTolerance.toFixed(2)}px`
+    ).toBeLessThanOrEqual(m.horizontalTolerance);
     expect(
       Math.abs(m.verticalOffset),
       `${m.monster} (${m.position}) foot-to-ring-center offset: ${m.verticalOffset.toFixed(1)}px; allowed ±${m.verticalTolerance.toFixed(1)}px`
