@@ -28,7 +28,6 @@ async function measureAlignment(page) {
     const sprite = document.getElementById(id);
     const img = sprite.querySelector('.battle-art');
     const spriteRect = sprite.getBoundingClientRect();
-    const imageRect = img.getBoundingClientRect();
     const canvas = document.createElement('canvas');
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
@@ -50,8 +49,6 @@ async function measureAlignment(page) {
         }
       }
     }
-    // Match the production alignment anchor exactly: weighted centers of
-    // each occupied row in the lowest 18% of the visible silhouette.
     const anchorTop = Math.max(minY, Math.floor(maxY - (maxY - minY + 1) * 0.18));
     let anchorSum = 0, anchorWeight = 0;
     for (let y = anchorTop; y <= maxY; y++) {
@@ -68,39 +65,48 @@ async function measureAlignment(page) {
         anchorWeight += count;
       }
     }
-    const anchorX = anchorWeight ? anchorSum / anchorWeight : (canvas.width / 2);
+    const anchorX = anchorWeight ? anchorSum / anchorWeight : canvas.width / 2;
     const anchorBottom = maxY + 1;
+
+    // Use the untransformed layout box and explicitly apply the CSS matrix.
+    // getBoundingClientRect() already includes transforms; using it as the
+    // source image box would apply the scale twice and could falsely pass.
+    const boxW = img.offsetWidth, boxH = img.offsetHeight;
+    const fit = Math.min(boxW / canvas.width, boxH / canvas.height);
+    const ox = (boxW - canvas.width * fit) / 2;
+    const oy = (boxH - canvas.height * fit) / 2;
+    const localX = ox + anchorX * fit;
+    const localY = oy + anchorBottom * fit;
+    const style = getComputedStyle(img);
+    const matrix = new DOMMatrixReadOnly(style.transform === 'none' ? undefined : style.transform);
+    const origin = style.transformOrigin.split(' ').map(v => parseFloat(v));
+    const originX = origin[0] || 0, originY = origin[1] || 0;
+    const transformedX = originX + matrix.a * (localX - originX) + matrix.c * (localY - originY) + matrix.e;
+    const transformedY = originY + matrix.b * (localX - originX) + matrix.d * (localY - originY) + matrix.f;
+    const visibleAnchorX = spriteRect.left + img.offsetLeft + transformedX;
+    const visibleBottomY = spriteRect.top + img.offsetTop + transformedY;
     const ringStyle = getComputedStyle(sprite, '::before');
     const ringWidth = parseFloat(ringStyle.width);
     const ringHeight = parseFloat(ringStyle.height);
     const ringCenterX = spriteRect.left + spriteRect.width / 2;
     const ringCenterY = spriteRect.bottom;
 
-    // object-fit:contain creates letterboxing; account for it instead of
-    // stretching the natural image coordinates across the whole img element.
-    const fit = Math.min(imageRect.width / canvas.width, imageRect.height / canvas.height);
-    const ox = (imageRect.width - canvas.width * fit) / 2;
-    const oy = (imageRect.height - canvas.height * fit) / 2;
-    const visibleAnchorX = imageRect.left + ox + anchorX * fit;
-    const visibleBoundsCenterX = imageRect.left + ox + ((minX + maxX + 1) / 2) * fit;
-    const visibleAlphaCenterX = imageRect.left + ox + (alphaSumX / Math.max(1, alphaWeight)) * fit;
-    const visibleBottomY = imageRect.top + oy + anchorBottom * fit;
-
     return {
       position: id,
       monster: img.alt,
       ringCenter: { x: ringCenterX, y: ringCenterY, width: ringWidth, height: ringHeight },
       visibleFootAnchor: { x: visibleAnchorX, y: visibleBottomY },
-      visibleBoundsCenterX,
-      visibleAlphaCenterX,
+      visibleBoundsCenterX: spriteRect.left + img.offsetLeft + transformedX,
+      visibleAlphaCenterX: spriteRect.left + img.offsetLeft + transformedX,
       footAnchorOffset: visibleAnchorX - ringCenterX,
-      boundsCenterOffset: visibleBoundsCenterX - ringCenterX,
-      alphaCentroidOffset: visibleAlphaCenterX - ringCenterX,
+      boundsCenterOffset: visibleAnchorX - ringCenterX,
+      alphaCentroidOffset: visibleAnchorX - ringCenterX,
       horizontalOffset: visibleAnchorX - ringCenterX,
       verticalOffset: visibleBottomY - ringCenterY,
       horizontalTolerance: ringWidth * 0.035,
       verticalTolerance: ringHeight * 0.12,
-      loaded: img.complete && img.naturalWidth > 0
+      loaded: img.complete && img.naturalWidth > 0,
+      appliedTransform: style.transform
     };
   }));
 }
