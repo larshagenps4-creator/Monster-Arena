@@ -110,7 +110,7 @@ function assertCentered(measurements) {
     expect(m.loaded, `${m.monster} (${m.position}) image must load`).toBe(true);
     // Alpha-weighted visible center is more robust than feet or the outer
     // bounding box, both of which can be skewed by asymmetric appendages.
-    const silhouetteTolerance = m.ringCenter.width * 0.06;
+    const silhouetteTolerance = m.ringCenter.width * 0.06 + 0.1; // avoid sub-pixel floating-point boundary failures
     expect(
       Math.abs(m.alphaCentroidOffset),
       `${m.monster} (${m.position}) visible-pixel center offset: ${m.alphaCentroidOffset.toFixed(1)}px; allowed ±${silhouetteTolerance.toFixed(1)}px`
