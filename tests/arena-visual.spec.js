@@ -21,7 +21,7 @@ async function openTestBattle(page, playerIndex, enemyIndex) {
   await page.waitForTimeout(250);
 }
 
-// Measures the alpha-weighted center of the visible monster silhouette.
+// Measures the visible-bounds center of the visible monster silhouette.
 // The ring center is the center of ::before; transparent padding is excluded.
 async function measureAlignment(page) {
   return page.evaluate(() => ['playerSprite', 'enemySprite'].map(id => {
@@ -36,21 +36,19 @@ async function measureAlignment(page) {
     const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
     let minY = canvas.height, maxY = -1, minX = canvas.width, maxX = -1;
-    let weightedX = 0, alphaWeight = 0;
     for (let y = 0; y < canvas.height; y++) {
       for (let x = 0; x < canvas.width; x++) {
-        const alpha = pixels[(y * canvas.width + x) * 4 + 3];
-        if (alpha > 40) {
+        if (pixels[(y * canvas.width + x) * 4 + 3] > 40) {
           minY = Math.min(minY, y);
           maxY = Math.max(maxY, y);
           minX = Math.min(minX, x);
           maxX = Math.max(maxX, x);
-          weightedX += x * alpha;
-          alphaWeight += alpha;
         }
       }
     }
-    const silhouetteCenterX = alphaWeight ? weightedX / alphaWeight : canvas.width / 2;
+    // The visible alpha-bounds center is the stable visual placement reference.
+    // Alpha mass is not used: wide wings/tails otherwise pull the monster sideways.
+    const silhouetteCenterX = minX <= maxX ? (minX + maxX + 1) / 2 : canvas.width / 2;
     const anchorBottom = maxY + 1;
 
     // Use the untransformed layout box and explicitly apply the CSS matrix.
@@ -98,7 +96,7 @@ function assertCentered(measurements) {
     // The visible silhouette itself must be centered, not just its feet.
     expect(
       Math.abs(m.silhouetteCenterOffset),
-      `${m.monster} (${m.position}) visible-silhouette alpha-center offset: ${m.silhouetteCenterOffset.toFixed(2)}px; allowed ±${m.horizontalTolerance.toFixed(2)}px`
+      `${m.monster} (${m.position}) visible-silhouette bounds-center offset: ${m.silhouetteCenterOffset.toFixed(2)}px; allowed ±${m.horizontalTolerance.toFixed(2)}px`
     ).toBeLessThanOrEqual(m.horizontalTolerance);
     expect(
       Math.abs(m.verticalOffset),
