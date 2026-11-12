@@ -47,9 +47,17 @@ async function measureAlignment(page) {
         }
       }
     }
-    // The visible alpha-bounds center is the stable visual placement reference.
-    // Alpha mass is not used: wide wings/tails otherwise pull the monster sideways.
-    const silhouetteCenterX = minX <= maxX ? (minX + maxX + 1) / 2 : canvas.width / 2;
+    // Measure the perceived torso/body center independently of the game code.
+    // The upper 22% (wing tips) and bottom 14% (tails/feet) are excluded.
+    let weightedX = 0, totalWeight = 0;
+    const visibleHeight = maxY - minY + 1;
+    for (let y = Math.floor(minY + visibleHeight * 0.22); y <= Math.ceil(minY + visibleHeight * 0.86); y++) {
+      for (let x = minX; x <= maxX; x++) {
+        const alpha = pixels[(y * canvas.width + x) * 4 + 3];
+        if (alpha > 40) { const weight = alpha / 255; weightedX += x * weight; totalWeight += weight; }
+      }
+    }
+    const silhouetteCenterX = totalWeight ? weightedX / totalWeight : (minX + maxX + 1) / 2;
     const anchorBottom = maxY + 1;
 
     // Use the untransformed layout box and explicitly apply the CSS matrix.
@@ -97,7 +105,7 @@ function assertCentered(measurements) {
     // The visible silhouette itself must be centered, not just its feet.
     expect(
       Math.abs(m.silhouetteCenterOffset),
-      `${m.monster} (${m.position}) visible-silhouette bounds-center offset: ${m.silhouetteCenterOffset.toFixed(2)}px; allowed ±${m.horizontalTolerance.toFixed(2)}px`
+      `${m.monster} (${m.position}) visible torso/body-center offset: ${m.silhouetteCenterOffset.toFixed(2)}px; allowed ±${m.horizontalTolerance.toFixed(2)}px`
     ).toBeLessThanOrEqual(m.horizontalTolerance);
     expect(
       Math.abs(m.verticalOffset),
