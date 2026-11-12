@@ -610,8 +610,8 @@ function centerVisibleBattleMonsters(){
     let minX=canvas.width,minY=canvas.height,maxX=-1,maxY=-1;
     for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++){
      if(pixels[(y*canvas.width+x)*4+3]>40){
-      if(x<minX)minX=x;if(x>maxX)maxX=x;
-      if(y<minY)minY=y;if(y>maxY)maxY=y;
+      minX=Math.min(minX,x);maxX=Math.max(maxX,x);
+      minY=Math.min(minY,y);maxY=Math.max(maxY,y);
      }
     }
     if(maxX<minX||maxY<minY)return;
@@ -620,24 +620,25 @@ function centerVisibleBattleMonsters(){
     const fit=Math.min(w/img.naturalWidth,h/img.naturalHeight);
     const ox=(w-img.naturalWidth*fit)/2;
     const visibleHeight=maxY-minY+1;
-    // The visual anchor is the weighted center of the lowest 12% of
-    // the opaque silhouette. This follows the feet/stance, not wings/tails.
-    const footTop=Math.max(minY,Math.floor(maxY-visibleHeight*.12));
-    let weightedX=0,totalWeight=0;
-    for(let y=footTop;y<=maxY;y++){
-     const rowWeight=1+(y-footTop)/(maxY-footTop+1);
+    // Human-facing visual center: alpha-weighted center of the torso/body
+    // zone. Upper wing tips and low tail/foot extensions are de-emphasized.
+    const bodyTop=minY+visibleHeight*.22;
+    const bodyBottom=minY+visibleHeight*.86;
+    let sumX=0,sumWeight=0;
+    for(let y=Math.floor(bodyTop);y<=Math.ceil(bodyBottom);y++){
+     const verticalWeight=1;
      for(let x=minX;x<=maxX;x++){
       const alpha=pixels[(y*canvas.width+x)*4+3];
-      if(alpha>40){const weight=(alpha/255)*rowWeight;weightedX+=x*weight;totalWeight+=weight;}
+      if(alpha>40){const weight=(alpha/255)*verticalWeight;sumX+=x*weight;sumWeight+=weight;}
      }
     }
-    if(!totalWeight)return;
-    const footAnchorX=ox+(weightedX/totalWeight)*fit;
-    const dx=w/2-footAnchorX;
+    if(!sumWeight)return;
+    const bodyCenterX=ox+(sumX/sumWeight)*fit;
+    const dx=w/2-bodyCenterX;
     img.style.setProperty('transform-origin','center center','important');
     img.style.removeProperty('translate');img.style.removeProperty('scale');
     img.style.setProperty('transform',`translateX(${dx.toFixed(2)}px)`,'important');
-    img.dataset.visualFootAnchorOffset=(footAnchorX-w/2).toFixed(3);
+    img.dataset.opticalCenterOffset=(bodyCenterX-w/2).toFixed(3);
    }catch(error){console.warn('Optische Monster-Zentrierung fehlgeschlagen:',img.alt,error)}
   };
   if(img.complete)align();else img.addEventListener('load',align,{once:true});
