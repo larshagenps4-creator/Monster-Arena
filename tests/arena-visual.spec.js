@@ -1,4 +1,4 @@
-// Re-trigger visual verification after the GitHub Actions queue incident on 2026-11-11.
+// Verify the exact live 20.50 source, not a stale test-branch copy.
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 
