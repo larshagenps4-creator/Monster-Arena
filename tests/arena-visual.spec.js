@@ -1,3 +1,4 @@
+// Re-trigger visual verification after the GitHub Actions queue incident on 2026-11-11.
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 
