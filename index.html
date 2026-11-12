@@ -598,42 +598,41 @@ function endTest(){
 function centerVisibleBattleMonsters(){
  const scene=document.querySelector('.battle-scene');
  if(!scene)return;
- document.querySelectorAll('.battle-scene .battle-art').forEach(img=>{
+ scene.querySelectorAll('.battle-art').forEach(img=>{
   const align=()=>{
    if(!img.naturalWidth||!img.naturalHeight)return;
    try{
-    const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;
-    const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(img,0,0);
-    const a=x.getImageData(0,0,c.width,c.height).data;
-    let x0=c.width,y0=c.height,x1=-1,y1=-1,weightedX=0,alphaWeight=0;
-    for(let y=0;y<c.height;y++)for(let xx=0;xx<c.width;xx++){
-     const alpha=a[(y*c.width+xx)*4+3];
-     if(alpha>40){
-      if(xx<x0)x0=xx;if(xx>x1)x1=xx;if(y<y0)y0=y;if(y>y1)y1=y;
-      weightedX+=xx*alpha;alphaWeight+=alpha;
+    const canvas=document.createElement('canvas');
+    canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    ctx.drawImage(img,0,0);
+    const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+    let minX=canvas.width,minY=canvas.height,maxX=-1,maxY=-1;
+    for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++){
+     if(pixels[(y*canvas.width+x)*4+3]>40){
+      if(x<minX)minX=x;if(x>maxX)maxX=x;
+      if(y<minY)minY=y;if(y>maxY)maxY=y;
      }
     }
-    if(x1<0||!alphaWeight)return;
+    if(maxX<minX||maxY<minY)return;
     const rarity=book.find(t=>t[0]===img.alt)?.[3]||'Common';
     const legendary=rarity==='Legendary';
-    /* Alpha-gewichteter Schwerpunkt der sichtbaren Monsterpixel statt
-       der Mitte transparenter Bildränder oder eines einzelnen Fußankers. */
-    const anchorX=weightedX/alphaWeight;
-    const w=img.clientWidth,h=img.clientHeight;if(!w||!h)return;
+    const w=img.clientWidth,h=img.clientHeight;
+    if(!w||!h)return;
     const fit=Math.min(w/img.naturalWidth,h/img.naturalHeight);
     const ox=(w-img.naturalWidth*fit)/2,oy=(h-img.naturalHeight*fit)/2;
-    const visibleCenterX=ox+anchorX*fit;
-    const visibleBottomY=oy+(y1+1)*fit;
-    const visibleHeight=(y1-y0+1)*fit,visibleWidth=(x1-x0+1)*fit;
+    const boundsCenterX=ox+((minX+maxX+1)/2)*fit;
+    const visibleBottomY=oy+(maxY+1)*fit;
+    const visibleHeight=(maxY-minY+1)*fit,visibleWidth=(maxX-minX+1)*fit;
     const targetHeight=Math.min(scene.clientHeight*(legendary?.36:.20),legendary?170:105);
     const targetWidth=scene.clientWidth*(legendary?.40:.215);
-    const visualScale=Math.max(.65,Math.min(2.4,targetHeight/Math.max(1,visibleHeight),targetWidth/Math.max(1,visibleWidth)));
-    const dx= w/2-(w/2+(visibleCenterX-w/2)*visualScale);
-    const dy=(h-visibleBottomY)*visualScale;
-    img.style.transformOrigin='center bottom';
+    const scale=Math.max(.65,Math.min(2.4,targetHeight/Math.max(1,visibleHeight),targetWidth/Math.max(1,visibleWidth)));
+    const dx=w/2-(w/2+(boundsCenterX-w/2)*scale);
+    const dy=(h-visibleBottomY)*scale;
+    img.style.setProperty('transform-origin','center bottom','important');
     img.style.removeProperty('translate');img.style.removeProperty('scale');
-    img.style.setProperty('transform',`translate(${dx.toFixed(2)}px,${dy.toFixed(2)}px) scale(${visualScale.toFixed(3)})`,'important');
-   }catch(e){console.warn('Monster-Ausrichtung übersprungen:',img.alt,e)}
+    img.style.setProperty('transform',`translate(${dx.toFixed(2)}px,${dy.toFixed(2)}px) scale(${scale.toFixed(4)})`,'important');
+   }catch(error){console.warn('Monster-Ausrichtung fehlgeschlagen:',img.alt,error)}
   };
   if(img.complete)align();else img.addEventListener('load',align,{once:true});
  });
