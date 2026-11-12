@@ -635,9 +635,11 @@ function centerVisibleBattleMonsters(){
     if(!sumWeight)return;
     const bodyCenterX=ox+(sumX/sumWeight)*fit;
     const dx=w/2-bodyCenterX;
+    const visibleBottomY=(maxY+1)*fit+(h-img.naturalHeight*fit)/2;
+    const dy=h-visibleBottomY;
     img.style.setProperty('transform-origin','center center','important');
     img.style.removeProperty('translate');img.style.removeProperty('scale');
-    img.style.setProperty('transform',`translateX(${dx.toFixed(2)}px)`,'important');
+    img.style.setProperty('transform',`translate(${dx.toFixed(2)}px,${dy.toFixed(2)}px)`,'important');
     img.dataset.opticalCenterOffset=(bodyCenterX-w/2).toFixed(3);
    }catch(error){console.warn('Optische Monster-Zentrierung fehlgeschlagen:',img.alt,error)}
   };
