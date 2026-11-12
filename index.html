@@ -615,24 +615,30 @@ function centerVisibleBattleMonsters(){
      }
     }
     if(maxX<minX||maxY<minY)return;
-    const rarity=book.find(t=>t[0]===img.alt)?.[3]||'Common';
-    const legendary=rarity==='Legendary';
     const w=img.clientWidth,h=img.clientHeight;
     if(!w||!h)return;
     const fit=Math.min(w/img.naturalWidth,h/img.naturalHeight);
-    const ox=(w-img.naturalWidth*fit)/2,oy=(h-img.naturalHeight*fit)/2;
-    const boundsCenterX=ox+((minX+maxX+1)/2)*fit;
-    const visibleBottomY=oy+(maxY+1)*fit;
-    const visibleHeight=(maxY-minY+1)*fit,visibleWidth=(maxX-minX+1)*fit;
-    const targetHeight=Math.min(scene.clientHeight*(legendary?.36:.20),legendary?170:105);
-    const targetWidth=scene.clientWidth*(legendary?.40:.215);
-    const scale=Math.max(.65,Math.min(2.4,targetHeight/Math.max(1,visibleHeight),targetWidth/Math.max(1,visibleWidth)));
-    const dx=w/2-(w/2+(boundsCenterX-w/2)*scale);
-    const dy=(h-visibleBottomY)*scale;
-    img.style.setProperty('transform-origin','center bottom','important');
+    const ox=(w-img.naturalWidth*fit)/2;
+    const visibleHeight=maxY-minY+1;
+    // The visual anchor is the weighted center of the lowest 12% of
+    // the opaque silhouette. This follows the feet/stance, not wings/tails.
+    const footTop=Math.max(minY,Math.floor(maxY-visibleHeight*.12));
+    let weightedX=0,totalWeight=0;
+    for(let y=footTop;y<=maxY;y++){
+     const rowWeight=1+(y-footTop)/(maxY-footTop+1);
+     for(let x=minX;x<=maxX;x++){
+      const alpha=pixels[(y*canvas.width+x)*4+3];
+      if(alpha>40){const weight=(alpha/255)*rowWeight;weightedX+=x*weight;totalWeight+=weight;}
+     }
+    }
+    if(!totalWeight)return;
+    const footAnchorX=ox+(weightedX/totalWeight)*fit;
+    const dx=w/2-footAnchorX;
+    img.style.setProperty('transform-origin','center center','important');
     img.style.removeProperty('translate');img.style.removeProperty('scale');
-    img.style.setProperty('transform',`translate(${dx.toFixed(2)}px,${dy.toFixed(2)}px) scale(${scale.toFixed(4)})`,'important');
-   }catch(error){console.warn('Monster-Ausrichtung fehlgeschlagen:',img.alt,error)}
+    img.style.setProperty('transform',`translateX(${dx.toFixed(2)}px)`,'important');
+    img.dataset.visualFootAnchorOffset=(footAnchorX-w/2).toFixed(3);
+   }catch(error){console.warn('Optische Monster-Zentrierung fehlgeschlagen:',img.alt,error)}
   };
   if(img.complete)align();else img.addEventListener('load',align,{once:true});
  });
