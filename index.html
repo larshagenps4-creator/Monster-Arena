@@ -328,7 +328,7 @@
 
 
 <style id="arena-optical-centering-v2058">
-/* 20.56: individually fine-tune Blattling and Tropfli positions over each unchanged floor ring. */
+/* 20.58: based on 20.57; calculate the visible center against the fixed ring before mirroring. */
 .battle-scene #enemySprite .battle-art,
 .battle-scene #playerSprite .battle-art{
   translate:var(--arena-optical-x, 0%) 0!important;
@@ -648,12 +648,14 @@ function centerVisibleBattleMonsters(){
     }
     if(!totalWeight)return;
     const bodyCenterX=ox+(weightedX/totalWeight)*fit;
-    const scaledBodyCenterX=w/2+(bodyCenterX-w/2)*scale;
+    const mirrored=testMode&&img.alt==='Blitzling'&&!!img.closest('#enemySprite');
+    const sprite=img.closest('.battle-sprite');
+    const ringCenterX=sprite?sprite.clientWidth/2:w/2;
+    const bodyCenterForView=mirrored?(w-bodyCenterX):bodyCenterX;
+    const scaledBodyCenterX=w/2+(bodyCenterForView-w/2)*scale;
     const visibleBottomY=oy+(maxY+1)*fit;
-    const faceTowardCenter=testMode&&img.alt==='Blitzling'&&!!img.closest('#enemySprite');
-    // Mirror only the test enemy. Compensate the mirrored alpha-weighted body center
-    // so its visible body stays anchored to the same ring center as in 20.57.
-    let dx=faceTowardCenter?scaledBodyCenterX-w/2:w/2-scaledBodyCenterX;
+    // Align the visible torso center (normal or mirrored) to the fixed ring center.
+    let dx=ringCenterX-scaledBodyCenterX;
     let dy=(h-visibleBottomY)*scale + Math.max(8,scene.clientHeight*0.025); // allgemeine Absenkung aus 20.55
     // 20.56: nur die zwei im Test auffälligen Monster fein nachjustieren.
     // Blattling etwas höher; Tropfli etwas nach links und höher. Alle anderen bleiben unverändert.
@@ -661,7 +663,7 @@ function centerVisibleBattleMonsters(){
     if(img.alt==='Tropfli'){dx-=scene.clientWidth*0.012;dy-=scene.clientHeight*0.012;}
     img.style.setProperty('transform-origin','center bottom','important');
     img.style.removeProperty('translate');img.style.removeProperty('scale');
-    img.style.setProperty('transform',`translate(${dx.toFixed(2)}px,${dy.toFixed(2)}px) ${faceTowardCenter?'scaleX(-1) ':''}scale(${scale.toFixed(4)})`,'important');
+    img.style.setProperty('transform',`translate(${dx.toFixed(2)}px,${dy.toFixed(2)}px) ${mirrored?'scaleX(-1) ':''}scale(${scale.toFixed(4)})`,'important');
     img.dataset.opticalCenterOffset=(bodyCenterX-w/2).toFixed(3);
    }catch(error){console.warn('Optische Monster-Zentrierung fehlgeschlagen:',img.alt,error)}
   };
@@ -876,7 +878,10 @@ load();render();
         if(!totalAlpha) return;
         const centerX = weightedX / totalAlpha;
         const correction = Math.max(-0.07, Math.min(0.07, 0.5 - centerX / canvas.width));
-        img.style.setProperty('--arena-optical-x', (correction * 100).toFixed(3) + '%');
+        const mirrored = typeof testMode !== 'undefined' && testMode && img.alt === 'Blitzling' && !!img.closest('#enemySprite');
+        // Reverse the separate CSS translate as well, or it would undo the ring-centering after mirroring.
+        const appliedCorrection = mirrored ? -correction : correction;
+        img.style.setProperty('--arena-optical-x', (appliedCorrection * 100).toFixed(3) + '%');
       } catch(error) {
         /* If canvas measurement is unavailable, keep the original centered image. */
       }
@@ -1031,5 +1036,3 @@ load();render();
 </style>
 
 <style id="arena-legendary-centering-v20-45">.battle-scene .battle-art{transform-origin:center bottom!important}</style>
-
-<style id="facing-prototype-v2058">/* 20.58: only the Test Arena enemy Blitzling is mirrored; the production arena and all other monsters retain the 20.57 artwork and positions. */</style>
