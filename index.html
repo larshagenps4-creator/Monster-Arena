@@ -326,6 +326,14 @@
 
 
 
+
+<style id="arena-optical-centering-v2053">
+/* 20.53 preview: center the visible artwork mass over each unchanged floor ring. */
+.battle-scene #enemySprite .battle-art,
+.battle-scene #playerSprite .battle-art{
+  translate:var(--arena-optical-x, 0%) 0!important;
+}
+</style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
 <main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.53 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
@@ -832,6 +840,54 @@ load();render();
 .battle-scene #playerCard{right:3%!important;left:auto!important}
 </style>
 
+
+<script id="arena-optical-centering-runtime-v2053">
+/* Calculate each sprite's horizontal visual center from its real transparent PNG alpha.
+   This only shifts the artwork inside its existing sprite box; ring and box coordinates stay unchanged. */
+(function(){
+  const done = new WeakSet();
+  function centerArtwork(img){
+    if(!img || done.has(img)) return;
+    const measure = () => {
+      if(done.has(img) || !img.naturalWidth || !img.naturalHeight) return;
+      done.add(img);
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d', {willReadFrequently:true});
+        if(!ctx) return;
+        ctx.drawImage(img, 0, 0);
+        const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let weightedX = 0, totalAlpha = 0;
+        for(let y = 0; y < canvas.height; y += 2){
+          for(let x = 0; x < canvas.width; x += 2){
+            const alpha = pixels[(y * canvas.width + x) * 4 + 3];
+            if(alpha > 32){ weightedX += x * alpha; totalAlpha += alpha; }
+          }
+        }
+        if(!totalAlpha) return;
+        const centerX = weightedX / totalAlpha;
+        const correction = Math.max(-0.07, Math.min(0.07, 0.5 - centerX / canvas.width));
+        img.style.setProperty('--arena-optical-x', (correction * 100).toFixed(3) + '%');
+      } catch(error) {
+        /* If canvas measurement is unavailable, keep the original centered image. */
+      }
+    };
+    if(img.complete) measure();
+    else img.addEventListener('load', measure, {once:true});
+  }
+  function scan(root){
+    if(root && root.matches && root.matches('.battle-scene .battle-art')) centerArtwork(root);
+    if(root && root.querySelectorAll) root.querySelectorAll('.battle-scene .battle-art').forEach(centerArtwork);
+  }
+  scan(document);
+  const observer = new MutationObserver(records => {
+    for(const record of records) for(const node of record.addedNodes) if(node.nodeType === 1) scan(node);
+  });
+  observer.observe(document.documentElement, {childList:true, subtree:true});
+})();
+</script>
 </body></html>
 
 
