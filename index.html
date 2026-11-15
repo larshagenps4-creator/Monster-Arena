@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#10182c"><title>Monster Arena – Testversion 20.66</title>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#10182c"><title>Monster Arena – Testversion 20.67</title>
 <style>
 :root{--bg:#080d19;--panel:#121c30;--panel2:#1c2942;--line:#2b3b59;--text:#f5f7ff;--muted:#a9b7d0;--red:#fb5266;--green:#2bd49a;--gold:#ffc65c;--blue:#42c8ff;--purple:#b18cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#182747 0,#080d19 58%);color:var(--text);font:15px system-ui,-apple-system,sans-serif;padding:0 12px}header,main{max-width:980px;margin:auto}header{display:flex;justify-content:space-between;align-items:center;padding:16px 0 10px;gap:8px}h1{font-size:clamp(22px,5vw,31px);margin:0}h2{font-size:20px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}.muted{color:var(--muted)}.small{font-size:12px}.wallet,.pill{background:#263754;padding:7px 10px;border-radius:11px;font-weight:750;white-space:nowrap}.nav{display:flex;gap:7px;overflow:auto;padding:8px 0 14px}button{border:1px solid #405373;border-radius:11px;padding:10px 12px;background:#293a58;color:white;font-weight:750;cursor:pointer;touch-action:manipulation}button:disabled{opacity:.38;cursor:not-allowed}.nav button{white-space:nowrap}.nav .active,.primary{background:#7652e8;border-color:#9c84ff}.green{background:#087f5b}.cyan{background:#087da8}.gold{background:#d9a02b;color:#17120a}.red{background:#a9213b}.panel{background:linear-gradient(145deg,#17233a,#10192b);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:13px;box-shadow:0 8px 24px #0002}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,225px),1fr));gap:10px}.monster{background:#1c2a43;border:1px solid #344866;border-radius:13px;padding:12px;min-width:0}.emoji{font-size:clamp(38px,8vw,58px);line-height:1.15}.rarity{font-weight:900;text-transform:uppercase;font-size:11px}.Common{color:#d1d9e8}.Uncommon{color:#4ade80}.Rare{color:#60a5fa}.Epic{color:#d8b4fe}.Legendary{color:#fbbf24}.row{display:flex;align-items:center;justify-content:space-between;gap:8px}.stats{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.bar{height:9px;background:#080d19;border-radius:10px;overflow:hidden;margin:5px 0 8px;border:1px solid #2b3851}.bar span{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#7cf5a5);transition:width .35s}.hp span{background:linear-gradient(90deg,#e73554,#ff7d84)}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.actions button{flex:1;min-width:95px}.battle-scene{position:relative;min-height:270px;border:1px solid #3a4663;border-radius:15px;overflow:hidden;padding:12px;background:radial-gradient(ellipse at center bottom,#3b3154 0,#18233b 44%,#0a1121 100%);margin:10px 0}.scene-top{display:flex;justify-content:flex-end}.scene-bottom{display:flex;justify-content:flex-start;align-items:end;margin-top:20px}.combatant{position:relative;width:58%;max-width:360px;background:#0b1323eF;border:1px solid #344866;border-radius:12px;padding:10px;z-index:2}.combatant.enemy{margin-left:auto}.combatant.player{margin-right:auto}.damage-pop{position:absolute;top:42%;right:-5px;z-index:8;font-size:22px;font-weight:1000;color:#ff6878;text-shadow:0 2px 8px #000;animation:damageFloat .9s ease-out forwards;pointer-events:none}.damage-pop.heal{color:#6dffb0;right:auto;left:-5px}@keyframes damageFloat{0%{opacity:0;transform:translateY(12px) scale(.65)}20%{opacity:1;transform:translateY(0) scale(1.15)}100%{opacity:0;transform:translateY(-28px) scale(1)}}.creature{font-size:clamp(55px,13vw,92px);filter:drop-shadow(0 8px 7px #0008);transition:transform .28s,filter .28s}.enemy .creature{text-align:right}.player .creature{text-align:left}.attacking.player .player .creature{transform:translate(28px,-8px) scale(1.12);filter:drop-shadow(0 0 14px #ffb34d)}.attacking.enemy .enemy .creature{transform:translate(-28px,8px) scale(1.12);filter:drop-shadow(0 0 14px #ff6262)}.impact{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);font-size:32px;font-weight:1000;color:#fff;text-shadow:0 2px 5px #000,0 0 18px #ffb43b;animation:pop .7s ease-out forwards;z-index:5;pointer-events:none}.impact.heal{color:#75ffba;text-shadow:0 0 18px #2bd49a}.impact.guard{color:#8ce4ff}@keyframes pop{0%{opacity:0;transform:translate(-50%,-20%) scale(.5)}25%{opacity:1;transform:translate(-50%,-60%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-100%) scale(1)}}.turnbox{padding:11px;border:1px solid #2e8eb7;background:#0d2b40;border-radius:12px;text-align:center;font-weight:850;margin:10px 0}.boss-banner{padding:10px;text-align:center;background:linear-gradient(90deg,#511b24,#a32331,#511b24);border:1px solid #ff7474;border-radius:10px;color:#ffe2a4;font-weight:950;letter-spacing:.06em;margin:8px 0}.log{background:#080e1a;padding:10px;border-radius:10px;max-height:190px;overflow:auto;font-size:13px;line-height:1.5}.notice{background:#1b3048;border-left:3px solid #38bdf8;padding:10px;border-radius:7px;margin:10px 0}.task{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #34425b;padding:10px 0}.footer{text-align:center;color:#71809c;font-size:12px;padding:20px}.locked{opacity:.6}.cooldown{font-size:11px;display:block;margin-top:3px;color:#ffdb8a}.tag{display:inline-block;border-radius:7px;padding:3px 7px;background:#273955;font-size:11px;font-weight:800}.selection{outline:2px solid #8b7bff}.empty{padding:18px;text-align:center;color:var(--muted)}@media(max-width:520px){body{padding:0 9px}.panel{padding:11px}.battle-scene{min-height:245px;padding:8px}.combatant{width:58%;padding:7px}.fight-row{display:flex;align-items:center;gap:6px}.fight-row .combatant{width:58%;flex:1;min-width:0}.fight-controls{width:40%;display:flex;flex-direction:column;gap:5px}.fight-controls button{width:100%;min-width:0;padding:8px 4px;font-size:11px;line-height:1.15}.fight-controls b{font-size:11px}.fight-controls .muted{font-size:9px}.fight-controls .small{font-size:9px}.scene-bottom{margin-top:12px}.scene-bottom{margin-top:14px}.stats .pill{font-size:11px;padding:5px 7px}.nav{margin:0 -2px}.actions button{padding:10px 7px;font-size:13px}}
@@ -341,9 +341,22 @@
 .battle-scene #playerSprite{left:28.5%!important;top:62.5%!important}
 .battle-scene #enemySprite{left:71%!important;top:62.5%!important}
 </style>
+
+<style id="special-attack-impact-flash-v2067">
+@keyframes element-impact-flash{0%{opacity:0;transform:scale(.35)}22%{opacity:1;transform:scale(1.05)}100%{opacity:0;transform:scale(1.8)}}
+@keyframes special-target-flash-v2067{
+ 0%{filter:brightness(1) saturate(1) drop-shadow(0 5px 5px #172b3c88)}
+ 18%{filter:brightness(3.2) saturate(1.9) drop-shadow(0 0 24px #fff)}
+ 42%{filter:brightness(2.1) saturate(1.7) drop-shadow(0 0 20px #fff)}
+ 100%{filter:brightness(1) saturate(1) drop-shadow(0 5px 5px #172b3c88)}
+}
+.battle-scene .battle-art.special-impact-flash{
+ animation:special-target-flash-v2067 .3s ease-out both!important;
+}
+</style>
 </head><body>
 <header><div><h1>⚔️ Monster Arena</h1><div class="muted small">Sammle · Trainiere · Bezwinge die Arena</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
-<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.66 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
+<main><nav class="nav"><button class="active" data-tab="battle">⚔️ Arena</button><button data-tab="testarena">🧪 Testarena</button><button data-tab="team">🛡️ Team</button><button data-tab="summon">🥚 Beschwören</button><button data-tab="collection">🐾 Sammlung</button><button data-tab="dex">📖 Monsterdex</button><button data-tab="training">💪 Training</button><button data-tab="quests">🎯 Aufgaben</button><button data-tab="guide">📘 Elemente</button></nav><div id="view"></div><div class="footer">Monster Arena · Testversion 20.67 · 14 Monster · Spielstand lokal auf diesem Gerät gespeichert</div></main>
 <script>
 const $=s=>document.querySelector(s),R={Common:1,Rare:2,Legendary:3};
 const book=[
@@ -457,11 +470,18 @@ function playSpecialEffect(element,isBoss,side){
   Drache:{name:'Drachenstrahl',color:'#ff9a35'}
  };
  const data=palette[element]||palette.Pflanze;
- const a=attacker.getBoundingClientRect(),t=target.getBoundingClientRect();
- const sx=a.left+a.width*.5,sy=a.top+a.height*.48;
- const ex=t.left+t.width*.5,ey=t.top+t.height*.48;
- const dx=ex-sx,bend=Math.max(-28,Math.min(28,dx*.035));
- const d=`M ${sx} ${sy} Q ${(sx+ex)/2+bend} ${(sy+ey)/2-12} ${ex} ${ey}`;
+ const attackerArt=attacker.querySelector('.battle-art')||attacker;
+ const targetArt=target.querySelector('.battle-art')||target;
+ const a=attackerArt.getBoundingClientRect(),t=targetArt.getBoundingClientRect();
+ // Die Monster stehen einander gegenüber: Mundöffnung liegt jeweils zur Arena-Mitte.
+ const fromLeft=side==='player';
+ const sx=a.left+a.width*(fromLeft?.76:.24);
+ const sy=a.top+a.height*.43;
+ const ex=t.left+t.width*(fromLeft?.28:.72);
+ const ey=t.top+t.height*.48;
+ const dx=ex-sx,dy=ey-sy;
+ const bend=Math.max(-24,Math.min(24,dx*.025));
+ const d=`M ${sx} ${sy} Q ${(sx+ex)/2+bend} ${(sy+ey)/2-10} ${ex} ${ey}`;
  const ns='http://www.w3.org/2000/svg';
  const svg=document.createElementNS(ns,'svg');
  svg.setAttribute('viewBox',`0 0 ${Math.max(innerWidth,1)} ${Math.max(innerHeight,1)}`);
@@ -475,33 +495,35 @@ function playSpecialEffect(element,isBoss,side){
   if(blur)p.style.filter=`blur(${blur}px)`;
   svg.appendChild(p);return p;
  };
- // Broad, soft translucent beam with a gentle, constant pulse.
- const glow=makePath(isBoss?34:29,.25,13);
- const body=makePath(isBoss?21:17,.27,6);
- const core=makePath(isBoss?7:5,.24,1.5);
+ // Deutlicher, heller Strahl mit sichtbarem Kern; er wächst vom Maul bis zum Ziel.
+ const glow=makePath(isBoss?27:22,.72,9);
+ const body=makePath(isBoss?13:10,.92,3);
+ const core=makePath(isBoss?5:3.5,1,0);
  document.body.appendChild(svg);
  const length=glow.getTotalLength();
  [glow,body,core].forEach(p=>{
   p.style.strokeDasharray=String(length);
   p.style.strokeDashoffset=String(length);
-  p.style.setProperty('--beam-length',String(length));
-  p.style.animation='element-beam-grow 1.35s linear forwards';
+  p.style.animation='element-beam-grow .78s cubic-bezier(.2,.65,.3,1) forwards';
  });
- // A brief soft flash and expanding ring appear only when the beam reaches the target.
  const flash=document.createElementNS(ns,'circle');
  flash.setAttribute('cx',String(ex));flash.setAttribute('cy',String(ey));
- flash.setAttribute('r',isBoss?'25':'19');flash.setAttribute('fill',data.color);
- flash.style.opacity='0';flash.style.filter=`blur(8px) drop-shadow(0 0 14px ${data.color})`;
- const ring=document.createElementNS(ns,'circle');
- ring.setAttribute('cx',String(ex));ring.setAttribute('cy',String(ey));
- ring.setAttribute('r','8');ring.setAttribute('fill','none');ring.setAttribute('stroke',data.color);
- ring.setAttribute('stroke-width',isBoss?'5':'3');ring.style.opacity='0';
- svg.appendChild(flash);svg.appendChild(ring);
+ flash.setAttribute('r',isBoss?'38':'30');flash.setAttribute('fill',data.color);
+ flash.style.opacity='0';flash.style.filter=`blur(5px) drop-shadow(0 0 18px ${data.color})`;
+ const whiteFlash=document.createElementNS(ns,'circle');
+ whiteFlash.setAttribute('cx',String(ex));whiteFlash.setAttribute('cy',String(ey));
+ whiteFlash.setAttribute('r',isBoss?'24':'19');whiteFlash.setAttribute('fill','#fff');
+ whiteFlash.style.opacity='0';whiteFlash.style.filter='blur(7px)';
+ svg.appendChild(flash);svg.appendChild(whiteFlash);
  setTimeout(()=>{
-  flash.style.animation='element-impact-flash .38s ease-out forwards';
-  ring.style.animation='element-impact-ring .42s ease-out forwards';
- },1350);
- setTimeout(()=>svg.remove(),1900);
+  flash.style.animation='element-impact-flash .24s ease-out forwards';
+  whiteFlash.style.animation='element-impact-flash .19s ease-out forwards';
+  targetArt.classList.remove('special-impact-flash');
+  void targetArt.offsetWidth;
+  targetArt.classList.add('special-impact-flash');
+  setTimeout(()=>targetArt.classList.remove('special-impact-flash'),300);
+ },780);
+ setTimeout(()=>svg.remove(),1250);
 }
 
 function playerAct(k,id){
